@@ -1,0 +1,78 @@
+/*
+ * Team grid. Plain CSS grid rather than the site's 12-column bento grid: the
+ * cards here are a fixed 4:5 portrait plus copy, so an explicit auto-fit track
+ * keeps them from stretching into odd aspect ratios at in-between widths.
+ */
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem 1.75rem;
+}
+
+@media (min-width: 768px) {
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.cell {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  min-width: 0;
+}
+
+/* ── Overlay copy (sits on the photo, inside the tilted layer) ────────────── */
+
+.name {
+  font-size: 1.15rem;
+  font-weight: 300;
+  letter-spacing: -0.01em;
+  color: #fff;
+  text-shadow: 0 1px 12px rgba(0, 0, 0, 0.5);
+}
+
+.role {
+  display: block;
+  margin-top: 0.2rem;
+  font-size: 0.66rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(147, 197, 253, 0.9);
+}
+
+/* ── Copy below the card ──────────────────────────────────────────────────── */
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  padding: 0 0.15rem;
+}
+
+.bio {
+  font-size: 0.82rem;
+  line-height: 1.65;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.email {
+  align-self: flex-start;
+  font-size: 0.72rem;
+  letter-spacing: 0.02em;
+  color: rgba(147, 197, 253, 0.8);
+  text-decoration: none;
+  transition: color 200ms ease;
+}
+
+.email:hover,
+.email:focus-visible {
+  color: #93c5fd;
+}

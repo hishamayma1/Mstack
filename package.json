@@ -1,0 +1,49 @@
+{
+  "name": "mstack360-website",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint .",
+    "payload": "payload",
+    "generate:types": "payload generate:types"
+  },
+  "dependencies": {
+    "@faceless-ui/modal": "3.0.0",
+    "@faceless-ui/scroll-info": "2.0.0",
+    "@payloadcms/db-mongodb": "3.88.0",
+    "@payloadcms/email-nodemailer": "3.88.0",
+    "@payloadcms/next": "3.88.0",
+    "@payloadcms/richtext-lexical": "3.88.0",
+    "@vercel/analytics": "1.6.1",
+    "graphql": "^16.8.1",
+    "next": "^16.3.1",
+    "payload": "3.88.0",
+    "react": "^19",
+    "react-dom": "^19",
+    "sharp": "^0.34.2",
+    "three": "0.180.0",
+    "web-push": "^3.6.7",
+    "zustand": "^5.0.3"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.2.0",
+    "@types/node": "^22",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "@types/three": "^0.185.4",
+    "@types/web-push": "^3.6.4",
+    "postcss": "^8.5",
+    "tailwindcss": "^4.2.0",
+    "typescript": "^5"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild",
+      "sharp"
+    ]
+  }
+}

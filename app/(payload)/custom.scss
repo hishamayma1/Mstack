@@ -1,0 +1,475 @@
+/* ===========================================================================
+   MStack360 admin theme
+   ---------------------------------------------------------------------------
+   Payload ships its own styles inside `@layer payload-default`. Unlayered CSS
+   beats layered CSS regardless of specificity, so everything in this file wins
+   over the defaults without a single `!important`. Keep it unlayered.
+
+   The approach is deliberately mostly *variables*, not overrides. Payload
+   derives nearly every surface, border and text colour from one greyscale ramp
+   (`--color-base-0` … `--color-base-1000`). Retinting that ramp to the
+   marketing site's blue-black re-skins the entire panel — including screens
+   this file never mentions and components added by future Payload versions.
+   Only the handful of things the ramp can't express (the accent, radii, the
+   custom dashboard) are targeted by class.
+
+   Dark mode is forced in payload.config.ts (`admin.theme: "dark"`), so in dark
+   Payload inverts the ramp: `--color-base-900` becomes the page background and
+   `--color-base-0` becomes the strongest text. That inversion is why the ramp
+   below runs light → dark rather than the other way around.
+   =========================================================================== */
+
+:root {
+  /* Blue-black greyscale, sampled from the marketing site:
+     page #0A0E17, raised surfaces #10141F, body text #F3F5FA. */
+  --color-base-0: #ffffff;
+  --color-base-50: #f3f5fa;
+  --color-base-100: #e6eaf3;
+  --color-base-150: #d5dbe9;
+  --color-base-200: #c3cbdd;
+  --color-base-250: #b0bad0;
+  --color-base-300: #9da9c3;
+  --color-base-350: #8b98b6;
+  --color-base-400: #7987a8;
+  --color-base-450: #68779a;
+  --color-base-500: #59688a;
+  --color-base-550: #4c5a7a;
+  --color-base-600: #414d69;
+  --color-base-650: #37425a;
+  --color-base-700: #2e384c;
+  --color-base-750: #262f41;
+  --color-base-800: #1e2637;
+  --color-base-850: #151b29;
+  --color-base-900: #0a0e17;
+  --color-base-950: #070a12;
+  --color-base-1000: #04060b;
+
+  /* Brand accent. Payload's stock "blue" ramp is a teal; these are the site's
+     blue-600/500/400 so links and highlights match the front end. */
+  --mstack-accent: #2563eb;
+  --mstack-accent-hover: #3b82f6;
+  --mstack-accent-soft: rgba(37, 99, 235, 0.14);
+  --mstack-accent-border: rgba(37, 99, 235, 0.32);
+
+  /* Slightly rounder than stock — matches the site's rounded-xl/2xl cards. */
+  --style-radius-s: 6px;
+  --style-radius-m: 10px;
+  --style-radius-l: 16px;
+
+  /* The site sets its body copy in the system UI stack; matching it here stops
+     the admin reading as a different product. */
+  --font-body:
+    system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+html[data-theme="dark"] {
+  /* Inputs sit one step above the page instead of blending into it, which is
+     the single biggest legibility win on a very dark background. */
+  --theme-input-bg: var(--theme-elevation-50);
+  --theme-overlay: rgba(4, 6, 11, 0.72);
+}
+
+/* ── Shell ───────────────────────────────────────────────────────────────── */
+
+.template-default {
+  background-color: var(--theme-elevation-0);
+}
+
+/* A hairline between the sidebar and the content, so the nav reads as a
+   separate plane rather than the page just changing colour. */
+.nav {
+  background-color: var(--theme-elevation-25, #080b13);
+  border-inline-end: 1px solid var(--theme-elevation-100);
+}
+
+/* Group headings ("SALES", "WEBSITE", …) — smaller, wider-tracked and quieter
+   than the links beneath them, so the sidebar scans as sections. */
+.nav-group__toggle,
+.nav__label {
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--theme-elevation-450);
+  font-weight: 600;
+}
+
+.nav__link {
+  font-size: 14.5px;
+  line-height: 1.5;
+  padding-block: 7px;
+  padding-inline: 10px;
+  margin-inline-start: -10px;
+  border-radius: var(--style-radius-s);
+  color: var(--theme-elevation-650);
+  transition:
+    background-color 120ms ease,
+    color 120ms ease;
+}
+
+/* Payload underlines nav links on hover. A background pill reads better at
+   this density and stops the sidebar flickering as the pointer crosses it. */
+.nav a.nav__link:hover,
+.nav a.nav__link:focus-visible {
+  text-decoration: none;
+  color: var(--theme-elevation-900);
+  background-color: var(--theme-elevation-100);
+}
+
+.nav__link.active {
+  color: var(--theme-elevation-1000);
+  background-color: var(--mstack-accent-soft);
+}
+
+.nav__link-indicator {
+  background: var(--mstack-accent);
+  inset-inline-start: -2px;
+}
+
+/* ── Brand marks (components/admin/brand-*.tsx) ──────────────────────────── */
+
+.mstack-brand {
+  display: inline-flex;
+  align-items: center;
+}
+
+.mstack-brand img {
+  width: auto;
+  object-fit: contain;
+}
+
+/* Payload's breadcrumb-bar icon slot is a hard 18px square, which crops a 2:1
+   lockup down to a sliver of the mark. Relax the slot to fit the full lockup
+   at breadcrumb scale — `.step-nav__home` is the element that constrains it. */
+.step-nav__home {
+  width: auto;
+  height: 22px;
+}
+
+/* Small on purpose — at breadcrumb scale this is a home button, and the
+   readable lockup lives at the top of the sidebar instead. */
+.mstack-brand--icon img {
+  height: 22px;
+  max-width: 120px;
+}
+
+/* Sidebar lockup (components/admin/brand-nav.tsx). */
+.mstack-navbrand {
+  display: block;
+  padding-block: 2px 24px;
+  line-height: 0;
+}
+
+/* Driven by width, not height: the artwork is a 2:1 cloud lockup with generous
+   internal padding, so sizing it by height makes it far narrower than the
+   sidebar and it reads as an afterthought. 150px is about half the 275px nav. */
+.mstack-navbrand img {
+  width: 150px;
+  height: auto;
+  object-fit: contain;
+  transition: opacity 150ms ease;
+}
+
+.mstack-navbrand:hover img {
+  opacity: 0.78;
+}
+
+.mstack-brand--logo {
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+.mstack-brand--logo img {
+  height: 62px;
+  max-width: 280px;
+}
+
+.mstack-brand__caption {
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--theme-elevation-500);
+}
+
+/* ── Buttons ─────────────────────────────────────────────────────────────── */
+
+/* Payload's primary button is "strongest elevation", which on a dark theme is
+   a white block. These local custom properties are the documented seam. */
+.btn--style-primary {
+  --bg-color: var(--mstack-accent);
+  --color: #ffffff;
+  --hover-bg: var(--mstack-accent-hover);
+  --hover-color: #ffffff;
+  border-radius: var(--style-radius-s);
+  font-weight: 500;
+}
+
+.btn--style-secondary {
+  border-radius: var(--style-radius-s);
+}
+
+/* ── Surfaces ────────────────────────────────────────────────────────────── */
+
+.card {
+  background-color: var(--theme-elevation-50);
+  border: 1px solid var(--theme-elevation-100);
+  border-radius: var(--style-radius-m);
+  transition:
+    border-color 150ms ease,
+    background-color 150ms ease;
+}
+
+.card:hover {
+  border-color: var(--mstack-accent-border);
+  background-color: var(--theme-elevation-100);
+}
+
+.table {
+  border-radius: var(--style-radius-m);
+  overflow: hidden;
+}
+
+.table thead th {
+  font-size: 11px;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--theme-elevation-500);
+  background-color: var(--theme-elevation-50);
+}
+
+.table tbody tr:hover {
+  background-color: var(--theme-elevation-50);
+}
+
+/* Inputs get a visible edge and a brand focus ring. */
+.field-type input:not([type="checkbox"]):not([type="radio"]),
+.field-type textarea,
+.field-type .rs__control {
+  border-radius: var(--style-radius-s);
+  border-color: var(--theme-elevation-150);
+}
+
+.field-type input:focus,
+.field-type textarea:focus,
+.field-type .rs__control--is-focused {
+  border-color: var(--mstack-accent-border);
+  box-shadow: 0 0 0 3px var(--mstack-accent-soft);
+}
+
+/* Field tabs. Several collections here are organised as one tab per page
+   section, so which tab you're on is the primary orientation cue — Payload's
+   default weight change alone is too quiet to carry that. */
+.tabs-field__tab-button {
+  color: var(--theme-elevation-500);
+  border-bottom: 2px solid transparent;
+  padding-block-end: 9px;
+  transition:
+    color 130ms ease,
+    border-color 130ms ease;
+}
+
+.tabs-field__tab-button:hover {
+  color: var(--theme-elevation-800);
+}
+
+.tabs-field__tab-button--active {
+  color: var(--theme-elevation-1000);
+  border-bottom-color: var(--mstack-accent);
+}
+
+/* The per-collection `admin.description` strings carry most of the editing
+   guidance in this project, so give them room rather than burying them. */
+.collection-list__sub-header,
+.view-description {
+  color: var(--theme-elevation-500);
+  max-width: 70ch;
+  line-height: 1.55;
+}
+
+/* ── Custom dashboard (components/admin/dashboard-welcome.tsx) ───────────── */
+
+.mstack-dash {
+  margin-bottom: 2.25rem;
+}
+
+.mstack-dash__eyebrow {
+  margin: 0 0 6px;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--mstack-accent-hover);
+}
+
+.mstack-dash__title {
+  margin: 0;
+  font-size: clamp(1.6rem, 3vw, 2.3rem);
+  font-weight: 300;
+  letter-spacing: -0.015em;
+  color: var(--theme-elevation-1000);
+}
+
+.mstack-dash__subtitle {
+  margin: 8px 0 0;
+  font-size: 14px;
+  color: var(--theme-elevation-550);
+}
+
+.mstack-dash__stats {
+  margin-top: 1.75rem;
+  display: grid;
+  gap: 12px;
+  /* Collapses 4 → 2 → 1 without a media query, so it also behaves inside the
+     narrower content column when the nav is pinned open. */
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+}
+
+.mstack-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 18px 20px;
+  border-radius: var(--style-radius-m);
+  border: 1px solid var(--theme-elevation-100);
+  background-color: var(--theme-elevation-50);
+  text-decoration: none;
+  transition:
+    border-color 150ms ease,
+    transform 150ms ease,
+    background-color 150ms ease;
+}
+
+.mstack-stat:hover {
+  text-decoration: none;
+  transform: translateY(-2px);
+  border-color: var(--mstack-accent-border);
+  background-color: var(--theme-elevation-100);
+}
+
+.mstack-stat__value {
+  font-size: 2rem;
+  font-weight: 300;
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+  color: var(--theme-elevation-1000);
+}
+
+.mstack-stat__label {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--theme-elevation-800);
+}
+
+.mstack-stat__hint {
+  font-size: 11.5px;
+  color: var(--theme-elevation-500);
+}
+
+/* Anything waiting on a human gets the accent; everything else stays quiet, so
+   the one number that needs action is the one that draws the eye. */
+.mstack-stat--urgent {
+  border-color: var(--mstack-accent-border);
+  background-color: var(--mstack-accent-soft);
+}
+
+.mstack-stat--urgent .mstack-stat__value {
+  color: var(--mstack-accent-hover);
+}
+
+.mstack-stat--active .mstack-stat__value {
+  color: var(--theme-elevation-900);
+}
+
+.mstack-dash__actions {
+  margin-top: 1.25rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.mstack-action {
+  display: inline-flex;
+  align-items: center;
+  padding: 9px 16px;
+  border-radius: var(--style-radius-s);
+  border: 1px solid var(--theme-elevation-150);
+  background-color: transparent;
+  color: var(--theme-elevation-800);
+  font-size: 13px;
+  text-decoration: none;
+  transition:
+    border-color 150ms ease,
+    background-color 150ms ease,
+    color 150ms ease;
+}
+
+.mstack-action:hover {
+  text-decoration: none;
+  color: var(--theme-elevation-1000);
+  border-color: var(--mstack-accent-border);
+  background-color: var(--theme-elevation-100);
+}
+
+.mstack-action--primary {
+  background-color: var(--mstack-accent);
+  border-color: var(--mstack-accent);
+  color: #ffffff;
+}
+
+.mstack-action--primary:hover {
+  background-color: var(--mstack-accent-hover);
+  border-color: var(--mstack-accent-hover);
+  color: #ffffff;
+}
+
+/* Push-notification toggle (components/admin/push-toggle.tsx). */
+
+.mstack-push {
+  margin-top: 1.1rem;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  font-size: 13px;
+  color: var(--theme-elevation-600);
+}
+
+.mstack-push--muted {
+  display: block;
+  max-width: 60ch;
+  line-height: 1.55;
+  font-size: 12.5px;
+  color: var(--theme-elevation-500);
+}
+
+.mstack-push__dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.mstack-push__dot--on {
+  background: #22c55e;
+  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.16);
+}
+
+.mstack-push__dot--off {
+  background: var(--theme-elevation-350);
+}
+
+.mstack-push__error {
+  flex-basis: 100%;
+  color: var(--theme-error-500);
+  font-size: 12px;
+}
+
+/* ── Login ───────────────────────────────────────────────────────────────── */
+
+.login .form-submit .btn {
+  width: 100%;
+  justify-content: center;
+}
+
+.login__brand {
+  margin-bottom: 1.5rem;
+}

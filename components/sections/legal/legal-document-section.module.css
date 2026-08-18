@@ -1,0 +1,29 @@
+/*
+ * Sticky in-page nav + scroll offsets for the three legal documents.
+ * Handled here rather than with long Tailwind arbitrary-value chains
+ * because sticky positioning and scroll-margin read more clearly as CSS.
+ */
+
+.article {
+  scroll-margin-top: 9rem;
+}
+
+.nav {
+  position: sticky;
+  top: 6.5rem;
+  align-self: start;
+}
+
+.navLink {
+  display: block;
+  padding: 0.5rem 0;
+  font-size: 0.6875rem;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.45);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.navLink:hover {
+  color: rgba(255, 255, 255, 0.85);
+}

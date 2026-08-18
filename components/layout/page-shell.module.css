@@ -1,0 +1,24 @@
+/*
+ * Page-open entrance for every non-home route. Pure CSS, time-based (not
+ * scroll-driven like reveal.module.css) so it always plays once, right when
+ * the page mounts after navigation — a plain opacity fade-in, no movement.
+ */
+
+.enter {
+  animation: fadeIn 500ms ease both;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .enter {
+    animation: none;
+  }
+}

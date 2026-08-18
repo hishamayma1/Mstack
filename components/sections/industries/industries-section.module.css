@@ -1,0 +1,84 @@
+/*
+ * The sector rail beside "Built for Your Industry".
+ *
+ * It was a plain `overflow-y-auto` column, so it drew the OS scrollbar (a bright
+ * bar against a dark panel), cut the last sectors off mid-row with no hint that
+ * more existed, and — because the list auto-advances — regularly highlighted a
+ * sector that had scrolled out of sight.
+ *
+ * Now: a slim themed scrollbar, the list fading out at both ends so it reads as
+ * continuing rather than truncated, and the active row carrying the countdown to
+ * the next auto-advance.
+ */
+
+.rail {
+  overflow-y: auto;
+  scroll-behavior: smooth;
+  overscroll-behavior: contain;
+
+  /* Firefox */
+  scrollbar-width: thin;
+  scrollbar-color: rgba(96, 165, 250, 0.35) transparent;
+
+  /* Fade the first and last rows instead of slicing them. The padding keeps the
+     fade off the rows themselves when the list sits at either end. */
+  mask-image: linear-gradient(180deg, transparent, #000 5%, #000 95%, transparent);
+  -webkit-mask-image: linear-gradient(180deg, transparent, #000 5%, #000 95%, transparent);
+}
+
+/* WebKit / Chromium */
+.rail::-webkit-scrollbar {
+  width: 4px;
+}
+
+.rail::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 999px;
+}
+
+.rail::-webkit-scrollbar-thumb {
+  background: rgba(96, 165, 250, 0.35);
+  border-radius: 999px;
+}
+
+.rail:hover::-webkit-scrollbar-thumb {
+  background: rgba(96, 165, 250, 0.55);
+}
+
+/* ── Auto-advance countdown on the active row ─────────────────────────────── */
+
+.progress {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 2px;
+  width: 100%;
+  transform-origin: left center;
+  background: linear-gradient(90deg, rgba(96, 165, 250, 0.9), rgba(96, 165, 250, 0.25));
+  animation: advance var(--advance-ms, 3200ms) linear forwards;
+}
+
+@keyframes advance {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+
+/* The rotation itself pauses while the pointer or keyboard is in the deck (see
+   pausedRef in the component), so the countdown has to hold too — otherwise it
+   fills to the end and nothing happens. */
+.deck:hover .progress,
+.deck:focus-within .progress {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rail {
+    scroll-behavior: auto;
+  }
+
+  .progress {
+    animation: none;
+    transform: scaleX(1);
+    opacity: 0.5;
+  }
+}

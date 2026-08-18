@@ -1,0 +1,99 @@
+/*
+ * Intro overlay — entirely CSS.
+ *
+ * This was a client component driven by six setTimeout calls, which meant the
+ * server HTML shipped an opaque full-screen curtain that only JavaScript could
+ * remove: if hydration was slow or failed, the site was a black screen. It
+ * also gated the hero copy behind a shared store, pushing LCP past 4s.
+ *
+ * As pure CSS it is a server component with no JS at all, it self-dismisses
+ * whether or not hydration ever happens, and the hero underneath is already
+ * painted and readable.
+ *
+ * Timeline (matches the original):
+ *   0.08s  letters fade in, 90ms apart
+ *   1.80s  letters fade out, 55ms apart
+ *   1.70s  curtain fades, revealing the hero
+ *   3.00s  overlay fades out and stops rendering
+ */
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  pointer-events: none;
+  animation: overlayOut 500ms ease 3000ms forwards;
+}
+
+@keyframes overlayOut {
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+.curtain {
+  position: absolute;
+  inset: 0;
+  background: #0a0e17;
+  animation: curtainOut 1300ms cubic-bezier(0.76, 0, 0.24, 1) 1700ms forwards;
+}
+
+@keyframes curtainOut {
+  to {
+    opacity: 0;
+  }
+}
+
+.letters {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.row {
+  display: flex;
+  gap: 0.06em;
+}
+
+.letter {
+  font-size: calc((100vw - 64px) / 9);
+  letter-spacing: 0.05em;
+  line-height: 1;
+  user-select: none;
+  opacity: 0;
+  animation:
+    letterIn 700ms cubic-bezier(0.16, 1, 0.3, 1) calc(80ms + var(--i) * 90ms) both,
+    letterOut 450ms cubic-bezier(0.4, 0, 1, 1) calc(1800ms + var(--i) * 55ms) forwards;
+}
+
+@keyframes letterIn {
+  from {
+    opacity: 0;
+    filter: blur(36px);
+    transform: translate3d(0, 48px, 0);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0);
+    transform: none;
+  }
+}
+
+@keyframes letterOut {
+  to {
+    opacity: 0;
+    filter: blur(24px);
+    transform: translate3d(0, -20px, 0);
+  }
+}
+
+/* No overlay at all when motion is reduced — the page underneath is already
+   complete, so there is nothing to reveal. */
+@media (prefers-reduced-motion: reduce) {
+  .overlay {
+    display: none;
+  }
+}

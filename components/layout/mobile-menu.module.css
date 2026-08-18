@@ -1,0 +1,521 @@
+/*
+ * Mobile-only staggered side menu.
+ *
+ * Structurally the StaggeredMenu idea (pre-layers sliding in ahead of the panel,
+ * items rising into place one after another, leading-zero numbering) rebuilt as
+ * pure CSS transitions driven by a single `data-open` attribute — no GSAP, no
+ * per-frame JS. Everything animated here is `transform` / `opacity` only, so the
+ * whole sequence runs on the compositor; the only JS state is `open` and which
+ * submenu is expanded.
+ *
+ * Visual language is the nav pill's, not React Bits': the panel is an inset
+ * floating sheet with the same 1px white border, corner radius and opaque
+ * #0b0f18 + accent-gradient base as .dropdownInner in mobile-nav.module.css.
+ * Opaque rather than glass is deliberate and matches that file's reasoning — the
+ * pages' large display type ghosts through even slight transparency, and it
+ * saves a backdrop-filter compositing layer on exactly the devices that can
+ * least afford one.
+ *
+ * The sheet is anchored below the nav pill (top: --menu-top) so the pill and its
+ * burger stay visible and tappable while the menu is open — the burger is the
+ * close affordance, so it must never be covered.
+ */
+
+.root {
+  position: fixed;
+  inset: 0;
+  z-index: 45;
+  /* Clears the pill nav (top-4 + its height) so the bar stays uncovered. */
+  --menu-top: 5.5rem;
+  --gap: 0.75rem;
+  --radius: 1.5rem;
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  /* Layer slide-in cadence. Closing runs the same values in reverse. */
+  --step: 70ms;
+  /* Overridden inline so the footer lands just after the last nav row. */
+  --foot-delay: 400ms;
+  pointer-events: none;
+}
+
+/* Desktop owns the hover mega-panels; this component never applies there. The
+   breakpoint lives here rather than as a `md:hidden` utility so the component
+   carries its own media contract. */
+@media (min-width: 768px) {
+  .root {
+    display: none;
+  }
+}
+
+.root[data-open="true"] {
+  pointer-events: auto;
+}
+
+/* The floating action cluster is its own fixed z-50 layer at bottom-right, so
+   it would otherwise sit on top of this sheet's CTA and socials. MobileMenu
+   flags the document while the sheet is up and it steps aside — phone widths
+   only, where the two actually overlap. */
+@media (max-width: 767px) {
+  :global(body[data-mobile-menu="open"] [data-floating-actions]) {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 200ms ease;
+  }
+}
+
+/* ── Scrim ────────────────────────────────────────────────────────────────── */
+
+.scrim {
+  position: absolute;
+  inset: 0;
+  border: 0;
+  padding: 0;
+  background: rgba(4, 6, 12, 0.6);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 260ms ease, visibility 260ms ease;
+  transition-behavior: allow-discrete;
+}
+
+.root[data-open="true"] .scrim {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* ── Sliding layers ───────────────────────────────────────────────────────── */
+
+.sheet {
+  position: absolute;
+  top: var(--menu-top);
+  right: var(--gap);
+  bottom: var(--gap);
+  width: min(86vw, 380px);
+  border-radius: var(--radius);
+  /* Parked just past its own right edge plus the gutter, so no sliver shows. */
+  transform: translate3d(calc(100% + var(--gap)), 0, 0);
+  transition: transform 380ms var(--ease) var(--delay, 0ms);
+  will-change: transform;
+}
+
+.root[data-open="true"] .sheet {
+  transform: translate3d(0, 0, 0);
+}
+
+/* Pre-layers: flat accent slabs that arrive first and read as depth behind the
+   panel. aria-hidden in the markup — purely decorative. */
+.prelayer {
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.prelayer:nth-child(1) {
+  background: linear-gradient(160deg, #2544a2, #16203a);
+}
+
+.prelayer:nth-child(2) {
+  background: linear-gradient(160deg, #1b2a55, #10141f);
+}
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  background: radial-gradient(120% 90% at 12% 0%, rgba(37, 68, 130, 0.42), transparent 55%),
+    #0b0f18;
+  box-shadow: 0 32px 80px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  padding: 1.15rem 0.6rem 1.1rem;
+  visibility: hidden;
+  transition: transform 380ms var(--ease) var(--delay, 0ms), visibility 380ms linear var(--delay, 0ms);
+  transition-behavior: allow-discrete;
+}
+
+.root[data-open="true"] .panel {
+  visibility: visible;
+}
+
+/* Opening: layers lead, panel lands last. Closing: the panel leaves first and
+   the layers trail it, which is what makes the exit read as a stack rather than
+   one slab. Driven by swapping which element carries which --delay. */
+.root[data-open="true"] .prelayer:nth-child(1) { --delay: 0ms; }
+.root[data-open="true"] .prelayer:nth-child(2) { --delay: var(--step); }
+.root[data-open="true"] .panel { --delay: calc(var(--step) * 2); }
+
+.root[data-open="false"] .panel { --delay: 0ms; }
+.root[data-open="false"] .prelayer:nth-child(2) { --delay: var(--step); }
+.root[data-open="false"] .prelayer:nth-child(1) { --delay: calc(var(--step) * 2); }
+
+/* ── Item list ────────────────────────────────────────────────────────────── */
+
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  counter-reset: navItem;
+  display: flex;
+  flex-direction: column;
+}
+
+.item {
+  counter-increment: navItem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.item:last-of-type {
+  border-bottom: 0;
+}
+
+/* Clips the row's rise so labels emerge from under the divider rather than
+   sliding over the sheet's padding. The submenu deliberately sits outside this
+   mask so an expanded accordion is never cropped. */
+.mask {
+  overflow: hidden;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  opacity: 0;
+  transform: translate3d(0, 115%, 0) rotate(4deg);
+  transform-origin: 0% 100%;
+  transition: opacity 200ms ease, transform 200ms ease;
+}
+
+/* Each row lands slightly after the one above it, offset from the moment the
+   panel itself starts moving. --i comes from the component. */
+.root[data-open="true"] .row {
+  opacity: 1;
+  transform: none;
+  transition: opacity 420ms var(--ease) calc(var(--step) * 2 + 90ms + var(--i, 0) * 45ms),
+    transform 520ms var(--ease) calc(var(--step) * 2 + 90ms + var(--i, 0) * 45ms);
+}
+
+.link {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.72rem 0.75rem;
+  border-radius: 0.9rem;
+  color: rgba(255, 255, 255, 0.88);
+  font-size: 1.22rem;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: background-color 180ms ease, color 180ms ease;
+}
+
+.link:active {
+  background: rgba(59, 130, 246, 0.14);
+  color: #fff;
+}
+
+.link[data-active="true"] {
+  color: #fff;
+}
+
+.num {
+  flex: 0 0 auto;
+  font-size: 0.6rem;
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  font-variant-numeric: tabular-nums;
+  color: rgba(147, 197, 253, 0.55);
+  transition: color 180ms ease;
+}
+
+.num::before {
+  content: counter(navItem, decimal-leading-zero);
+}
+
+.link[data-active="true"] .num {
+  color: #60a5fa;
+}
+
+/* Accordion trigger. 44px min target — it sits right next to the link, so an
+   undersized hit area here means mistapped navigations. */
+.expander {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 0.8rem;
+  background: rgba(255, 255, 255, 0.03);
+  color: rgba(147, 197, 253, 0.85);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: background-color 200ms ease, border-color 200ms ease, color 200ms ease;
+}
+
+.expander[aria-expanded="true"] {
+  background: rgba(59, 130, 246, 0.16);
+  border-color: rgba(96, 165, 250, 0.35);
+  color: #fff;
+}
+
+.chevron {
+  transition: transform 300ms var(--ease);
+}
+
+.expander[aria-expanded="true"] .chevron {
+  transform: rotate(180deg);
+}
+
+/* ── Submenu ──────────────────────────────────────────────────────────────── */
+
+/* 0fr → 1fr on a single grid row animates to the content's natural height with
+   no JS measuring and no max-height guess that clips longer groups. */
+.sub {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 340ms var(--ease);
+}
+
+.sub[data-expanded="true"] {
+  grid-template-rows: 1fr;
+}
+
+.subInner {
+  overflow: hidden;
+  min-height: 0;
+}
+
+.subBody {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  padding: 0.15rem 0.75rem 0.85rem;
+  opacity: 0;
+  transition: opacity 200ms ease;
+}
+
+.sub[data-expanded="true"] .subBody {
+  opacity: 1;
+  transition-delay: 90ms;
+}
+
+.blurb {
+  font-size: 0.7rem;
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.groupHeading {
+  padding: 0.35rem 0 0.3rem;
+  font-size: 0.58rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(147, 197, 253, 0.6);
+}
+
+.subLink {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  padding: 0.48rem 0.55rem;
+  border-radius: 0.7rem;
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: background-color 180ms ease;
+}
+
+.subLink:active {
+  background: linear-gradient(90deg, rgba(59, 130, 246, 0.16), rgba(59, 130, 246, 0.04));
+}
+
+.dot {
+  flex: 0 0 auto;
+  width: 4px;
+  height: 4px;
+  margin-top: 0.42rem;
+  border-radius: 999px;
+  background: rgba(96, 165, 250, 0.7);
+}
+
+.subText {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  min-width: 0;
+}
+
+.subLabel {
+  font-size: 0.82rem;
+  color: rgba(255, 255, 255, 0.82);
+}
+
+.subDesc {
+  font-size: 0.66rem;
+  line-height: 1.35;
+  color: rgba(255, 255, 255, 0.38);
+}
+
+.viewAll {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 0.1rem;
+  padding: 0.4rem 0.7rem;
+  border-radius: 0.7rem;
+  background: rgba(59, 130, 246, 0.1);
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(147, 197, 253, 0.9);
+  text-decoration: none;
+}
+
+/* ── Footer: CTA + socials ────────────────────────────────────────────────── */
+
+.foot {
+  margin-top: auto;
+  padding: 1.15rem 0.75rem 0.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  opacity: 0;
+  transform: translate3d(0, 14px, 0);
+  transition: opacity 200ms ease, transform 200ms ease;
+}
+
+.root[data-open="true"] .foot {
+  opacity: 1;
+  transform: none;
+  transition: opacity 420ms var(--ease) var(--foot-delay), transform 420ms var(--ease) var(--foot-delay);
+}
+
+.cta {
+  display: block;
+  width: 100%;
+  text-align: center;
+  text-decoration: none;
+  padding: 0.8rem 1rem;
+  border-radius: 0.85rem;
+  border: 1px solid rgba(59, 130, 246, 0.4);
+  background: rgba(59, 130, 246, 0.08);
+  color: #93c5fd;
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  font-family: system-ui, -apple-system, sans-serif;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: background-color 200ms ease, color 200ms ease, border-color 200ms ease;
+}
+
+.cta:active {
+  background: rgba(59, 130, 246, 0.22);
+  border-color: #60a5fa;
+  color: #fff;
+}
+
+.socials {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding-top: 0.85rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.socialsTitle {
+  font-size: 0.58rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(147, 197, 253, 0.6);
+}
+
+.socialsList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.socialsLink {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.7);
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ── Focus + reduced motion ───────────────────────────────────────────────── */
+
+.link:focus-visible,
+.expander:focus-visible,
+.subLink:focus-visible,
+.viewAll:focus-visible,
+.cta:focus-visible,
+.socialsLink:focus-visible {
+  outline: 2px solid #60a5fa;
+  outline-offset: 2px;
+  border-radius: 0.5rem;
+}
+
+/* Very short viewports (landscape phones): shrink the type so the list still
+   fits without the panel becoming a scroll-only experience. */
+@media (max-height: 640px) {
+  .root {
+    --menu-top: 4.75rem;
+  }
+
+  .link {
+    font-size: 1.05rem;
+    padding: 0.55rem 0.75rem;
+  }
+
+  .foot {
+    padding-top: 0.9rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* The panel still needs to appear and disappear, so opacity/visibility keep a
+     token duration — but nothing slides, staggers, or rotates. */
+  .sheet,
+  .panel,
+  .row,
+  .foot,
+  .sub,
+  .subBody,
+  .chevron {
+    transition-duration: 1ms !important;
+    transition-delay: 0ms !important;
+  }
+
+  .sheet {
+    transform: none !important;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 120ms linear, visibility 120ms linear !important;
+    transition-behavior: allow-discrete;
+  }
+
+  .root[data-open="true"] .sheet {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .prelayer {
+    display: none;
+  }
+
+  .row,
+  .foot {
+    transform: none !important;
+    opacity: 1 !important;
+  }
+}

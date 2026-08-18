@@ -1,0 +1,46 @@
+/*
+ * Testimonial marquee.
+ *
+ * The old strip reused the global `marqueeLeft` keyframe, which translates by
+ * -33.333% — correct for content duplicated three times, but this strip only
+ * duplicated it twice, so the loop jumped a third of the way through. The
+ * quotes were also `whitespace-nowrap` inside a `max-w-md` box, so long ones
+ * spilled over their neighbours. Both are fixed here: three copies, fixed-width
+ * cards, wrapped text.
+ *
+ * Transform-only, so it runs on the compositor and needs no JavaScript.
+ */
+
+.rail {
+  /* Fade the strip into the page at both edges instead of hard-cutting a card
+     in half at the viewport boundary. */
+  mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+}
+
+.track {
+  display: flex;
+  width: max-content;
+  animation: testimonialScroll 46s linear infinite;
+}
+
+/* Reading a quote shouldn't be a chase. */
+.rail:hover .track,
+.rail:focus-within .track {
+  animation-play-state: paused;
+}
+
+@keyframes testimonialScroll {
+  from { transform: translate3d(0, 0, 0); }
+  to   { transform: translate3d(-33.333%, 0, 0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .track {
+    animation: none;
+    /* Without the scroll, only the first copy is reachable — let it wrap so
+       every quote is still readable. */
+    width: 100%;
+    flex-wrap: wrap;
+  }
+}

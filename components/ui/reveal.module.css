@@ -1,0 +1,63 @@
+/*
+ * Scroll-reveal, shared by BentoCard and RevealText.
+ *
+ * This used to be an IntersectionObserver per element, which forced both
+ * components (and therefore every section grid on the site) to be client
+ * components — dozens of observers and dozens of hydration boundaries per
+ * page. Native scroll-driven animations do the same job on the compositor
+ * with zero JavaScript, so both are now server components.
+ *
+ * Progressive enhancement: browsers without `animation-timeline` skip the
+ * @supports block entirely and render the finished state, which is exactly
+ * the right fallback — content visible, nothing hidden behind a script.
+ *
+ * Stagger is per element via --reveal-start / --reveal-end, set inline by
+ * the component from its `delay` prop.
+ */
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .reveal {
+      animation: revealUp linear both;
+      animation-timeline: view();
+      animation-range: entry var(--reveal-start, 0%) entry var(--reveal-end, 42%);
+    }
+  }
+}
+
+@keyframes revealUp {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 26px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Word-level variant for headings: same mechanism, smaller travel, and a
+   blur that matches the intro animation's character. */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .revealWord {
+      display: inline-block;
+      animation: revealWord linear both;
+      animation-timeline: view();
+      animation-range: entry var(--reveal-start, 0%) entry var(--reveal-end, 40%);
+    }
+  }
+}
+
+@keyframes revealWord {
+  from {
+    opacity: 0;
+    filter: blur(8px);
+    transform: translate3d(0, 12px, 0);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0);
+    transform: none;
+  }
+}

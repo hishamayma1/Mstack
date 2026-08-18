@@ -1,0 +1,100 @@
+/* Range input styling.
+   Tailwind can't reach ::-webkit-slider-thumb / ::-moz-range-thumb, and the
+   default control is the one element that would make an otherwise dark,
+   custom-styled page look unfinished. The track is painted with a gradient
+   set from the component via --fill, so the filled portion tracks the value
+   without a second element behind it. */
+
+.slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 6px;
+  border-radius: 999px;
+  background: linear-gradient(
+    to right,
+    rgb(37 99 235) 0%,
+    rgb(59 130 246) var(--fill, 50%),
+    rgba(255, 255, 255, 0.1) var(--fill, 50%),
+    rgba(255, 255, 255, 0.1) 100%
+  );
+  outline: none;
+  cursor: pointer;
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #f3f5fa;
+  border: 3px solid rgb(37 99 235);
+  cursor: grab;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.45);
+  transition: transform 0.15s ease;
+}
+
+.slider::-webkit-slider-thumb:active {
+  cursor: grabbing;
+  transform: scale(1.12);
+}
+
+.slider::-moz-range-thumb {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #f3f5fa;
+  border: 3px solid rgb(37 99 235);
+  cursor: grab;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.45);
+}
+
+.slider:focus-visible {
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.35);
+}
+
+/* Firefox paints its own track element, so the gradient above needs
+   re-declaring here to avoid a flat grey bar. */
+.slider::-moz-range-track {
+  height: 6px;
+  border-radius: 999px;
+  background: transparent;
+}
+
+/* The quote panel follows the visitor down the options list on wide screens,
+   so the total is never scrolled off while they're changing what feeds it.
+   Below `lg` the grid is single-column and sticking would trap the panel
+   over the content underneath it. */
+@media (min-width: 1024px) {
+  .stickyPanel {
+    position: sticky;
+    top: 6rem;
+  }
+}
+
+/* Total changes are easy to miss when only a digit moves, so the figure gets
+   a brief lift each time it's re-keyed. Suppressed under reduced-motion. */
+.totalPulse {
+  animation: totalPulse 0.35s ease-out;
+}
+
+@keyframes totalPulse {
+  0% {
+    transform: translateY(3px);
+    opacity: 0.55;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .totalPulse {
+    animation: none;
+  }
+  .slider::-webkit-slider-thumb {
+    transition: none;
+  }
+}

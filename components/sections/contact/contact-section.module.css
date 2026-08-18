@@ -1,0 +1,29 @@
+/*
+ * Booking iframe container for the contact section. A fixed-ratio wrapper
+ * keeps the embedded Outlook Bookings widget from collapsing to 0 height,
+ * since the iframe itself only knows percentage sizing.
+ */
+
+.bookingFrame {
+  position: relative;
+  width: 100%;
+  height: 720px;
+  border-radius: 1rem;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.bookingIframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+@media (max-width: 768px) {
+  .bookingFrame {
+    height: 640px;
+  }
+}

@@ -1,0 +1,181 @@
+/*
+ * Footer visuals — entirely CSS, no background image.
+ *
+ * Performance notes, since this renders on every page:
+ *  - Compiles once into a content-hashed stylesheet; the component stays a
+ *    server component and ships zero client JS.
+ *  - The two ambient animations move only `transform` and `opacity`, so they
+ *    run on the compositor and never trigger layout or paint.
+ *  - The scroll reveal uses native scroll-driven animations (`animation-timeline`)
+ *    behind an @supports guard, so there is no IntersectionObserver and no
+ *    hydration cost. Browsers without support simply render the final state.
+ *  - Every animation is disabled under prefers-reduced-motion.
+ */
+
+.footer {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+/* ── Ambient light ────────────────────────────────────────────────────────── */
+
+/* Wide, soft blue wash that drifts slowly across the footer. Replaces the
+   old background image at a fraction of the byte and decode cost. */
+.aurora {
+  position: absolute;
+  inset: -40% -20% auto -20%;
+  height: 150%;
+  z-index: -2;
+  pointer-events: none;
+  background:
+    radial-gradient(55% 45% at 35% 35%, rgba(59, 130, 246, 0.13), transparent 72%),
+    radial-gradient(45% 40% at 72% 55%, rgba(99, 102, 241, 0.10), transparent 72%);
+  filter: blur(24px);
+  animation: auroraDrift 28s ease-in-out infinite alternate;
+}
+
+@keyframes auroraDrift {
+  from { transform: translate3d(-4%, 0, 0) scale(1); }
+  to   { transform: translate3d(4%, -3%, 0) scale(1.12); }
+}
+
+/* Faint grid, faded out towards the bottom so the footer dissolves into
+   the page background instead of ending on a hard edge. */
+.grid {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: linear-gradient(to bottom, black 0%, transparent 85%);
+  -webkit-mask-image: linear-gradient(to bottom, black 0%, transparent 85%);
+}
+
+/* A light travelling along the top border. The moving part is a child
+   transform inside an overflow-hidden 1px strip — cheap to composite. */
+.topLine {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  overflow: hidden;
+  z-index: -1;
+  pointer-events: none;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.topLine::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 40%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(96, 165, 250, 0.85),
+    rgba(147, 197, 253, 0.35),
+    transparent
+  );
+  animation: lineSweep 7s ease-in-out infinite;
+}
+
+@keyframes lineSweep {
+  0%        { transform: translate3d(-100%, 0, 0); }
+  55%, 100% { transform: translate3d(350%, 0, 0); }
+}
+
+/* ── Oversized wordmark watermark ─────────────────────────────────────────── */
+
+.watermark {
+  position: absolute;
+  left: 50%;
+  bottom: -0.18em;
+  transform: translateX(-50%);
+  z-index: -1;
+  width: 100%;
+  text-align: center;
+  font-size: clamp(4rem, 17vw, 13rem);
+  line-height: 0.8;
+  letter-spacing: 0.12em;
+  white-space: nowrap;
+  user-select: none;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.055),
+    rgba(255, 255, 255, 0)
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* ── Link hover: underline wipes in from the left ─────────────────────────── */
+
+.link {
+  position: relative;
+  display: inline-block;
+  transition: color 0.25s ease;
+}
+
+.link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 100%;
+  height: 1px;
+  background: rgba(96, 165, 250, 0.8);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.link:hover::after,
+.link:focus-visible::after {
+  transform: scaleX(1);
+}
+
+/* ── Scroll reveal (no JS) ────────────────────────────────────────────────── */
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .reveal {
+      animation: revealUp linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 55%;
+    }
+
+    /* Staggered by shifting each column's range slightly later, which reads
+       as a cascade as the footer scrolls in. */
+    .reveal:nth-child(2) { animation-range: entry 4% entry 60%; }
+    .reveal:nth-child(3) { animation-range: entry 8% entry 65%; }
+    .reveal:nth-child(4) { animation-range: entry 12% entry 70%; }
+    .reveal:nth-child(5) { animation-range: entry 16% entry 75%; }
+  }
+}
+
+@keyframes revealUp {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 18px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .aurora,
+  .topLine::after {
+    animation: none;
+  }
+}
