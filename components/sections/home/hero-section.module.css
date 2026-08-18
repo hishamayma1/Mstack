@@ -63,3 +63,15 @@
     animation: none;
   }
 }
+
+/*
+ * Fluid headline. Fixed Tailwind steps (text-6xl at every width below sm)
+ * overflowed the copy column on 320–390px phones and forced the block tall
+ * enough to run under the fixed nav. One clamp tracks the viewport
+ * continuously instead of jumping at breakpoints: the floor keeps
+ * "Our Expertise." on one line at 320px, the ceiling matches the old
+ * desktop text-8xl.
+ */
+.headline {
+  font-size: clamp(2rem, 8.5vw, 6rem);
+}
