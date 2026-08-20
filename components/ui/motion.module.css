@@ -1,0 +1,360 @@
+/*
+ * The homepage's motion vocabulary.
+ *
+ * Everything here is a native scroll-driven animation (`animation-timeline:
+ * view()`) or a plain keyframe on transform/opacity. No IntersectionObserver,
+ * no rAF, no client boundary — a server-rendered section can animate simply by
+ * adding a class, which is why the page still ships no JavaScript of its own.
+ *
+ * Two rules hold throughout:
+ *
+ *   1. Every scroll-driven rule is wrapped in
+ *      @supports (animation-timeline: view()) + prefers-reduced-motion, so a
+ *      browser without support (Firefox today) renders the *finished* state.
+ *      Nothing is ever hidden behind an animation that might not run.
+ *   2. Stagger is data, not duplication: components set --m-start / --m-end
+ *      inline from their index (see lib/motion.ts) and share one keyframe.
+ */
+
+/* ── Entrances ─────────────────────────────────────────────────────────────
+   rise      the default: fade up, ~26px of travel
+   riseSm    for items inside an already-animating group — half the travel, so
+             a grid doesn't look like it's falling apart
+   slideL/R  for a column that should arrive from the side (sticky headings,
+             panels) rather than from below
+   scaleIn   for surfaces that should feel like they settle: cards, panels   */
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .rise,
+    .riseSm,
+    .slideL,
+    .slideR,
+    .scaleIn,
+    .fade {
+      animation: linear both;
+      animation-timeline: view();
+      animation-range: entry var(--m-start, 0%) entry var(--m-end, 46%);
+    }
+
+    .rise { animation-name: mRise; }
+    .riseSm { animation-name: mRiseSm; }
+    .slideL { animation-name: mSlideL; }
+    .slideR { animation-name: mSlideR; }
+    .scaleIn { animation-name: mScaleIn; }
+    .fade { animation-name: mFade; }
+  }
+}
+
+@keyframes mRise {
+  from { opacity: 0; transform: translate3d(0, 26px, 0); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes mRiseSm {
+  from { opacity: 0; transform: translate3d(0, 12px, 0); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes mSlideL {
+  from { opacity: 0; transform: translate3d(-28px, 0, 0); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes mSlideR {
+  from { opacity: 0; transform: translate3d(28px, 0, 0); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes mScaleIn {
+  from { opacity: 0; transform: scale(0.97) translate3d(0, 14px, 0); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes mFade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* ── Line drawing ──────────────────────────────────────────────────────────
+   The process rail and each band's top edge draw themselves as you reach
+   them. This is the most useful piece of motion on the page: it says "these
+   five things are one sequence" without a word of copy.                      */
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .drawX,
+    .drawY,
+    .topLine {
+      animation: linear both;
+      animation-timeline: view();
+      animation-range: entry var(--m-start, 0%) entry var(--m-end, 70%);
+    }
+    .drawX,
+    .topLine {
+      animation-name: mDrawX;
+      transform-origin: left center;
+    }
+    .drawY {
+      animation-name: mDrawY;
+      transform-origin: center top;
+    }
+  }
+}
+
+@keyframes mDrawX {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+@keyframes mDrawY {
+  from { transform: scaleY(0); }
+  to { transform: scaleY(1); }
+}
+
+/* Step markers land after the rail reaches them — the stagger is set inline
+   per step, so marker 03 pops once the line has drawn as far as 03. */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .pop {
+      animation: mPop linear both;
+      animation-timeline: view();
+      animation-range: entry var(--m-start, 0%) entry var(--m-end, 40%);
+    }
+  }
+}
+
+@keyframes mPop {
+  from { opacity: 0; transform: scale(0.2); }
+  60% { transform: scale(1.25); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* Tick marks draw themselves stroke-first. Applied to the <svg>; the path
+   inside picks up the dash animation. */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .drawCheck path {
+      stroke-dasharray: 26;
+      animation: mDrawCheck linear both;
+      animation-timeline: view();
+      animation-range: entry var(--m-start, 0%) entry var(--m-end, 45%);
+    }
+  }
+}
+
+@keyframes mDrawCheck {
+  from { stroke-dashoffset: 26; }
+  to { stroke-dashoffset: 0; }
+}
+
+/* ── Counting figures ──────────────────────────────────────────────────────
+   The proof band's numbers count up as the band enters. Pure CSS: a
+   registered integer custom property is animatable, and counter() renders it.
+
+   The fallback matters here. --m-count defaults to the *final* value, so a
+   browser that cannot run the animation prints "500", never "0". Only the
+   animation drives it down to zero and back up.                              */
+
+@property --m-count {
+  syntax: "<integer>";
+  initial-value: 0;
+  inherits: false;
+}
+
+.count {
+  --m-count: var(--m-count-to, 0);
+  counter-reset: mcount var(--m-count);
+}
+
+.count::after {
+  content: counter(mcount);
+}
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .count {
+      animation: mCount linear both;
+      animation-timeline: view();
+      animation-range: entry 8% entry 62%;
+    }
+  }
+}
+
+@keyframes mCount {
+  from { --m-count: 0; }
+  to { --m-count: var(--m-count-to, 0); }
+}
+
+/* ── Row hover ─────────────────────────────────────────────────────────────
+   A list row is a big target with no border to light up, so it needs its own
+   affordance: an accent bar that grows from the top edge and a gradient that
+   washes in from the left. Transform and opacity only.                       */
+
+.row {
+  position: relative;
+  overflow: hidden;
+}
+
+.row::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(59, 130, 246, 0.09), transparent 60%);
+  opacity: 0;
+  transition: opacity 380ms ease;
+  pointer-events: none;
+}
+
+.row:hover::before,
+.row:focus-visible::before {
+  opacity: 1;
+}
+
+.row::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: linear-gradient(180deg, rgba(96, 165, 250, 0.9), rgba(59, 130, 246, 0.2));
+  transform: scaleY(0);
+  transform-origin: center top;
+  transition: transform 380ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.row:hover::after,
+.row:focus-visible::after {
+  transform: scaleY(1);
+}
+
+/* A row that isn't a link still wants somewhere for the pointer to land, but
+   an accent bar would promise a destination it doesn't have. */
+.rowQuiet::after {
+  content: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .row::before,
+  .row::after {
+    transition: none;
+  }
+}
+
+/* ── Ambient ───────────────────────────────────────────────────────────────
+   One slow-drifting glow on each of the two bands that ask for something
+   (proof, health check). Time-based rather than scroll-based, so those bands
+   stay alive while the reader sits on them — which is exactly where they sit
+   longest. Transform only, so it stays on the compositor.                    */
+
+.aurora {
+  animation: mAurora 26s ease-in-out infinite alternate;
+  will-change: transform;
+}
+
+@keyframes mAurora {
+  from { transform: translate3d(-8%, -5%, 0) scale(1); }
+  to { transform: translate3d(8%, 5%, 0) scale(1.2); }
+}
+
+/* ── Panel swap ────────────────────────────────────────────────────────────
+   The industries panel, re-keyed on the active sector so this replays on
+   every tab change. Short and blurred rather than a slide: the panel is not
+   moving anywhere, its contents are being replaced.                          */
+
+.swap {
+  animation: mSwap 320ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes mSwap {
+  from { opacity: 0; filter: blur(6px); transform: translate3d(0, 8px, 0); }
+  to { opacity: 1; filter: blur(0); transform: none; }
+}
+
+/* Accordion answers fade in behind the height transition, so a long answer
+   does not appear fully formed before its container has room for it. */
+.answer {
+  animation: mAnswer 420ms ease both;
+}
+
+@keyframes mAnswer {
+  from { opacity: 0; transform: translate3d(0, -6px, 0); }
+  to { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .swap,
+  .answer,
+  .aurora {
+    animation: none;
+  }
+}
+
+/* ── Marquee edges ─────────────────────────────────────────────────────────
+   The logo strip ran hard into the viewport edges. Masking both ends makes
+   the loop read as continuous rather than clipped.                           */
+
+.marqueeMask {
+  mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+}
+
+/* ── Link underline ────────────────────────────────────────────────────────
+   The quiet inline "next step" links that replaced seven CTA bars. They need
+   to read as actionable without shouting, so the underline sweeps in.        */
+
+.link {
+  position: relative;
+}
+
+.link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -3px;
+  height: 1px;
+  background: currentColor;
+  opacity: 0.5;
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 340ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.link:hover::after,
+.link:focus-visible::after {
+  transform: scaleX(1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .link::after {
+    transition: none;
+  }
+}
+
+/* ── Tile hover ────────────────────────────────────────────────────────────
+   Grid cells (differentiators, use cases, quotes) lift very slightly. 2px is
+   deliberate: enough to confirm the cell is a unit, not enough to make a
+   six-cell grid feel like it is breathing.                                   */
+
+.tile {
+  transition: background-color 300ms ease, transform 300ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.tile:hover {
+  transform: translate3d(0, -2px, 0);
+}
+
+.tile:hover .tileIcon {
+  transform: scale(1.08) rotate(-3deg);
+  border-color: rgba(96, 165, 250, 0.5);
+}
+
+.tileIcon {
+  transition: transform 400ms cubic-bezier(0.16, 1, 0.3, 1), border-color 300ms ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tile,
+  .tileIcon {
+    transition: none;
+  }
+  .tile:hover {
+    transform: none;
+  }
+}

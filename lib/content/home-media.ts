@@ -1,4 +1,19 @@
 // ─────────────────────────────────────────────────────────────────────────────
+// STATUS: nothing on the homepage reads this file at the moment.
+//
+// Every slot below is still `src: null`, and the redesign dropped the dashed
+// <MediaFrame> placeholders from the homepage — a live page announcing IMAGE /
+// "photo goes here" in four places was advertising what was missing rather than
+// showing what is there.
+//
+// The briefs are kept because they are the art direction, not dead code. When
+// the photography exists: set that slot's `src` and `alt`, then render a
+// <MediaFrame> for it in the matching section — challenges-section.tsx,
+// process-section.tsx, lead-magnet-section.tsx and differentiators-section.tsx
+// respectively. The layouts all have a column free for one.
+// ─────────────────────────────────────────────────────────────────────────────
+
+// ─────────────────────────────────────────────────────────────────────────────
 // IMAGE SLOTS FOR THE HOMEPAGE — the only file you edit to replace the
 // placeholders with real artwork. Same contract as lib/content/industry-media.ts.
 //
