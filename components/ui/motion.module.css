@@ -358,3 +358,33 @@
     transform: none;
   }
 }
+
+/* ── Parallax ──────────────────────────────────────────────────────────────
+   Depth, not decoration. Each process step travels at its own rate through
+   the viewport, so the row breathes as you scroll instead of arriving as one
+   rigid line of five. `--m-par` is the drift in pixels, set inline per step
+   (see parallax() in lib/motion.ts); the element starts that far below its
+   resting place and ends the same distance above it, so it is exactly on
+   layout when it sits at the middle of the viewport.
+
+   The range is `entry 0% exit 100%` — the whole passage across the screen,
+   unlike an entrance, which finishes early and stops. Transform only, and a
+   browser without scroll-driven animations simply renders everything on its
+   own baseline, which is a perfectly good layout.                            */
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .parallax {
+      animation: mParallax linear both;
+      animation-timeline: view();
+      animation-range: entry 0% exit 100%;
+      will-change: transform;
+    }
+  }
+}
+
+@keyframes mParallax {
+  from { transform: translate3d(0, var(--m-par, 20px), 0); }
+  to { transform: translate3d(0, calc(var(--m-par, 20px) * -1), 0); }
+}
+

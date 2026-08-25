@@ -1,0 +1,146 @@
+/*
+ * The six animated panels that sit at the top of each "why us" cell.
+ *
+ * Aceternity's demo drives these from framer-motion variants. Every one of
+ * them is an x-translate, a rotate, a width or a background position, so they
+ * are transitions and keyframes here instead — the section stays a server
+ * component and the page gains no runtime.
+ *
+ * Two kinds of movement, deliberately kept apart:
+ *   - hover, off the `.bento-cell` hook that FeatureCard puts on every cell,
+ *     for the panels that react to the pointer. A plain global class rather
+ *     than Tailwind's own `group/cell`, whose slash needs escaping inside a
+ *     CSS module for no benefit.
+ *   - ambient, a slow loop, for the two that should look alive while the
+ *     reader is only passing by
+ *
+ * Everything is transform, opacity or background-position, and the whole file
+ * is inert under prefers-reduced-motion.
+ */
+
+/* The dotted ground every panel sits on — Aceternity's `bg-dot-white/[0.2]`,
+   which is a Tailwind plugin this project does not have. */
+.dots {
+  background-image: radial-gradient(rgba(255, 255, 255, 0.11) 1px, transparent 1px);
+  background-size: 16px 16px;
+  background-position: -8px -8px;
+}
+
+/* ── Splay ─────────────────────────────────────────────────────────────────
+   Rows (or bubbles) that fan apart under the pointer. The odd and even
+   children lean opposite ways, which is what stops it reading as a single
+   block sliding. Used by the products panel and the support panel.
+
+   The tilt is a variable because rotation does not survive a change of
+   width. The demo's 3° is right on its narrow bubbles; on the product rows,
+   which run the full width of a two-column cell, the same 3° swings the far
+   end of a 25px-tall pill by nearly 20px and the row reads as a spike rather
+   than a tilt. Wide panels set it down.                                     */
+
+.splay > * {
+  transition: transform 260ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+:global(.bento-cell):hover .splay > :nth-child(odd) {
+  transform: translateX(10px) rotate(var(--splay-tilt, 3deg));
+}
+
+:global(.bento-cell):hover .splay > :nth-child(even) {
+  transform: translateX(-10px) rotate(calc(var(--splay-tilt, 3deg) * -1));
+}
+
+/* ── Sweep ─────────────────────────────────────────────────────────────────
+   Bars that run out from the left on hover. Each bar's full width is set
+   inline and the transform scales it back, so they rest short of it rather
+   than at nothing — at the demo's near-zero resting state the panel reads as
+   unloaded rather than as a thing waiting to be touched.                     */
+
+.sweep > * {
+  transform-origin: left center;
+  transition: transform 420ms cubic-bezier(0.16, 1, 0.3, 1);
+  transform: scaleX(0.72);
+}
+
+:global(.bento-cell):hover .sweep > * {
+  transform: scaleX(1);
+}
+
+/* ── Climb ─────────────────────────────────────────────────────────────────
+   The scale panel: columns that grow to their full height on hover. Resting
+   at a fraction of it means the shape reads as "room to grow" even before
+   anyone touches it, which is the actual claim.                             */
+
+.climb > * {
+  transform-origin: bottom center;
+  transform: scaleY(0.72);
+  transition: transform 460ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+:global(.bento-cell):hover .climb > * {
+  transform: scaleY(1);
+}
+
+/* ── Converge ──────────────────────────────────────────────────────────────
+   Three cards sitting askew that straighten into a row on hover — the
+   partnership panel. This is the demo's fourth skeleton, minus the avatars. */
+
+.converge > * {
+  transition: transform 340ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.converge > :first-child {
+  transform: translateX(14px) rotate(-5deg);
+}
+
+.converge > :last-child {
+  transform: translateX(-14px) rotate(5deg);
+}
+
+:global(.bento-cell):hover .converge > * {
+  transform: none;
+}
+
+/* ── Scan ──────────────────────────────────────────────────────────────────
+   Ambient, not hover: a line travelling down the security panel. It is the
+   one claim on the page that is about something happening continuously
+   whether or not anyone is looking, so it moves on its own.                 */
+
+.scan {
+  animation: mScan 3.8s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+}
+
+@keyframes mScan {
+  0% { transform: translateY(0); opacity: 0; }
+  12% { opacity: 1; }
+  88% { opacity: 1; }
+  100% { transform: translateY(var(--scan-travel, 96px)); opacity: 0; }
+}
+
+/* ── Drift ─────────────────────────────────────────────────────────────────
+   The speed panel's gradient wash, the demo's third skeleton. Background
+   position only, so nothing repaints.                                       */
+
+.drift {
+  background: linear-gradient(-45deg, rgba(37, 99, 235, 0.5), rgba(96, 165, 250, 0.35), rgba(14, 165, 233, 0.4), rgba(37, 99, 235, 0.5));
+  background-size: 400% 400%;
+  animation: mDrift 9s ease-in-out infinite alternate;
+}
+
+@keyframes mDrift {
+  from { background-position: 0% 50%; }
+  to { background-position: 100% 50%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .splay > *,
+  .sweep > *,
+  .climb > *,
+  .converge > * {
+    transition: none;
+    transform: none;
+  }
+  .scan,
+  .drift {
+    animation: none;
+  }
+}

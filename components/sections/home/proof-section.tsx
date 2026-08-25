@@ -4,9 +4,9 @@ import { Stat } from "@/components/ui/stat"
 import { RevealText } from "@/components/ui/reveal-text"
 import { INDUSTRIES, TESTIMONIALS } from "@/lib/content/site"
 
-const FIGURES = [
+const FIGURES: { value: string; label: string; mark?: boolean; srValue?: string }[] = [
   { value: "500+", label: "Businesses supported" },
-  { value: "★★★★★", label: "Google review rating" },
+  { value: "★★★★★", label: "Google reviews", mark: true, srValue: "5 out of 5" },
   { value: "10+", label: "Years on Microsoft 365" },
   { value: String(INDUSTRIES.length), label: "Industries served" },
 ]
@@ -46,16 +46,33 @@ export function ProofSection() {
           </Link>
         </div>
 
-        <dl className="grid grid-cols-2 gap-x-6 gap-y-10 lg:col-span-7 lg:grid-cols-4 lg:gap-x-4">
-          {FIGURES.map((f) => (
-            <Stat key={f.label} value={f.value} label={f.label} />
+        {/* Two-up at every width. Four columns inside a 7-of-12 span leaves
+            about 150px each — and because the section is capped at max-w-6xl,
+            that stays 150px however wide the window gets. "Years on Microsoft
+            365" cannot set on one line at that width, so every label wrapped
+            and the row came out ragged. Two columns of ~320px fix it for good
+            rather than only above some breakpoint. */}
+        <dl className="grid grid-cols-2 gap-x-8 gap-y-10 lg:col-span-7">
+          {FIGURES.map((f, i) => (
+            <Stat
+              key={f.label}
+              value={f.value}
+              label={f.label}
+              mark={f.mark}
+              srValue={f.srValue}
+              order={i}
+            />
           ))}
         </dl>
       </div>
 
       {/* Three quotes, held still. Divided rather than boxed — the band's own
           surface already separates them from the page. */}
-      <ul className="mt-16 grid gap-px overflow-hidden rounded-2xl border border-white/[0.07] bg-white/[0.07] md:grid-cols-3">
+      {/* One column until `lg`, then three. Not two at `md`: with three items
+          in a two-column grid the empty fourth cell shows through as a pale
+          block, because the hairlines here are the parent's background
+          bleeding between the tiles rather than real borders. */}
+      <ul className="mt-16 grid gap-px overflow-hidden rounded-2xl border border-white/[0.07] bg-white/[0.07] lg:grid-cols-3">
         {TESTIMONIALS.slice(0, 3).map((t) => (
           <li key={t.name} className="flex flex-col gap-4 bg-[#0B1220] p-7">
             <span className="text-[11px] tracking-[0.25em] text-blue-400/80" aria-label="5 out of 5">

@@ -68,10 +68,10 @@ export default async function HomePage() {
       <TrustBarSection />
       <ChallengesSection />
       <HomeServicesSection levels={levels} />
+      <DifferentiatorsSection />
       <ProofSection />
       <HomeIndustriesSection />
       <ProcessSection />
-      <DifferentiatorsSection />
       <QuestionsSection faqs={faqs} />
       <LeadMagnetSection />
       <FinalCTASection />

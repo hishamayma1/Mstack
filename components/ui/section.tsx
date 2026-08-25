@@ -57,7 +57,7 @@ export function Section({
 }) {
   // `overflow-hidden` is applied only when there is an aurora to clip. An
   // ancestor with `overflow: hidden` silently kills `position: sticky` in
-  // every descendant, and the challenges section relies on a sticky heading.
+  // every descendant, so it stays off unless the band actually needs it.
   const clip = aurora ? "overflow-hidden" : ""
 
   return (

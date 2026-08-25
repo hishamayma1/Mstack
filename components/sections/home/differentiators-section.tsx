@@ -1,4 +1,6 @@
 import { Section, SectionIntro } from "@/components/ui/section"
+import { FeatureGrid, FeatureCard } from "@/components/ui/feature-grid"
+import { DIFFERENTIATOR_VISUALS } from "./differentiator-visuals"
 import { BRAND_BREAKDOWN, DIFFERENTIATORS, type Differentiator } from "@/lib/content/site"
 
 // One mark per claim. Six identical badges made the grid read as one repeated
@@ -14,15 +16,23 @@ const ICONS: Record<Differentiator["icon"], string> = {
     "M7.5 12.5l3 3 6-6M4 6.5A2.5 2.5 0 016.5 4h11A2.5 2.5 0 0120 6.5v11a2.5 2.5 0 01-2.5 2.5h-11A2.5 2.5 0 014 17.5z",
 }
 
+// The column spans, in content order. Aceternity's demo runs 1,1,1,2,1 across
+// three columns; six claims need nine span-units to fill three clean rows, so
+// this alternates 2+1 / 1+2 / 1+2. No row ever repeats the previous row's
+// rhythm, which is the whole reason to use a bento here rather than a grid of
+// six equal cards — that is what the old version was, and six peers of equal
+// weight invite comparison instead of reading.
+//
+// The wide cells are given to the claims whose panel needs the room: the
+// product row, the security layers, and the three-year timeline.
+const SPANS = [2, 1, 1, 2, 1, 2] as const
+
 // Why us.
 //
-// Two changes from the old version. The brand breakdown was three large cards
-// with 4xl letters, taking a full row beside a dashed team-photo placeholder,
-// to explain a name — it is now one slim strip, which is all that claim is
-// worth. And the six differentiators are a shared grid rather than six
-// floating bordered cards: single hairlines between cells, no card chrome, no
-// hover glow. Six peers laid out as a table is legible in a way six cards
-// stacked on the same dark surface never were.
+// The brand breakdown stays as it was — one slim strip, which is all that
+// claim is worth. What changed is the six differentiators: they were a shared
+// hairline grid, legible but inert, six sentences with an icon each. Now every
+// claim gets a panel that demonstrates it, which is the thing a bento is for.
 export function DifferentiatorsSection() {
   return (
     <Section id="why-us" tone="base" size="lg">
@@ -42,10 +52,16 @@ export function DifferentiatorsSection() {
         ))}
       </dl>
 
-      <ul className="mt-3 grid gap-px overflow-hidden rounded-2xl border border-white/[0.07] bg-white/[0.07] sm:grid-cols-2 lg:grid-cols-3">
-        {DIFFERENTIATORS.map((d) => (
-          <li key={d.title} className="bg-[#0A0E17] p-7 transition-colors hover:bg-white/[0.02]">
-            <span className="mb-5 flex h-9 w-9 items-center justify-center rounded-lg border border-blue-500/25 bg-blue-500/10 text-blue-300/90">
+      <FeatureGrid className="mt-4">
+        {DIFFERENTIATORS.map((d, i) => (
+          <FeatureCard
+            key={d.title}
+            order={i}
+            title={d.title}
+            desc={d.desc}
+            span={SPANS[i] ?? 1}
+            visual={DIFFERENTIATOR_VISUALS[d.icon]}
+            icon={
               <svg
                 width="17"
                 height="17"
@@ -59,12 +75,10 @@ export function DifferentiatorsSection() {
               >
                 <path d={ICONS[d.icon]} />
               </svg>
-            </span>
-            <h3 className="text-[1.0625rem] font-light leading-snug text-[#F3F5FA]">{d.title}</h3>
-            <p className="mt-2 text-[0.9375rem] leading-[1.7] text-white/50">{d.desc}</p>
-          </li>
+            }
+          />
         ))}
-      </ul>
+      </FeatureGrid>
     </Section>
   )
 }
