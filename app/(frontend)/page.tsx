@@ -75,7 +75,6 @@ export default async function HomePage() {
       <QuestionsSection faqs={faqs} />
       <LeadMagnetSection />
       <FinalCTASection />
-
       <FloatingActions />
       <SiteFooter />
     </div>
