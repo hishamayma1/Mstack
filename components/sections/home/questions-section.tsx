@@ -1,6 +1,6 @@
 import Link from "next/link"
 import { Section, Eyebrow, SectionIntro, Chevron } from "@/components/ui/section"
-import { AppLogo } from "@/components/ui/app-logo"
+import { InfiniteMovingCards } from "@/components/ui/infinite-moving-cards"
 import { FAQAccordion } from "@/components/sections/home/faq-accordion"
 import { USE_CASES } from "@/lib/content/site"
 import { USE_CASE_LOGOS } from "@/lib/content/app-logos"
@@ -25,20 +25,31 @@ export function QuestionsSection({ faqs }: { faqs: FAQCard[] }) {
         lead="Real requests, in the words they arrived in — followed by the questions we answer most weeks."
       />
 
-      {/* The requests. Quiet by design: they are context for the answers under
-          them, not six things to choose between. */}
-      <ul className="mt-12 grid gap-px overflow-hidden rounded-2xl border border-white/[0.07] bg-white/[0.07] sm:grid-cols-2 lg:grid-cols-3">
-        {USE_CASES.map((u) => (
-          <li key={u.name} className="flex flex-col gap-4 bg-[#0C111C] p-6">
-            <p className="flex-1 text-[0.9375rem] leading-[1.75] text-white/55">&ldquo;{u.quote}&rdquo;</p>
-            <div className="flex items-center gap-2.5 border-t border-white/[0.06] pt-4">
-              {USE_CASE_LOGOS[u.topic] ? <AppLogo slug={USE_CASE_LOGOS[u.topic]} size={20} /> : null}
-              <span className="text-[0.8125rem] font-light text-white/75">{u.name}</span>
-              <span className="ml-auto text-[10px] uppercase tracking-[0.15em] text-white/35">{u.topic}</span>
-            </div>
-          </li>
-        ))}
-      </ul>
+      {/* The requests, as a strip that drifts past rather than a grid that
+          sits still. They are context for the answers under them, not six
+          things to choose between, so a row you can glance at and move on
+          from suits them better than six cells asking to be compared.
+
+          The speed is the whole argument for doing it this way at all. At the
+          component's own default — one pass in 20s — a quote leaves the
+          screen before it can be read, which is exactly why the testimonial
+          marquee that used to run further up this page was taken out. 110s is
+          slow enough to finish a card at a glance, it pauses under the
+          pointer, and it stops dead for anyone who has asked for reduced
+          motion. */}
+      <div className="mt-12">
+        <InfiniteMovingCards
+          ariaLabel="What people ask us for"
+          speed={110}
+          items={USE_CASES.map((u) => ({
+            id: u.name,
+            quote: u.quote,
+            name: u.name,
+            meta: u.topic,
+            logo: USE_CASE_LOGOS[u.topic],
+          }))}
+        />
+      </div>
 
       {faqs.length > 0 ? (
         <div className="mt-20">
