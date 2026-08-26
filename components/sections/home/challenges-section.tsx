@@ -18,13 +18,31 @@ const KIND = {
 // `media: "top"` on the opening cell only: one picture entering from above
 // anchors the grid, and repeating it would flatten the alternation back into
 // a uniform wall. Every other cell drops its picture out of the bottom.
+//
+// ── Replacing the pictures ──────────────────────────────────────────────────
+// `src` points at a placeholder in public/images/demo/. They are stand-ins
+// drawn to be plausible, not real: no tenant data, no Microsoft product
+// chrome. Drop a real screenshot in at the same path and nothing else here
+// changes.
+//
+// What a replacement needs to be: wide (these are 1200×800, and 3:2 or wider
+// is right — the card crops height, never width), dark, and readable in its
+// top-left corner, because `object-left-top` anchors there while the rest
+// runs off the card. `label` is only used when `src` is absent, so it can
+// stay as documentation of what belongs in each slot.
 const LAYOUT = [
-  { span: 7, media: "top", minH: "min-h-[420px]", label: "Licence spend" },
-  { span: 5, media: "bottom", minH: "min-h-[420px]", label: "Security baseline" },
-  { span: 5, media: "bottom", minH: "min-h-[400px]", label: "Storage sprawl" },
-  { span: 7, media: "bottom", minH: "min-h-[400px]", label: "Support queue" },
-  { span: 6, media: "bottom", minH: "min-h-[380px]", label: "Manual process" },
-  { span: 6, media: "bottom", minH: "min-h-[380px]", label: "Reporting" },
+  { span: 7, media: "top", minH: "min-h-[420px]", label: "Licence spend",
+    src: "/images/demo/licence-spend.png", alt: "Licence usage report showing 19% of a paid tier in use" },
+  { span: 5, media: "bottom", minH: "min-h-[420px]", label: "Security baseline",
+    src: "/images/demo/security-baseline.png", alt: "Secure score at 31% with MFA and Conditional Access off" },
+  { span: 5, media: "bottom", minH: "min-h-[400px]", label: "Storage sprawl",
+    src: "/images/demo/storage-sprawl.png", alt: "One document found in five locations, none of them current" },
+  { span: 7, media: "bottom", minH: "min-h-[400px]", label: "Support queue",
+    src: "/images/demo/support-queue.png", alt: "Helpdesk queue with an eleven-day oldest ticket and no named contact" },
+  { span: 6, media: "bottom", minH: "min-h-[380px]", label: "Manual process",
+    src: "/images/demo/manual-process.png", alt: "Weekly approvals still done by hand, totalling over nine hours" },
+  { span: 6, media: "bottom", minH: "min-h-[380px]", label: "Reporting",
+    src: "/images/demo/reporting.png", alt: "A monthly report with no data, beside an invoice that arrives anyway" },
 ] as const
 
 // Problem agitation, before the service menu — a visitor who recognises three
@@ -61,6 +79,8 @@ export function ChallengesSection() {
               media={cell.media}
               minH={cell.minH}
               mediaLabel={cell.label}
+              src={cell.src}
+              alt={cell.alt}
               meta={
                 <span
                   className={`shrink-0 rounded-full border px-2.5 py-1 text-[10px] uppercase tracking-[0.18em] ${KIND[p.kind]}`}
