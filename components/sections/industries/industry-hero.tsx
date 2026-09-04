@@ -31,14 +31,14 @@ export function IndustryHero({
 
       <div className="relative z-10 max-w-6xl mx-auto">
         <nav aria-label="Breadcrumb" className="mb-6">
-          <ol className="flex items-center gap-2 text-xs text-white/40 tracking-wide">
+          <ol className="flex items-center gap-2 text-xs text-muted-foreground tracking-wide">
             <li>
-              <Link href="/industries" className="hover:text-white/70 transition-colors">
+              <Link href="/industries" className="hover:text-foreground transition-colors">
                 Industries
               </Link>
             </li>
             <li aria-hidden="true">/</li>
-            <li className="text-white/60">{industryTitle}</li>
+            <li className="text-muted-foreground">{industryTitle}</li>
           </ol>
         </nav>
 
@@ -51,7 +51,7 @@ export function IndustryHero({
             >
               {headline}
             </RevealText>
-            <p className="mt-6 text-base text-white/55 leading-relaxed">{valueProp}</p>
+            <p className="mt-6 text-base text-muted-foreground leading-relaxed">{valueProp}</p>
 
             <div className="mt-9">
               <CTAButtons
@@ -78,12 +78,12 @@ export function IndustryHero({
             {stats.map((s) => (
               <div
                 key={s.label}
-                className="rounded-2xl border border-white/[0.08] bg-white/[0.02] px-6 py-5"
+                className="rounded-2xl border border-border bg-card px-6 py-5"
               >
                 <dt className="sr-only">{s.label}</dt>
                 <dd>
                   <span className="block text-3xl font-light text-blue-400 font-ibm-plex">{s.value}</span>
-                  <span className="mt-1 block text-xs text-white/45 tracking-wide">{s.label}</span>
+                  <span className="mt-1 block text-xs text-muted-foreground tracking-wide">{s.label}</span>
                 </dd>
               </div>
             ))}

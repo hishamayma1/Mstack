@@ -28,7 +28,7 @@ const VALUE_POINTS = [
 
 export function IndustriesValueSection() {
   return (
-    <section className="py-28 px-6 md:px-12 lg:px-20 border-t border-white/[0.08]">
+    <section className="py-28 px-6 md:px-12 lg:px-20 border-t border-border">
       <div className="max-w-6xl mx-auto">
         <SectionHeader
           eyebrow="WHY SECTOR MATTERS"
@@ -39,9 +39,9 @@ export function IndustriesValueSection() {
         <MouseGlowGrid className="grid grid-cols-1 md:grid-cols-3 gap-3">
           {VALUE_POINTS.map((v, i) => (
             <BentoCard key={v.n} className="p-8 flex flex-col min-h-[240px]" delay={i * 70}>
-              <span className="font-pixel text-[11px] text-white/30 tracking-widest block mb-6">{v.n}</span>
+              <span className="font-pixel text-[11px] text-muted-foreground tracking-widest block mb-6">{v.n}</span>
               <h3 className="text-lg font-light mb-3 mt-auto">{v.title}</h3>
-              <p className="text-sm text-white/55 leading-relaxed">{v.desc}</p>
+              <p className="text-sm text-muted-foreground leading-relaxed">{v.desc}</p>
             </BentoCard>
           ))}
         </MouseGlowGrid>

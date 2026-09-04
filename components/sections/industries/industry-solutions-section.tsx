@@ -16,7 +16,7 @@ export function IndustrySolutionsSection({
   if (solutions.length === 0) return null
 
   return (
-    <section id="solutions" className="py-28 px-6 md:px-12 lg:px-20 border-t border-white/[0.08]">
+    <section id="solutions" className="py-28 px-6 md:px-12 lg:px-20 border-t border-border">
       <div className="max-w-6xl mx-auto">
         <SectionHeader
           eyebrow="WHAT WE SOLVE"
@@ -27,11 +27,11 @@ export function IndustrySolutionsSection({
         <MouseGlowGrid className="grid grid-cols-1 md:grid-cols-2 gap-3">
           {solutions.map((s, i) => (
             <BentoCard key={s.title} className="p-8 flex flex-col" delay={i * 70}>
-              <span className="font-pixel text-[11px] text-white/30 tracking-widest block mb-5">
+              <span className="font-pixel text-[11px] text-muted-foreground tracking-widest block mb-5">
                 {String(i + 1).padStart(2, "0")}
               </span>
               <h3 className="text-lg font-light mb-2">{s.title}</h3>
-              <p className="text-sm text-white/55 leading-relaxed">{s.description}</p>
+              <p className="text-sm text-muted-foreground leading-relaxed">{s.description}</p>
             </BentoCard>
           ))}
         </MouseGlowGrid>

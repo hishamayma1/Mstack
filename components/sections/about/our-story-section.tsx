@@ -5,7 +5,7 @@ import { OUR_STORY } from "@/lib/content/site"
 
 export function OurStorySection() {
   return (
-    <section id="our-story" className="py-32 px-6 md:px-12 lg:px-20 border-t border-white/[0.08]">
+    <section id="our-story" className="py-32 px-6 md:px-12 lg:px-20 border-t border-border">
       <div className="max-w-6xl mx-auto">
         <div className="mb-16 max-w-2xl">
           <Tag>OUR STORY</Tag>
@@ -17,9 +17,9 @@ export function OurStorySection() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
           {OUR_STORY.map((m, i) => (
             <BentoCard key={m.year} className="p-7 flex flex-col min-h-[220px]" delay={i * 80}>
-              <span className="font-pixel text-[11px] text-blue-400/80 tracking-widest block mb-6">{m.year}</span>
+              <span className="font-pixel text-[11px] text-blue-600 dark:text-blue-400/80 tracking-widest block mb-6">{m.year}</span>
               <h3 className="text-lg font-light mb-3 mt-auto">{m.title}</h3>
-              <p className="text-sm text-white/55 leading-relaxed">{m.desc}</p>
+              <p className="text-sm text-muted-foreground leading-relaxed">{m.desc}</p>
             </BentoCard>
           ))}
         </div>

@@ -25,7 +25,7 @@ export function BentoCard({
 
   return (
     <div
-      className={`${styles.reveal} group relative rounded-2xl border border-white/[0.08] bg-[#10141f] overflow-hidden transition-colors duration-300 hover:border-blue-500/30 hover:bg-[#131a29] ${className}`}
+      className={`${styles.reveal} group relative rounded-2xl border border-border bg-card overflow-hidden transition-colors duration-300 hover:border-blue-500/30 hover:bg-accent/40 ${className}`}
       style={
         {
           "--reveal-start": `${start}%`,

@@ -26,7 +26,7 @@ export function ExplorerSearch({
   return (
     <div className={`relative ${className}`}>
       <svg
-        className="absolute left-3.5 top-1/2 -translate-y-1/2 text-white/30"
+        className="absolute left-3.5 top-1/2 -translate-y-1/2 text-muted-foreground"
         width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
         aria-hidden="true"
       >
@@ -39,7 +39,7 @@ export function ExplorerSearch({
         onChange={(e) => setQuery(explorerKey, e.target.value)}
         placeholder={placeholder}
         aria-label={placeholder}
-        className="w-full pl-9 pr-3 py-2.5 rounded-xl bg-white/[0.03] border border-white/[0.1] text-xs text-[#F3F5FA] placeholder:text-white/30 focus:outline-none focus:border-blue-500/50 focus:bg-white/[0.05] transition-colors"
+        className="w-full pl-9 pr-3 py-2.5 rounded-xl bg-card border border-border text-xs text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-blue-500/50 focus:bg-accent/40 transition-colors"
       />
     </div>
   )
@@ -71,9 +71,9 @@ export function ExplorerFilterChips({
             aria-pressed={active}
             className="px-3 py-1.5 rounded-full text-[11px] tracking-wide border transition-all duration-200"
             style={{
-              background: active ? "rgba(59,130,246,0.18)" : "rgba(255,255,255,0.03)",
-              borderColor: active ? "rgba(96,165,250,0.4)" : "rgba(255,255,255,0.08)",
-              color: active ? "rgba(255,255,255,0.95)" : "rgba(255,255,255,0.55)",
+              background: active ? "rgba(59,130,246,0.18)" : "rgba(var(--fg-rgb),0.03)",
+              borderColor: active ? "rgba(96,165,250,0.4)" : "rgba(var(--fg-rgb),0.08)",
+              color: active ? "rgb(var(--fg-rgb))" : "rgba(var(--fg-rgb),0.55)",
             }}
           >
             {option}

@@ -13,7 +13,7 @@ import type { IndustryCard } from "@/lib/cms/industries"
 // Microsoft tools that industry gets, so the grid sells before the click.
 export function IndustriesGridSection({ industries }: { industries: IndustryCard[] }) {
   return (
-    <section id="sectors" className="py-28 px-6 md:px-12 lg:px-20 border-t border-white/[0.08]">
+    <section id="sectors" className="py-28 px-6 md:px-12 lg:px-20 border-t border-border">
       <div className="max-w-6xl mx-auto">
         <SectionHeader
           eyebrow="SECTOR EXPERTISE"
@@ -38,25 +38,25 @@ export function IndustriesGridSection({ industries }: { industries: IndustryCard
                 />
 
                 <div className="flex items-center justify-between mb-5">
-                  <span className="font-pixel text-[11px] text-white/30 tracking-widest">
+                  <span className="font-pixel text-[11px] text-muted-foreground tracking-widest">
                     {String(i + 1).padStart(2, "0")}
                   </span>
                   {ind.solutionCount > 0 ? (
-                    <span className="text-[11px] text-white/35 tracking-wide">
+                    <span className="text-[11px] text-muted-foreground tracking-wide">
                       {ind.solutionCount} solutions
                     </span>
                   ) : null}
                 </div>
 
                 <h3 className="text-xl font-light mb-3">{ind.title}</h3>
-                <p className="text-sm text-white/55 leading-relaxed mb-6">{ind.summary}</p>
+                <p className="text-sm text-muted-foreground leading-relaxed mb-6">{ind.summary}</p>
 
                 {ind.toolNames.length > 0 ? (
                   <div className="flex flex-wrap gap-1.5 mb-6">
                     {ind.toolNames.map((name) => (
                       <span
                         key={name}
-                        className="px-2.5 py-1 rounded-full text-[11px] tracking-wide text-white/45 bg-white/[0.05] border border-white/[0.06]"
+                        className="px-2.5 py-1 rounded-full text-[11px] tracking-wide text-muted-foreground bg-card border border-border"
                       >
                         {name}
                       </span>
@@ -64,7 +64,7 @@ export function IndustriesGridSection({ industries }: { industries: IndustryCard
                   </div>
                 ) : null}
 
-                <span className="mt-auto pt-5 border-t border-white/[0.08] text-xs text-blue-300/80 tracking-wide group-hover/card:text-blue-300 transition-colors">
+                <span className="mt-auto pt-5 border-t border-border text-xs text-blue-600 dark:text-blue-300/80 tracking-wide group-hover/card:text-blue-500 dark:group-hover/card:text-blue-300 transition-colors">
                   See the toolkit for {ind.title} →
                 </span>
               </BentoCard>
@@ -80,7 +80,7 @@ export function IndustriesGridSection({ industries }: { industries: IndustryCard
           secondaryHref="/solutions"
         />
 
-        <p className="mt-8 text-xs text-white/35 leading-relaxed max-w-2xl">
+        <p className="mt-8 text-xs text-muted-foreground leading-relaxed max-w-2xl">
           *PCI and HIPAA policy compliance requires additional, out-of-scope labour. Reach out for more information.
         </p>
       </div>

@@ -16,7 +16,7 @@ export function FAQAccordion({ faqs }: { faqs: FAQCard[] }) {
   const [open, setOpen] = useState<string | null>(faqs[0]?.id ?? null)
 
   return (
-    <div className="divide-y divide-white/[0.07] border-y border-white/[0.07]">
+    <div className="divide-y divide-border border-y border-border">
       {faqs.map((item) => {
         const isOpen = open === item.id
         return (
@@ -31,15 +31,15 @@ export function FAQAccordion({ faqs }: { faqs: FAQCard[] }) {
               >
                 <span
                   className={`text-[1.0625rem] font-light leading-snug transition-colors ${
-                    isOpen ? "text-blue-200" : "text-[#F3F5FA] group-hover:text-white"
+                    isOpen ? "text-blue-600 dark:text-blue-200" : "text-foreground group-hover:text-foreground"
                   }`}
                 >
                   {item.question}
                 </span>
                 <span
                   aria-hidden="true"
-                  className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full border text-white/50 transition-all duration-300 ${
-                    isOpen ? "rotate-45 border-blue-400/40 text-blue-300" : "border-white/15"
+                  className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full border text-muted-foreground transition-all duration-300 ${
+                    isOpen ? "rotate-45 border-blue-400/40 text-blue-600 dark:text-blue-300" : "border-border"
                   }`}
                 >
                   +
@@ -57,11 +57,11 @@ export function FAQAccordion({ faqs }: { faqs: FAQCard[] }) {
             >
               <div className="overflow-hidden">
                 <div className="max-w-[70ch] pb-7 pr-4 md:pr-10">
-                  <p className="text-[0.9375rem] leading-[1.8] text-white/60">{item.answer}</p>
+                  <p className="text-[0.9375rem] leading-[1.8] text-muted-foreground">{item.answer}</p>
                   {item.points.length > 0 ? (
                     <ul className="mt-4 space-y-2.5">
                       {item.points.map((p) => (
-                        <li key={p} className="flex gap-3 text-[0.9375rem] leading-[1.7] text-white/45">
+                        <li key={p} className="flex gap-3 text-[0.9375rem] leading-[1.7] text-muted-foreground">
                           <span
                             aria-hidden="true"
                             className="mt-[0.6em] h-1 w-1 shrink-0 rounded-full bg-blue-400/50"

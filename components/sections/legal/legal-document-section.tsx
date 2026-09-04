@@ -5,7 +5,7 @@ import styles from "./legal-document-section.module.css"
 // so each is directly linkable and indexable at /legal#privacy-policy etc.
 export function LegalDocumentSection() {
   return (
-    <section className="py-24 px-6 md:px-12 lg:px-20 border-t border-white/[0.08]">
+    <section className="py-24 px-6 md:px-12 lg:px-20 border-t border-border">
       <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-[200px_1fr] gap-12">
         <nav className={styles.nav} aria-label="Legal documents">
           {LEGAL_DOCS.map((doc) => (
@@ -19,12 +19,12 @@ export function LegalDocumentSection() {
           {LEGAL_DOCS.map((doc) => (
             <article key={doc.id} id={doc.id} className={styles.article}>
               <h2 className="text-3xl md:text-4xl font-light tracking-tight mb-2">{doc.title}</h2>
-              <p className="text-xs text-white/35 tracking-wide mb-8">Last updated: {doc.updated}</p>
+              <p className="text-xs text-muted-foreground tracking-wide mb-8">Last updated: {doc.updated}</p>
               <div className="flex flex-col gap-6">
                 {doc.sections.map((s) => (
                   <div key={s.heading}>
-                    <h3 className="text-base font-light text-[#F3F5FA] mb-2">{s.heading}</h3>
-                    <p className="text-sm text-white/55 leading-relaxed">{s.body}</p>
+                    <h3 className="text-base font-light text-foreground mb-2">{s.heading}</h3>
+                    <p className="text-sm text-muted-foreground leading-relaxed">{s.body}</p>
                   </div>
                 ))}
               </div>

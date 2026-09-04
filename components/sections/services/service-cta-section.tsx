@@ -18,7 +18,7 @@ export function ServiceCTASection({
   return (
     <section
       id="final-cta"
-      className={`${styles.backdrop} py-32 px-6 md:px-12 lg:px-20 border-t border-white/[0.08]`}
+      className={`${styles.backdrop} py-32 px-6 md:px-12 lg:px-20 border-t border-border`}
     >
       <div className={styles.glow} aria-hidden="true" />
       <div className={styles.floor} aria-hidden="true" />
@@ -28,7 +28,7 @@ export function ServiceCTASection({
         <RevealText className="text-4xl md:text-5xl lg:text-6xl font-light tracking-tight leading-[1.05] mb-6">
           {headline}
         </RevealText>
-        <p className="text-sm text-white/55 leading-relaxed mb-10">{subtext}</p>
+        <p className="text-sm text-muted-foreground leading-relaxed mb-10">{subtext}</p>
 
         <div className="mb-8 flex flex-col sm:flex-row gap-3 justify-center">
           <a
@@ -39,7 +39,7 @@ export function ServiceCTASection({
           </a>
           <Link
             href="/contact"
-            className="px-8 py-3 border border-white/15 text-white/75 text-sm rounded-xl hover:border-blue-500/40 hover:text-white hover:bg-white/[0.05] transition-all tracking-widest font-medium text-center whitespace-nowrap"
+            className="px-8 py-3 border border-border text-foreground/75 text-sm rounded-xl hover:border-blue-500/40 hover:text-foreground hover:bg-accent/60 transition-all tracking-widest font-medium text-center whitespace-nowrap"
           >
             Book a Call Instead
           </Link>
@@ -47,7 +47,7 @@ export function ServiceCTASection({
 
         <div className="flex items-center justify-center gap-6 flex-wrap">
           {TRUST_INDICATORS.map((indicator) => (
-            <div key={indicator} className="flex items-center gap-2 text-xs text-white/40">
+            <div key={indicator} className="flex items-center gap-2 text-xs text-muted-foreground">
               <span className="w-1 h-1 rounded-full bg-blue-400/60" />
               {indicator}
             </div>

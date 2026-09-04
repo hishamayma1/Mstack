@@ -62,7 +62,7 @@ export function ChallengesSection() {
         lead="Almost every Microsoft 365 tenant we open has the same handful of problems. See how many you recognise."
       />
 
-      <p className="mx-auto mt-6 max-w-md text-center text-[0.9375rem] leading-[1.7] text-white/40">
+      <p className="mx-auto mt-6 max-w-md text-center text-[0.9375rem] leading-[1.7] text-muted-foreground">
         Every one of these is fixable with licences you already hold.
       </p>
 

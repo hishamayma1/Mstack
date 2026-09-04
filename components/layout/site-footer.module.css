@@ -48,8 +48,8 @@
   z-index: -2;
   pointer-events: none;
   background-image:
-    linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+    linear-gradient(rgba(var(--fg-rgb), 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(var(--fg-rgb), 0.035) 1px, transparent 1px);
   background-size: 56px 56px;
   mask-image: linear-gradient(to bottom, black 0%, transparent 85%);
   -webkit-mask-image: linear-gradient(to bottom, black 0%, transparent 85%);
@@ -66,7 +66,7 @@
   overflow: hidden;
   z-index: -1;
   pointer-events: none;
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(var(--fg-rgb), 0.08);
 }
 
 .topLine::after {
@@ -79,8 +79,8 @@
   background: linear-gradient(
     90deg,
     transparent,
-    rgba(96, 165, 250, 0.85),
-    rgba(147, 197, 253, 0.35),
+    rgba(var(--accent-strong-rgb), 0.85),
+    rgba(var(--accent-soft-rgb), 0.35),
     transparent
   );
   animation: lineSweep 7s ease-in-out infinite;
@@ -109,8 +109,8 @@
   pointer-events: none;
   background: linear-gradient(
     to bottom,
-    rgba(255, 255, 255, 0.055),
-    rgba(255, 255, 255, 0)
+    rgba(var(--fg-rgb), 0.055),
+    rgba(var(--fg-rgb), 0)
   );
   -webkit-background-clip: text;
   background-clip: text;
@@ -132,7 +132,7 @@
   bottom: -2px;
   width: 100%;
   height: 1px;
-  background: rgba(96, 165, 250, 0.8);
+  background: rgba(var(--accent-strong-rgb), 0.8);
   transform: scaleX(0);
   transform-origin: left center;
   transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);

@@ -1,5 +1,5 @@
 import Image from "next/image"
-import { APP_LOGOS, type AppLogoSlug } from "@/lib/content/app-logos"
+import { APP_LOGOS, type AppLogo as AppLogoDef, type AppLogoSlug } from "@/lib/content/app-logos"
 
 // A product logo slot that degrades into a monogram tile.
 //
@@ -18,15 +18,23 @@ export function AppLogo({
   /** Show the product name beside the mark. */
   showName?: boolean
 }) {
-  const logo = APP_LOGOS[slug]
+  const logo: AppLogoDef = APP_LOGOS[slug]
   const box = { width: size, height: size }
 
+  // Widened to AppLogoDef above so the monogram fallback stays reachable to the
+  // type checker: APP_LOGOS is `as const`, so once every entry has a literal
+  // `src` string, narrowing on it collapses this else branch to `never`.
   const mark = logo.src ? (
     <Image
       src={logo.src}
       alt={showName ? "" : logo.name}
       width={size}
       height={size}
+      // The marks are hand-sized SVGs of a few hundred bytes each. Routing
+      // them through /_next/image would raster them at every density and, for
+      // SVG, needs `images.dangerouslyAllowSVG` turned on globally. Serving
+      // them straight out of /public is both smaller and sharper.
+      unoptimized
       className="object-contain"
       style={box}
     />
@@ -52,7 +60,7 @@ export function AppLogo({
   return (
     <span className="inline-flex items-center gap-2">
       {mark}
-      <span className="text-xs text-white/50 tracking-wide whitespace-nowrap">{logo.name}</span>
+      <span className="text-xs text-muted-foreground tracking-wide whitespace-nowrap">{logo.name}</span>
     </span>
   )
 }

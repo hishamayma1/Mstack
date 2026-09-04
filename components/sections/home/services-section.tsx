@@ -37,10 +37,10 @@ export function HomeServicesSection({ levels }: { levels: ServiceCard[] }) {
       level.fromPricePerSeat !== null ? (
         <>
           from{" "}
-          <span className="font-ibm-plex text-[0.9375rem] text-white/85">
+          <span className="font-ibm-plex text-[0.9375rem] text-foreground/85">
             {formatMoney(level.fromPricePerSeat, level.currency)}
           </span>
-          <span className="text-white/30"> per user / month</span>
+          <span className="text-muted-foreground"> per user / month</span>
         </>
       ) : (
         "Priced on application"
@@ -58,7 +58,7 @@ export function HomeServicesSection({ levels }: { levels: ServiceCard[] }) {
 
         <Link
           href="/solutions"
-          className="group inline-flex shrink-0 items-center gap-2 text-[0.875rem] tracking-wide text-blue-300/85 transition-colors hover:text-blue-300"
+          className="group inline-flex shrink-0 items-center gap-2 text-[0.875rem] tracking-wide text-blue-600 dark:text-blue-300/85 transition-colors hover:text-blue-500 dark:hover:text-blue-300"
         >
           Compare all levels
           <Chevron className="transition-transform group-hover:translate-x-0.5" />
@@ -69,7 +69,7 @@ export function HomeServicesSection({ levels }: { levels: ServiceCard[] }) {
         <StickyScroll items={items} ariaLabel="Service levels" />
       </div>
 
-      <p className="mt-12 max-w-3xl text-[0.875rem] leading-[1.7] text-white/40">
+      <p className="mt-12 max-w-3xl text-[0.875rem] leading-[1.7] text-muted-foreground">
         All five levels are available as ongoing support models. We don&apos;t implement and leave —
         we support your full Microsoft 365 environment continuously, across every level, at the same
         time.

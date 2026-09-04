@@ -64,14 +64,14 @@ export function IndustryTabs() {
               onClick={() => setActive(i)}
               className={`group flex items-center gap-3 rounded-lg px-4 py-3 text-left transition-colors ${
                 isActive
-                  ? "bg-blue-500/[0.12] text-white"
-                  : "text-white/55 hover:bg-white/[0.04] hover:text-white/85"
+                  ? "bg-blue-500/[0.12] text-foreground"
+                  : "text-muted-foreground hover:bg-accent/40 hover:text-foreground/85"
               }`}
             >
               <span
                 aria-hidden="true"
                 className={`font-ibm-plex text-[11px] tabular-nums tracking-[0.15em] transition-colors ${
-                  isActive ? "text-blue-300/90" : "text-white/25"
+                  isActive ? "text-blue-600 dark:text-blue-300/90" : "text-muted-foreground"
                 }`}
               >
                 {s.num}
@@ -80,7 +80,7 @@ export function IndustryTabs() {
               <Chevron
                 className={`ml-auto shrink-0 transition-all ${
                   isActive
-                    ? "translate-x-0 text-blue-300/90 opacity-100"
+                    ? "translate-x-0 text-blue-600 dark:text-blue-300/90 opacity-100"
                     : "-translate-x-1 opacity-0 group-hover:translate-x-0 group-hover:opacity-60"
                 }`}
               />
@@ -95,15 +95,15 @@ export function IndustryTabs() {
         id="industry-panel"
         aria-labelledby={`industry-tab-${industry.num}`}
         tabIndex={-1}
-        className="flex min-h-[340px] flex-col justify-center rounded-2xl border border-white/[0.07] bg-white/[0.02] p-8 md:p-10 lg:col-span-8"
+        className="flex min-h-[340px] flex-col justify-center rounded-2xl border border-border bg-card p-8 md:p-10 lg:col-span-8"
       >
-        <p className="font-ibm-plex text-[11px] uppercase tracking-[0.2em] text-blue-300/70">
+        <p className="font-ibm-plex text-[11px] uppercase tracking-[0.2em] text-blue-600 dark:text-blue-300/70">
           {industry.num} / {String(INDUSTRIES.length).padStart(2, "0")}
         </p>
         <h3 className="mt-4 text-[1.75rem] font-light leading-tight tracking-tight md:text-[2rem]">
           {industry.title}
         </h3>
-        <p className="mt-5 max-w-[58ch] text-[0.9375rem] leading-[1.8] text-white/55">{industry.desc}</p>
+        <p className="mt-5 max-w-[58ch] text-[0.9375rem] leading-[1.8] text-muted-foreground">{industry.desc}</p>
 
         <Link
           href={industry.slug ? `/industries/${industry.slug}` : "/industries"}

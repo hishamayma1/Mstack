@@ -87,10 +87,10 @@ export function IndustriesSection() {
   const industry = INDUSTRIES[active]
 
   return (
-    <section ref={sectionRef} id="industries" className="py-32 px-6 md:px-12 lg:px-20 border-t border-white/[0.08]">
+    <section ref={sectionRef} id="industries" className="py-32 px-6 md:px-12 lg:px-20 border-t border-border">
       <div className="max-w-6xl mx-auto">
         <div className="mb-16">
-          <div className="mt-4 inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/[0.06] border border-white/[0.08] text-[10px] tracking-widest text-white/50 uppercase">
+          <div className="mt-4 inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-accent/40 border border-border text-[10px] tracking-widest text-muted-foreground uppercase">
             M365 Solutions Tailored to Your Sector
           </div>
           <h2 className="mt-5 text-4xl md:text-5xl font-light tracking-tight leading-[1.05]">
@@ -122,20 +122,20 @@ export function IndustriesSection() {
                   className={`relative overflow-hidden text-left rounded-xl border px-4 py-3 shrink-0 transition-all duration-200 group ${
                     isActive
                       ? "border-blue-400/35 bg-blue-500/[0.12]"
-                      : "border-white/[0.08] bg-white/[0.03] hover:border-white/20 hover:bg-white/[0.06]"
+                      : "border-border bg-card hover:border-foreground/20 hover:bg-accent/60"
                   }`}
                 >
                   <div className="flex gap-3 items-center">
                     <span
                       className={`flex items-center justify-center w-7 h-7 rounded-lg text-[11px] font-light shrink-0 transition-colors duration-200 ${
-                        isActive ? "bg-blue-500/25 text-white/90" : "bg-white/[0.06] text-white/45"
+                        isActive ? "bg-blue-500/25 text-foreground/90" : "bg-accent/60 text-muted-foreground"
                       }`}
                     >
                       {s.num}
                     </span>
                     <p
                       className={`text-sm font-light transition-colors duration-200 ${
-                        isActive ? "text-white/95" : "text-white/60 group-hover:text-white/85"
+                        isActive ? "text-foreground/95" : "text-muted-foreground group-hover:text-foreground/85"
                       }`}
                     >
                       {s.title}
@@ -149,7 +149,7 @@ export function IndustriesSection() {
                       className={`ml-auto shrink-0 transition-all duration-200 ${
                         isActive
                           ? "text-blue-300/90 opacity-100"
-                          : "text-white/40 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0"
+                          : "text-muted-foreground opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0"
                       }`}
                     >
                       <path
@@ -181,9 +181,8 @@ export function IndustriesSection() {
 
           {/* Right — fixed-size description panel */}
           <div
-            className="lg:col-span-2 rounded-2xl border border-white/[0.08] p-8 flex flex-col justify-center"
+            className="lg:col-span-2 rounded-2xl border border-border p-8 flex flex-col justify-center bg-card"
             style={{
-              background: "rgba(255,255,255,0.03)",
               boxShadow: "0 1px 3px rgba(0,0,0,0.2)",
               minHeight: "360px",
             }}
@@ -198,7 +197,7 @@ export function IndustriesSection() {
             >
               <span className="text-[10px] tracking-widest uppercase text-blue-400/80 font-mono">{industry.num} / {INDUSTRIES.length.toString().padStart(2, "0")}</span>
               <h3 className="mt-3 text-2xl md:text-3xl font-light mb-5">{industry.title}</h3>
-              <p className="text-base text-white/55 leading-relaxed max-w-xl">{industry.desc}</p>
+              <p className="text-base text-muted-foreground leading-relaxed max-w-xl">{industry.desc}</p>
 
               {/* The way out of the carousel: every sector gets its own button
                   to its own page. The two sectors without a page yet (slug:
@@ -224,7 +223,7 @@ export function IndustriesSection() {
           secondaryHref="/contact"
         />
 
-        <p className="mt-8 text-xs text-white/35 leading-relaxed max-w-2xl">
+        <p className="mt-8 text-xs text-muted-foreground leading-relaxed max-w-2xl">
           *PCI and HIPAA policy compliance requires additional, out-of-scope labour. Reach out for more information.
         </p>
       </div>

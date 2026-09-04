@@ -43,11 +43,11 @@ export function DifferentiatorsSection() {
       />
 
       {/* The name, explained in one line rather than one row of cards. */}
-      <dl className="mt-10 grid gap-px overflow-hidden rounded-xl border border-white/[0.07] bg-white/[0.07] sm:grid-cols-3">
+      <dl className="mt-10 grid gap-px overflow-hidden rounded-xl border border-border bg-border sm:grid-cols-3">
         {BRAND_BREAKDOWN.map((b) => (
-          <div key={b.label} className="flex items-baseline gap-3 bg-[#0A0E17] px-5 py-4">
-            <dt className="font-ibm-plex text-[1.125rem] font-light text-blue-300/90">{b.letter}</dt>
-            <dd className="text-[0.8125rem] leading-[1.6] text-white/45">{b.desc.replace(/^Stands for /, "")}</dd>
+          <div key={b.label} className="flex items-baseline gap-3 bg-background px-5 py-4">
+            <dt className="font-ibm-plex text-[1.125rem] font-light text-blue-600 dark:text-blue-300/90">{b.letter}</dt>
+            <dd className="text-[0.8125rem] leading-[1.6] text-muted-foreground">{b.desc.replace(/^Stands for /, "")}</dd>
           </div>
         ))}
       </dl>

@@ -19,7 +19,7 @@ export function HomeIndustriesSection() {
         <IndustryTabs />
       </div>
 
-      <p className="mt-8 max-w-2xl text-[0.8125rem] leading-[1.7] text-white/30">
+      <p className="mt-8 max-w-2xl text-[0.8125rem] leading-[1.7] text-muted-foreground">
         *PCI and HIPAA policy compliance requires additional, out-of-scope labour. Reach out for more
         information.
       </p>

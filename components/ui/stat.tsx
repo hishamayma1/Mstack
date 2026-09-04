@@ -48,9 +48,9 @@ export function Stat({
   return (
     <div className={motion.rise} style={stagger(order, 5)}>
       <dd
-        className={`flex min-h-[2.25rem] items-center font-ibm-plex font-light leading-none text-[#F3F5FA] md:min-h-[2.75rem] ${
+        className={`flex min-h-[2.25rem] items-center font-ibm-plex font-light leading-none text-foreground md:min-h-[2.75rem] ${
           mark
-            ? "text-[1.375rem] tracking-[0.14em] text-blue-300/90 md:text-[1.625rem]"
+            ? "text-[1.375rem] tracking-[0.14em] text-blue-600 dark:text-blue-300/90 md:text-[1.625rem]"
             : "text-[2.25rem] tracking-tight md:text-[2.75rem]"
         }`}
       >
@@ -81,7 +81,7 @@ export function Stat({
       {/* `text-balance` keeps a two-word label from leaving one word alone on
           the second line, which is what made the row of figures look ragged
           at the widths where "Years on Microsoft 365" has to wrap. */}
-      <dt className="mt-3 text-balance text-[11px] uppercase leading-[1.5] tracking-[0.16em] text-white/40">
+      <dt className="mt-3 text-balance text-[11px] uppercase leading-[1.5] tracking-[0.16em] text-muted-foreground">
         {label}
       </dt>
     </div>

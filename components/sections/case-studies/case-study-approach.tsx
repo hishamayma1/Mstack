@@ -15,7 +15,7 @@ export function CaseStudyApproach({ study }: { study: CaseStudyDetail }) {
   const hasSteps = study.approach.length > 0
 
   return (
-    <section id="approach" className="py-24 px-6 md:px-12 lg:px-20 border-t border-white/[0.08]">
+    <section id="approach" className="py-24 px-6 md:px-12 lg:px-20 border-t border-border">
       <div className="max-w-6xl mx-auto">
         <SectionHeader eyebrow="THE WORK" title={"What We\nDid."} intro={study.result} />
 
@@ -24,11 +24,11 @@ export function CaseStudyApproach({ study }: { study: CaseStudyDetail }) {
             <MouseGlowGrid className="grid grid-cols-1 gap-3">
               {study.approach.map((step, i) => (
                 <BentoCard key={step.title} className="p-7 flex flex-col" delay={i * 70}>
-                  <span className="font-pixel text-[11px] text-white/30 tracking-widest block mb-4">
+                  <span className="font-pixel text-[11px] text-muted-foreground tracking-widest block mb-4">
                     {String(i + 1).padStart(2, "0")}
                   </span>
                   <h3 className="text-lg font-light mb-2">{step.title}</h3>
-                  <p className="text-sm text-white/55 leading-relaxed">{step.description}</p>
+                  <p className="text-sm text-muted-foreground leading-relaxed">{step.description}</p>
                 </BentoCard>
               ))}
             </MouseGlowGrid>

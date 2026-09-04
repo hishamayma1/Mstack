@@ -34,7 +34,7 @@ export function MediaFrame({
 
   if (src) {
     return (
-      <div className={`${frame} border border-white/[0.08] bg-[#10141f]`} style={style}>
+      <div className={`${frame} border border-border bg-card`} style={style}>
         <Image src={src} alt={alt} fill sizes={sizes} priority={priority} className="object-cover" />
       </div>
     )
@@ -44,7 +44,7 @@ export function MediaFrame({
     <div
       role="img"
       aria-label={`Placeholder: ${label}`}
-      className={`${frame} border border-dashed border-white/15 bg-white/[0.02] flex items-center justify-center`}
+      className={`${frame} border border-dashed border-border bg-card/40 flex items-center justify-center`}
       style={style}
     >
       {/* Faint grid so an empty frame still reads as a deliberate surface */}
@@ -53,7 +53,7 @@ export function MediaFrame({
         className="absolute inset-0 opacity-60"
         style={{
           backgroundImage:
-            "linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px)",
+            "linear-gradient(rgba(var(--fg-rgb),0.035) 1px, transparent 1px), linear-gradient(90deg, rgba(var(--fg-rgb),0.035) 1px, transparent 1px)",
           backgroundSize: "32px 32px",
         }}
       />
@@ -64,10 +64,10 @@ export function MediaFrame({
       />
 
       <div className="relative z-10 text-center px-6">
-        <span className="font-pixel text-[10px] tracking-[0.25em] text-white/30 block mb-3">IMAGE</span>
-        <span className="block text-sm text-white/55 leading-relaxed max-w-xs mx-auto">{label}</span>
+        <span className="font-pixel text-[10px] tracking-[0.25em] text-muted-foreground block mb-3">IMAGE</span>
+        <span className="block text-sm text-muted-foreground leading-relaxed max-w-xs mx-auto">{label}</span>
         {hint ? (
-          <span className="mt-2 block text-[11px] text-white/30 tracking-wide">{hint}</span>
+          <span className="mt-2 block text-[11px] text-muted-foreground tracking-wide">{hint}</span>
         ) : null}
       </div>
     </div>

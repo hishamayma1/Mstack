@@ -73,7 +73,7 @@ export function CaseStudiesExplorer({ caseStudies }: { caseStudies: CaseStudyCar
   }, [indexed, deferredQuery, industry, sort])
 
   return (
-    <section id="all-studies" className="py-24 px-6 md:px-12 lg:px-20 border-t border-white/[0.08]">
+    <section id="all-studies" className="py-24 px-6 md:px-12 lg:px-20 border-t border-border">
       <div className="max-w-6xl mx-auto">
         <div className="mb-10 max-w-2xl">
           <Tag>PROVEN RESULTS</Tag>
@@ -104,34 +104,34 @@ export function CaseStudiesExplorer({ caseStudies }: { caseStudies: CaseStudyCar
           />
         </div>
 
-        <p className="text-xs text-white/35 tracking-wide mb-6" aria-live="polite">
+        <p className="text-xs text-muted-foreground tracking-wide mb-6" aria-live="polite">
           {filtered.length} {filtered.length === 1 ? "case study" : "case studies"}
         </p>
 
         {filtered.length === 0 ? (
-          <div className="rounded-2xl border border-white/[0.08] p-12 text-center">
-            <p className="text-sm text-white/45">
+          <div className="rounded-2xl border border-border p-12 text-center">
+            <p className="text-sm text-muted-foreground">
               No case studies match your search. Try a different term or industry.
             </p>
           </div>
         ) : view === "list" ? (
-          <ul className="border-t border-white/[0.08]">
+          <ul className="border-t border-border">
             {filtered.map((c) => (
               <li key={c.id}>
                 <Link
                   href={`/case-studies/${c.slug}`}
-                  className="group grid grid-cols-1 md:grid-cols-12 gap-3 md:gap-6 items-baseline py-6 border-b border-white/[0.08] hover:bg-white/[0.02] transition-colors"
+                  className="group grid grid-cols-1 md:grid-cols-12 gap-3 md:gap-6 items-baseline py-6 border-b border-border hover:bg-accent/40 transition-colors"
                 >
-                  <span className="md:col-span-4 text-base font-light group-hover:text-blue-300/90 transition-colors">
+                  <span className="md:col-span-4 text-base font-light group-hover:text-blue-600 dark:group-hover:text-blue-300/90 transition-colors">
                     {c.client}
                   </span>
-                  <span className="md:col-span-3 text-xs text-white/40 tracking-wide">
+                  <span className="md:col-span-3 text-xs text-muted-foreground tracking-wide">
                     {c.industry}
                   </span>
-                  <span className="md:col-span-3 text-sm text-white/55 leading-relaxed">
+                  <span className="md:col-span-3 text-sm text-muted-foreground leading-relaxed">
                     {c.stat.label}
                   </span>
-                  <span className="md:col-span-2 md:text-right text-xl font-light text-blue-400 font-ibm-plex">
+                  <span className="md:col-span-2 md:text-right text-xl font-light text-blue-600 dark:text-blue-400 font-ibm-plex">
                     {c.stat.value}
                   </span>
                 </Link>
@@ -142,7 +142,7 @@ export function CaseStudiesExplorer({ caseStudies }: { caseStudies: CaseStudyCar
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
             {filtered.map((c) => (
               <Link key={c.id} href={`/case-studies/${c.slug}`} className="block group">
-                <article className="h-full rounded-2xl border border-white/[0.08] bg-[#10141f] p-8 flex flex-col transition-all duration-300 group-hover:border-blue-500/30 group-hover:bg-[#131a29]">
+                <article className="h-full rounded-2xl border border-border bg-card p-8 flex flex-col transition-all duration-300 group-hover:border-blue-500/30 group-hover:bg-accent/30">
                   <MediaFrame
                     src={c.heroImage?.url}
                     alt={c.heroImage?.alt ?? ""}
@@ -158,24 +158,24 @@ export function CaseStudiesExplorer({ caseStudies }: { caseStudies: CaseStudyCar
                     <Tag>{c.industry}</Tag>
                   </div>
 
-                  <p className="text-[11px] uppercase tracking-widest text-white/35 mb-1.5">
+                  <p className="text-[11px] uppercase tracking-widest text-muted-foreground mb-1.5">
                     Challenge
                   </p>
-                  <p className="text-sm text-white/55 leading-relaxed mb-5">{c.challenge}</p>
+                  <p className="text-sm text-muted-foreground leading-relaxed mb-5">{c.challenge}</p>
 
-                  <p className="text-[11px] uppercase tracking-widest text-white/35 mb-1.5">
+                  <p className="text-[11px] uppercase tracking-widest text-muted-foreground mb-1.5">
                     What We Did
                   </p>
-                  <p className="text-sm text-white/55 leading-relaxed mb-6">{c.result}</p>
+                  <p className="text-sm text-muted-foreground leading-relaxed mb-6">{c.result}</p>
 
-                  <div className="mt-auto pt-5 border-t border-white/[0.08] flex items-end justify-between gap-4">
+                  <div className="mt-auto pt-5 border-t border-border flex items-end justify-between gap-4">
                     <span className="flex items-baseline gap-2">
-                      <span className="text-2xl font-light text-blue-400 font-ibm-plex">
+                      <span className="text-2xl font-light text-blue-600 dark:text-blue-400 font-ibm-plex">
                         {c.stat.value}
                       </span>
-                      <span className="text-xs text-white/45 tracking-wide">{c.stat.label}</span>
+                      <span className="text-xs text-muted-foreground tracking-wide">{c.stat.label}</span>
                     </span>
-                    <span className="shrink-0 text-xs text-blue-300/70 group-hover:text-blue-300 transition-colors tracking-wide">
+                    <span className="shrink-0 text-xs text-blue-600 dark:text-blue-300/70 group-hover:text-blue-700 dark:group-hover:text-blue-300 transition-colors tracking-wide">
                       Read story →
                     </span>
                   </div>

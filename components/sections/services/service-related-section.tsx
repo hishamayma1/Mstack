@@ -13,7 +13,7 @@ export function ServiceRelatedSection({ services }: { services: ServiceLink[] })
   const addons = services.filter((service) => service.kind === "addon")
 
   return (
-    <section className="py-24 px-6 md:px-12 lg:px-20 border-t border-white/[0.08]">
+    <section className="py-24 px-6 md:px-12 lg:px-20 border-t border-border">
       <div className="max-w-6xl mx-auto">
         <Tag>KEEP LOOKING</Tag>
         <h2 className="mt-5 text-2xl font-light tracking-tight">Other services we run.</h2>
@@ -25,7 +25,7 @@ export function ServiceRelatedSection({ services }: { services: ServiceLink[] })
           .filter((group) => group.items.length > 0)
           .map((group) => (
             <div key={group.heading} className="mt-8">
-              <span className="text-[11px] uppercase tracking-widest text-white/35">
+              <span className="text-[11px] uppercase tracking-widest text-muted-foreground">
                 {group.heading}
               </span>
               <div className="mt-3 flex flex-wrap gap-2">
@@ -33,7 +33,7 @@ export function ServiceRelatedSection({ services }: { services: ServiceLink[] })
                   <Link
                     key={service.id}
                     href={`/solutions/${service.slug}`}
-                    className="px-4 py-2 rounded-full border border-white/[0.1] bg-white/[0.02] text-sm text-white/65 hover:border-blue-500/40 hover:text-white hover:bg-white/[0.05] transition-all"
+                    className="px-4 py-2 rounded-full border border-border bg-card text-sm text-muted-foreground hover:border-blue-500/40 hover:text-foreground hover:bg-accent/60 transition-all"
                   >
                     {service.title}
                   </Link>

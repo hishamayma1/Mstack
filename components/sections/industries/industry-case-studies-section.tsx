@@ -11,7 +11,7 @@ export function IndustryCaseStudiesSection({ caseStudies }: { caseStudies: CaseS
   if (caseStudies.length === 0) return null
 
   return (
-    <section id="case-studies" className="py-28 px-6 md:px-12 lg:px-20 border-t border-white/[0.08]">
+    <section id="case-studies" className="py-28 px-6 md:px-12 lg:px-20 border-t border-border">
       <div className="max-w-6xl mx-auto">
         <SectionHeader
           eyebrow="PROVEN RESULTS"
@@ -22,18 +22,18 @@ export function IndustryCaseStudiesSection({ caseStudies }: { caseStudies: CaseS
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
           {caseStudies.map((c) => (
             <Link key={c.id} href={`/case-studies/${c.slug}`} className="block group">
-              <article className="h-full rounded-2xl border border-white/[0.08] bg-[#10141f] p-8 flex flex-col transition-all duration-300 group-hover:border-blue-500/30 group-hover:bg-[#131a29]">
+              <article className="h-full rounded-2xl border border-border bg-card p-8 flex flex-col transition-all duration-300 group-hover:border-blue-500/30 group-hover:bg-accent/40">
                 <div className="flex items-start justify-between gap-4 mb-6">
                   <h3 className="text-lg font-light">{c.client}</h3>
                   <Tag>{c.industry}</Tag>
                 </div>
-                <p className="text-sm text-white/55 leading-relaxed mb-6">{c.result}</p>
-                <div className="mt-auto pt-5 border-t border-white/[0.08] flex items-end justify-between gap-4">
+                <p className="text-sm text-muted-foreground leading-relaxed mb-6">{c.result}</p>
+                <div className="mt-auto pt-5 border-t border-border flex items-end justify-between gap-4">
                   <span className="flex items-baseline gap-2">
                     <span className="text-2xl font-light text-blue-400 font-ibm-plex">{c.stat.value}</span>
-                    <span className="text-xs text-white/45 tracking-wide">{c.stat.label}</span>
+                    <span className="text-xs text-muted-foreground tracking-wide">{c.stat.label}</span>
                   </span>
-                  <span className="shrink-0 text-xs text-blue-300/70 group-hover:text-blue-300 transition-colors tracking-wide">
+                  <span className="shrink-0 text-xs text-blue-600 dark:text-blue-300/70 group-hover:text-blue-500 dark:group-hover:text-blue-300 transition-colors tracking-wide">
                     Read story →
                   </span>
                 </div>

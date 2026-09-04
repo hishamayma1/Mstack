@@ -23,11 +23,11 @@ export function LeadMagnetSection() {
           <Eyebrow>Free — no commitment</Eyebrow>
           <RevealText
             stagger={2}
-            className="mt-4 text-[2rem] font-light leading-[1.12] tracking-tight text-[#F3F5FA] md:text-[2.75rem]"
+            className="mt-4 text-[2rem] font-light leading-[1.12] tracking-tight text-foreground md:text-[2.75rem]"
           >
             {"The 15-minute\nMicrosoft 365\nhealth check."}
           </RevealText>
-          <p className="mt-6 max-w-[52ch] text-[0.975rem] leading-[1.8] text-white/55">
+          <p className="mt-6 max-w-[52ch] text-[0.975rem] leading-[1.8] text-muted-foreground">
             We open your tenant, look at what you&apos;re paying for against what&apos;s actually
             configured, and tell you plainly where the gaps are. No sales deck, no obligation — you
             keep the findings either way.
@@ -41,13 +41,13 @@ export function LeadMagnetSection() {
             />
           </div>
 
-          <p className="mt-6 text-[0.75rem] leading-relaxed text-white/35">
+          <p className="mt-6 text-[0.75rem] leading-relaxed text-muted-foreground">
             Typically booked within 2 working days · Runs over Teams · No access changes made
           </p>
         </div>
 
-        <div className="rounded-2xl border border-white/[0.08] bg-[#0A1020]/70 p-8 md:p-9">
-          <p className="text-[11px] uppercase tracking-[0.2em] text-white/40">What you get</p>
+        <div className="rounded-2xl border border-border bg-card/70 p-8 md:p-9">
+          <p className="text-[11px] uppercase tracking-[0.2em] text-muted-foreground">What you get</p>
           <ul className="mt-6 space-y-5">
             {HEALTH_CHECK_DELIVERABLES.map((d) => (
               <li key={d} className="flex items-start gap-3.5">
@@ -65,7 +65,7 @@ export function LeadMagnetSection() {
                 >
                   <path d="M4 12.5l5 5L20 6.5" />
                 </svg>
-                <span className="text-[0.9375rem] leading-[1.7] text-white/65">{d}</span>
+                <span className="text-[0.9375rem] leading-[1.7] text-muted-foreground">{d}</span>
               </li>
             ))}
           </ul>

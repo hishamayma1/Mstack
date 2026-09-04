@@ -3,6 +3,7 @@ import { MobileNav } from "@/components/layout/mobile-nav"
 import { FloatingActions } from "@/components/layout/floating-actions"
 import { SiteFooter } from "@/components/layout/site-footer"
 import { HeroSection } from "@/components/sections/home/hero-section"
+import { HeroSecondarySection } from "@/components/sections/home/hero-secondary-section"
 import { TrustBarSection } from "@/components/sections/home/trust-bar-section"
 import { ChallengesSection } from "@/components/sections/home/challenges-section"
 import { HomeServicesSection } from "@/components/sections/home/services-section"
@@ -60,18 +61,18 @@ export default async function HomePage() {
   const levels = services.filter((service) => service.kind === "level")
 
   return (
-    <div className="min-h-screen bg-[#0A0E17] font-sans antialiased text-[#F3F5FA]">
+    <div className="min-h-screen font-sans antialiased text-foreground">
       <IntroAnimation />
       <MobileNav />
-
       <HeroSection />
+      {/* <HeroSecondarySection /> */}
       <TrustBarSection />
       <ChallengesSection />
+      <ProcessSection />
       <HomeServicesSection levels={levels} />
       <DifferentiatorsSection />
       <ProofSection />
       <HomeIndustriesSection />
-      <ProcessSection />
       <QuestionsSection faqs={faqs} />
       <LeadMagnetSection />
       <FinalCTASection />

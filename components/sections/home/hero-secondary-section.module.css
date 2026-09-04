@@ -1,0 +1,217 @@
+/*
+ * Second hero. Everything here is composited-only (opacity / transform) so the
+ * section costs nothing to paint while the three.js hero above it is still
+ * warming up.
+ */
+
+.section {
+  /* Keeps the block from collapsing on short viewports without pinning it to
+     a full screen height — it is a second hero, not a second screen. */
+  min-height: 78svh;
+  display: flex;
+  align-items: center;
+}
+
+/* Hairline grid, faded out at every edge so it never meets a border. */
+.grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(to right, rgba(var(--fg-rgb), 0.045) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(var(--fg-rgb), 0.045) 1px, transparent 1px);
+  background-size: 64px 64px;
+  mask-image: radial-gradient(ellipse 70% 60% at 50% 45%, black, transparent 100%);
+  -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 45%, black, transparent 100%);
+  pointer-events: none;
+}
+
+/* One soft blue wash behind the headline. A gradient, not a blur layer. */
+.glow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse 55% 45% at 50% 38%,
+    rgba(37, 99, 235, 0.16),
+    transparent 70%
+  );
+  pointer-events: none;
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4375rem 0.875rem;
+  border: 1px solid rgba(var(--fg-rgb), 0.1);
+  border-radius: 9999px;
+  background: rgba(var(--fg-rgb), 0.03);
+  font-size: 0.6875rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(var(--fg-rgb), 0.55);
+}
+
+.dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 9999px;
+  background: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.18);
+}
+
+/* Fluid, same technique as the main hero — one clamp instead of breakpoint
+   jumps — but deliberately a step smaller so it never competes with the h1. */
+.headline {
+  font-size: clamp(1.875rem, 6vw, 3.75rem);
+}
+
+.primary,
+.secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.375rem;
+  border-radius: 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  transition: background-color 200ms ease, border-color 200ms ease, color 200ms ease;
+}
+
+.primary {
+  background: #2563eb;
+  color: #fff;
+}
+
+.primary:hover {
+  background: #3b82f6;
+}
+
+.arrow {
+  width: 15px;
+  height: 15px;
+  transition: transform 200ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.primary:hover .arrow {
+  transform: translateX(3px);
+}
+
+.secondary {
+  border: 1px solid rgba(var(--fg-rgb), 0.14);
+  color: rgba(var(--fg-rgb), 0.72);
+}
+
+.secondary:hover {
+  border-color: rgba(59, 130, 246, 0.4);
+  background: rgba(var(--fg-rgb), 0.05);
+  color: rgb(var(--fg-rgb));
+}
+
+/* Credentials as one hairline-separated line rather than four boxes — the
+   items are peers of the same claim, so a rule between them is enough. */
+.credentials {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem 1.5rem;
+  font-size: 0.75rem;
+  color: rgba(var(--fg-rgb), 0.38);
+}
+
+.credentials li {
+  position: relative;
+  padding-left: 1.5rem;
+}
+
+.credentials li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 12px;
+  height: 1px;
+  background: rgba(var(--fg-rgb), 0.18);
+}
+
+.credentials li:first-child {
+  padding-left: 0;
+}
+
+.credentials li:first-child::before {
+  display: none;
+}
+
+.rise {
+  animation: heroRise 900ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: calc(600ms + var(--i, 0) * 80ms);
+}
+
+@keyframes heroRise {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 18px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rise {
+    animation: none;
+  }
+
+  .arrow {
+    transition: none;
+  }
+}
+
+/*
+ * The service logo row. Chips rather than a bare row of marks: with names
+ * attached the items need a container to keep pairs from breaking across
+ * lines, and a faint one reads as a list without turning into cards.
+ */
+.logos {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+  max-width: 34rem;
+}
+
+.logos li {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4375rem;
+  padding: 0.375rem 0.75rem 0.375rem 0.5rem;
+  border: 1px solid rgba(var(--fg-rgb), 0.07);
+  border-radius: 9999px;
+  background: rgba(var(--fg-rgb), 0.025);
+  white-space: nowrap;
+  transition: border-color 200ms ease, background-color 200ms ease;
+}
+
+.logos li:hover {
+  border-color: rgba(var(--fg-rgb), 0.14);
+  background: rgba(var(--fg-rgb), 0.05);
+}
+
+.logos span {
+  font-size: 0.75rem;
+  letter-spacing: 0.01em;
+  color: rgba(var(--fg-rgb), 0.6);
+}
+
+/* On phones the names push the row to five or six lines. Marks only there —
+   the products are named in full in the trust marquee directly below. */
+@media (max-width: 480px) {
+  .logos span {
+    display: none;
+  }
+
+  .logos li {
+    padding: 0.4375rem;
+  }
+}

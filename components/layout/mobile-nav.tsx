@@ -6,6 +6,7 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { NAV_LINKS, NAV_MENUS } from "@/lib/content/site"
 import { AppLogo } from "@/components/ui/app-logo"
+import { ThemeToggle } from "@/components/ui/theme-toggle"
 import { MobileMenu } from "./mobile-menu"
 import styles from "./mobile-nav.module.css"
 
@@ -14,8 +15,8 @@ const MOBILE_MENU_ID = "mobile-nav-menu"
 const NAV_STYLE = {
   backdropFilter: "blur(16px)",
   WebkitBackdropFilter: "blur(16px)",
-  background: "rgba(16,20,31,0.55)",
-  boxShadow: "0 8px 32px rgba(0,0,0,0.35), 0 2px 8px rgba(0,0,0,0.25)",
+  background: "var(--glass-bg)",
+  boxShadow: "var(--shadow-glass)",
 } as const
 
 // Desktop-only hover panels. Which nav items get one — and everything in them —
@@ -65,11 +66,11 @@ export function MobileNav() {
   return (
     <>
     <div className="fixed top-4 inset-x-0 z-50 flex justify-center px-4 pointer-events-none">
-      <div className={`pointer-events-auto w-full max-w-3xl md:max-w-4xl ${styles.navRoot}`}>
+      <div className={`pointer-events-auto w-full max-w-3xl lg:max-w-5xl ${styles.navRoot}`}>
 
         {/* Main bar */}
         <nav
-          className="flex items-center justify-between px-5 py-3 md:px-7 md:py-4 rounded-2xl border border-white/[0.08]"
+          className="flex items-center justify-between gap-3 px-4 py-3 sm:px-5 lg:px-7 lg:py-4 rounded-2xl border border-glass-border"
           style={NAV_STYLE}
         >
           <Link
@@ -85,12 +86,14 @@ export function MobileNav() {
               width={1024}
               height={512}
               priority
-              className="h-8 md:h-9 w-auto"
+              className="h-7 sm:h-8 lg:h-9 w-auto"
             />
           </Link>
 
-          {/* Desktop links */}
-          <div className="hidden md:flex items-center gap-8" style={{ fontFamily: "system-ui, -apple-system, sans-serif" }}>
+          {/* Desktop links — needs real room for the mega-menu triggers, so
+              this only switches on at `lg`; below that the burger takes over,
+              same as it always did, just one breakpoint later than before. */}
+          <div className="hidden lg:flex items-center gap-6 xl:gap-8" style={{ fontFamily: "system-ui, -apple-system, sans-serif" }}>
             {NAV_LINKS.map(l => {
               const menu = menuFor(l.label)
 
@@ -99,7 +102,7 @@ export function MobileNav() {
                   <a
                     key={l.label}
                     href={l.href}
-                    className="text-[12px] text-white/65 hover:text-white transition-colors duration-200 tracking-wide"
+                    className="text-[12px] text-muted-foreground hover:text-foreground transition-colors duration-200 tracking-wide"
                   >
                     {l.label}
                   </a>
@@ -110,7 +113,7 @@ export function MobileNav() {
                 <div key={l.label} className={styles.navItem}>
                   <a
                     href={l.href}
-                    className="inline-flex items-center gap-1 text-[12px] text-white/65 hover:text-white transition-colors duration-200 tracking-wide"
+                    className="inline-flex items-center gap-1 text-[12px] text-muted-foreground hover:text-foreground transition-colors duration-200 tracking-wide"
                   >
                     {l.label}
                     <svg className={styles.chevron} width="9" height="9" viewBox="0 0 9 9" fill="none" aria-hidden="true">
@@ -207,28 +210,30 @@ export function MobileNav() {
             })}
           </div>
 
-          <div className="flex items-center gap-2">
-            <button className="text-[12px] px-4 py-2 md:px-5 md:py-2.5 rounded-xl border border-blue-500/40 text-blue-300 hover:text-white hover:border-blue-400 hover:bg-blue-500/20 transition-all duration-200 tracking-wide hidden md:block" style={{ fontFamily: "system-ui, -apple-system, sans-serif" }}>
+          <div className="flex items-center gap-1.5 sm:gap-2">
+            <ThemeToggle />
+
+            <button className="text-[12px] px-4 py-2 lg:px-5 lg:py-2.5 rounded-xl border border-blue-500/40 text-blue-600 dark:text-blue-300 hover:text-foreground hover:border-blue-400 hover:bg-blue-500/20 transition-all duration-200 tracking-wide hidden lg:block" style={{ fontFamily: "system-ui, -apple-system, sans-serif" }}>
               FREE CONSULTATION
             </button>
 
-            {/* Burger — mobile only */}
+            {/* Burger — everything below `lg`, matching the desktop links' breakpoint */}
             <button
               onClick={() => setOpen(v => !v)}
-              className="md:hidden flex flex-col justify-center items-center w-9 h-9 gap-[5px] rounded-lg hover:bg-white/[0.06] transition-colors"
+              className="lg:hidden flex flex-col justify-center items-center w-9 h-9 gap-[5px] rounded-lg hover:bg-accent/60 transition-colors"
               aria-label={open ? "Close menu" : "Open menu"}
               aria-expanded={open}
               aria-controls={MOBILE_MENU_ID}
             >
               <span
-                className="block h-px bg-white/70 transition-all duration-300 origin-center"
+                className="block h-px bg-foreground/70 transition-all duration-300 origin-center"
                 style={{
                   width: "18px",
                   transform: open ? "translateY(6px) rotate(45deg)" : "none",
                 }}
               />
               <span
-                className="block h-px bg-white/70 transition-all duration-300"
+                className="block h-px bg-foreground/70 transition-all duration-300"
                 style={{
                   width: "18px",
                   opacity: open ? 0 : 1,
@@ -236,7 +241,7 @@ export function MobileNav() {
                 }}
               />
               <span
-                className="block h-px bg-white/70 transition-all duration-300 origin-center"
+                className="block h-px bg-foreground/70 transition-all duration-300 origin-center"
                 style={{
                   width: "18px",
                   transform: open ? "translateY(-6px) rotate(-45deg)" : "none",

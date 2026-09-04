@@ -17,7 +17,7 @@ export function IndustryChallengesSection({
   if (challenges.length === 0) return null
 
   return (
-    <section id="challenges" className="py-28 px-6 md:px-12 lg:px-20 border-t border-white/[0.08]">
+    <section id="challenges" className="py-28 px-6 md:px-12 lg:px-20 border-t border-border">
       <div className="max-w-6xl mx-auto">
         <SectionHeader
           eyebrow="THE CHALLENGE"
@@ -34,7 +34,7 @@ export function IndustryChallengesSection({
               />
               <div>
                 <h3 className="text-lg font-light mb-2">{c.title}</h3>
-                <p className="text-sm text-white/55 leading-relaxed">{c.description}</p>
+                <p className="text-sm text-muted-foreground leading-relaxed">{c.description}</p>
               </div>
             </BentoCard>
           ))}

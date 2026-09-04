@@ -11,7 +11,7 @@ import styles from "./page-shell.module.css"
 // outside that wrapper so they don't re-animate.
 export function PageShell({ children }: { children: ReactNode }) {
   return (
-    <div className="bg-[#0A0E17] text-[#F3F5FA] min-h-screen font-sans antialiased">
+    <div className="text-foreground min-h-screen font-sans antialiased">
       <MobileNav />
       <div className={styles.enter}>{children}</div>
       <FloatingActions />

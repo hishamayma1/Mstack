@@ -26,7 +26,7 @@ export function CaseStudySortControl() {
 
   return (
     <div className="flex items-center gap-2">
-      <span className="text-[11px] tracking-widest text-white/30 shrink-0">SORT</span>
+      <span className="text-[11px] tracking-widest text-muted-foreground shrink-0">SORT</span>
       <div className="flex gap-1" role="group" aria-label="Sort case studies">
         {SORTS.map((s) => {
           const active = s.id === sort
@@ -37,8 +37,8 @@ export function CaseStudySortControl() {
               aria-pressed={active}
               className={`px-3 py-1.5 rounded-lg text-[11px] tracking-wide transition-colors ${
                 active
-                  ? "bg-white/[0.08] text-white/90"
-                  : "text-white/45 hover:text-white/75 hover:bg-white/[0.04]"
+                  ? "bg-accent text-foreground"
+                  : "text-muted-foreground hover:text-foreground hover:bg-accent/40"
               }`}
             >
               {s.label}
@@ -72,8 +72,8 @@ export function CaseStudyViewControl() {
             title={v.label}
             className={`w-8 h-8 rounded-lg text-xs transition-colors ${
               active
-                ? "bg-white/[0.08] text-white/90"
-                : "text-white/35 hover:text-white/70 hover:bg-white/[0.04]"
+                ? "bg-accent text-foreground"
+                : "text-muted-foreground hover:text-foreground hover:bg-accent/40"
             }`}
           >
             <span aria-hidden="true">{v.icon}</span>

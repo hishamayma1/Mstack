@@ -33,13 +33,13 @@ export function ProofSection() {
           <Eyebrow>The record</Eyebrow>
           <RevealText
             stagger={2}
-            className="mt-4 text-[2rem] font-light leading-[1.12] tracking-tight text-[#F3F5FA] md:text-[2.5rem]"
+            className="mt-4 text-[2rem] font-light leading-[1.12] tracking-tight text-foreground md:text-[2.5rem]"
           >
             {"Ten years, one\nplatform, 500+\nbusinesses."}
           </RevealText>
           <Link
             href="/case-studies"
-            className="group mt-7 inline-flex items-center gap-2 text-[0.875rem] tracking-wide text-blue-300/85 transition-colors hover:text-blue-300"
+            className="group mt-7 inline-flex items-center gap-2 text-[0.875rem] tracking-wide text-blue-600 dark:text-blue-300/85 transition-colors hover:text-blue-500 dark:hover:text-blue-300"
           >
             Read the case studies
             <Chevron className="transition-transform group-hover:translate-x-0.5" />
@@ -72,22 +72,22 @@ export function ProofSection() {
           in a two-column grid the empty fourth cell shows through as a pale
           block, because the hairlines here are the parent's background
           bleeding between the tiles rather than real borders. */}
-      <ul className="mt-16 grid gap-px overflow-hidden rounded-2xl border border-white/[0.07] bg-white/[0.07] lg:grid-cols-3">
+      <ul className="mt-16 grid gap-px overflow-hidden rounded-2xl border border-border bg-border lg:grid-cols-3">
         {TESTIMONIALS.slice(0, 3).map((t) => (
-          <li key={t.name} className="flex flex-col gap-4 bg-[#0B1220] p-7">
+          <li key={t.name} className="flex flex-col gap-4 bg-card p-7">
             <span className="text-[11px] tracking-[0.25em] text-blue-400/80" aria-label="5 out of 5">
               ★★★★★
             </span>
-            <p className="flex-1 text-[0.9375rem] leading-[1.75] text-white/60">
-              <span aria-hidden="true" className="mr-1 text-white/20">
+            <p className="flex-1 text-[0.9375rem] leading-[1.75] text-muted-foreground">
+              <span aria-hidden="true" className="mr-1 text-muted-foreground/50">
                 &ldquo;
               </span>
               {t.quote}
-              <span aria-hidden="true" className="ml-0.5 text-white/20">
+              <span aria-hidden="true" className="ml-0.5 text-muted-foreground/50">
                 &rdquo;
               </span>
             </p>
-            <span className="text-[0.8125rem] font-light text-white/80">{t.name}</span>
+            <span className="text-[0.8125rem] font-light text-foreground/80">{t.name}</span>
           </li>
         ))}
       </ul>

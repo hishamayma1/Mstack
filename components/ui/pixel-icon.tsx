@@ -3,7 +3,10 @@
 import { useEffect, useRef } from "react"
 
 // Each icon is a 12×12 pixel grid animated at 60fps with RAF.
-// Colors are white at varying opacity to sit on the dark theme background.
+// Colors are drawn at the page's current ink color (--fg-rgb: white on the
+// dark theme, near-black on light) at varying opacity, read live off
+// document.documentElement so the icon repaints correctly if the theme
+// toggles while it's mounted.
 
 type IconType = "platform" | "agents" | "workflow" | "integrations" | "pricing"
 
@@ -13,14 +16,14 @@ interface PixelIconProps {
 }
 
 // ── Platform icon: rotating gear / node graph ────────────────────────────────
-function drawPlatform(ctx: CanvasRenderingContext2D, W: number, t: number) {
+function drawPlatform(ctx: CanvasRenderingContext2D, W: number, t: number, rgb: string) {
   const cx = W / 2, cy = W / 2
   const r  = W * 0.36
   const ps = W / 12  // pixel size
 
   // Central node — pulsing
   const pulse = 0.6 + 0.4 * Math.sin(t * 0.003)
-  ctx.fillStyle = `rgba(255,255,255,${pulse})`
+  ctx.fillStyle = `rgba(${rgb},${pulse})`
   const cs = ps * 1.4
   ctx.fillRect(cx - cs / 2, cy - cs / 2, cs, cs)
 
@@ -31,7 +34,7 @@ function drawPlatform(ctx: CanvasRenderingContext2D, W: number, t: number) {
     const nx = cx + Math.cos(angle) * r
     const ny = cy + Math.sin(angle) * r
     const opacity = 0.3 + 0.5 * ((Math.sin(angle * 2 + t * 0.002) + 1) / 2)
-    ctx.fillStyle = `rgba(255,255,255,${opacity})`
+    ctx.fillStyle = `rgba(${rgb},${opacity})`
     ctx.fillRect(Math.round(nx / ps) * ps - ps / 2, Math.round(ny / ps) * ps - ps / 2, ps, ps)
 
     // Connector line (pixelated)
@@ -40,7 +43,7 @@ function drawPlatform(ctx: CanvasRenderingContext2D, W: number, t: number) {
       const lx = cx + (nx - cx) * (s / steps)
       const ly = cy + (ny - cy) * (s / steps)
       const lo = (0.06 + 0.1 * (s / steps)) * pulse
-      ctx.fillStyle = `rgba(255,255,255,${lo})`
+      ctx.fillStyle = `rgba(${rgb},${lo})`
       ctx.fillRect(Math.round(lx / ps) * ps, Math.round(ly / ps) * ps, ps * 0.7, ps * 0.7)
     }
   }
@@ -95,7 +98,7 @@ const AGENT_FRAMES: number[][][] = [
   ],
 ]
 
-function drawAgents(ctx: CanvasRenderingContext2D, W: number, t: number) {
+function drawAgents(ctx: CanvasRenderingContext2D, W: number, t: number, rgb: string) {
   const fps       = 6  // animation speed in "frames per second equivalent"
   const frameIdx  = Math.floor(t / (1000 / fps)) % AGENT_FRAMES.length
   const frame     = AGENT_FRAMES[frameIdx]
@@ -112,14 +115,14 @@ function drawAgents(ctx: CanvasRenderingContext2D, W: number, t: number) {
     row.forEach((cell, c) => {
       if (!cell) return
       const opacity = 0.5 + 0.5 * Math.sin(t * 0.001 + r * 0.3)
-      ctx.fillStyle = `rgba(255,255,255,${opacity})`
+      ctx.fillStyle = `rgba(${rgb},${opacity})`
       ctx.fillRect(offX + c * ps, offY + r * ps + bobY, ps - 1, ps - 1)
     })
   })
 }
 
 // ── Workflow icon: hourglass shape — top half fills, drains to bottom ─────────
-function drawWorkflow(ctx: CanvasRenderingContext2D, W: number, t: number) {
+function drawWorkflow(ctx: CanvasRenderingContext2D, W: number, t: number, rgb: string) {
   const ps   = Math.floor(W / 12)
   const cx   = W / 2
   const cy   = W / 2
@@ -170,14 +173,14 @@ function drawWorkflow(ctx: CanvasRenderingContext2D, W: number, t: number) {
       // Outline always visible at low opacity
       const baseAlpha = 0.12
       const alpha = Math.max(baseAlpha, sandAlpha * 0.85)
-      ctx.fillStyle = `rgba(255,255,255,${alpha})`
+      ctx.fillStyle = `rgba(${rgb},${alpha})`
       ctx.fillRect(offX + c * ps, offY + r * ps, ps - 1, ps - 1)
     })
   })
 }
 
 // ── Integrations icon: pixel grid of tiles that light up in sequence ──────────
-function drawIntegrations(ctx: CanvasRenderingContext2D, W: number, t: number) {
+function drawIntegrations(ctx: CanvasRenderingContext2D, W: number, t: number, rgb: string) {
   const cols = 5, rows = 4
   const ps   = Math.floor(W / (cols + 1))
   const gap  = 2
@@ -194,14 +197,14 @@ function drawIntegrations(ctx: CanvasRenderingContext2D, W: number, t: number) {
       const alpha = 0.1 + 0.65 * ((Math.sin(wave + phase) + 1) / 2)
       const x     = offX + c * (ps + gap)
       const y     = offY + r * (ps + gap)
-      ctx.fillStyle = `rgba(255,255,255,${alpha})`
+      ctx.fillStyle = `rgba(${rgb},${alpha})`
       ctx.fillRect(x, y, ps, ps)
     }
   }
 }
 
 // ── Pricing icon: stacked bar chart growing ───────────────────────────────────
-function drawPricing(ctx: CanvasRenderingContext2D, W: number, t: number) {
+function drawPricing(ctx: CanvasRenderingContext2D, W: number, t: number, rgb: string) {
   const ps    = Math.floor(W / 12)
   const bars  = 3
   const bw    = ps * 2
@@ -224,7 +227,7 @@ function drawPricing(ctx: CanvasRenderingContext2D, W: number, t: number) {
     for (let row = 0; row < rowCount; row++) {
       const progress = 1 - row / rowCount
       const alpha    = 0.15 + progress * 0.7
-      ctx.fillStyle  = `rgba(255,255,255,${alpha})`
+      ctx.fillStyle  = `rgba(${rgb},${alpha})`
       ctx.fillRect(x, y + row * ps, bw, ps - 1)
     }
   })
@@ -249,15 +252,26 @@ export function PixelIcon({ type, size = 40 }: PixelIconProps) {
     ctx.scale(dpr, dpr)
     ctx.imageSmoothingEnabled = false  // crisp pixels
 
+    // The page's ink color as "R G B", swapped by the theme toggle (white on
+    // dark, near-black on light). Re-read only when the toggle actually
+    // flips `.dark` on <html>, not every frame.
+    const rgbRef = { current: "255 255 255" }
+    const readRgb = () => {
+      rgbRef.current =
+        getComputedStyle(document.documentElement).getPropertyValue("--fg-rgb").trim() || "255 255 255"
+    }
+    readRgb()
+
     const draw = (t: number) => {
       ctx.clearRect(0, 0, size, size)
+      const rgb = rgbRef.current
 
       switch (type) {
-        case "platform":      drawPlatform(ctx, size, t);      break
-        case "agents":        drawAgents(ctx, size, t);        break
-        case "workflow":      drawWorkflow(ctx, size, t);      break
-        case "integrations":  drawIntegrations(ctx, size, t);  break
-        case "pricing":       drawPricing(ctx, size, t);       break
+        case "platform":      drawPlatform(ctx, size, t, rgb);      break
+        case "agents":        drawAgents(ctx, size, t, rgb);        break
+        case "workflow":      drawWorkflow(ctx, size, t, rgb);      break
+        case "integrations":  drawIntegrations(ctx, size, t, rgb);  break
+        case "pricing":       drawPricing(ctx, size, t, rgb);       break
       }
 
       rafRef.current = requestAnimationFrame(draw)
@@ -278,12 +292,24 @@ export function PixelIcon({ type, size = 40 }: PixelIconProps) {
 
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches
     if (reduceMotion) {
-      // Paint one static frame and leave it there.
+      // Paint one static frame and leave it there — but still repaint it (once)
+      // if the theme toggles, since the ink color it was painted in no longer
+      // matches the page.
       ctx.clearRect(0, 0, size, size)
       draw(0)
       stop()
-      return
+      const themeObserver = new MutationObserver(() => {
+        readRgb()
+        ctx.clearRect(0, 0, size, size)
+        draw(0)
+        stop()
+      })
+      themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] })
+      return () => themeObserver.disconnect()
     }
+
+    const themeObserver = new MutationObserver(readRgb)
+    themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] })
 
     const observer = new IntersectionObserver(
       ([entry]) => (entry.isIntersecting ? start() : stop()),
@@ -293,6 +319,7 @@ export function PixelIcon({ type, size = 40 }: PixelIconProps) {
 
     return () => {
       observer.disconnect()
+      themeObserver.disconnect()
       stop()
     }
   }, [type, size])

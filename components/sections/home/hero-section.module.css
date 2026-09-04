@@ -36,11 +36,11 @@
   pointer-events: none;
   background: linear-gradient(
     to top,
-    #0a0e17 0%,
-    #0a0e17 18%,
-    rgba(10, 14, 23, 0.85) 35%,
-    rgba(10, 14, 23, 0.5) 55%,
-    rgba(10, 14, 23, 0.15) 75%,
+    rgb(var(--surface-rgb)) 0%,
+    rgb(var(--surface-rgb)) 18%,
+    rgba(var(--surface-rgb), 0.85) 35%,
+    rgba(var(--surface-rgb), 0.5) 55%,
+    rgba(var(--surface-rgb), 0.15) 75%,
     transparent 100%
   );
 }

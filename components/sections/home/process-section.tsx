@@ -53,7 +53,7 @@ export function ProcessSection() {
                 inside it — one element cannot carry two `animation`
                 shorthands, and they want different ranges anyway. */}
             <div
-              className={`${motion.rise} ${motion.tile} group h-full rounded-2xl border border-white/[0.06] bg-white/[0.02] p-5 hover:border-blue-400/25 hover:bg-white/[0.04] md:p-6`}
+              className={`${motion.rise} ${motion.tile} group h-full rounded-2xl border border-border bg-card p-5 hover:border-blue-400/25 hover:bg-accent/40 md:p-6`}
               style={stagger(i, 5)}
             >
               {/* The figure. Same scale and family as the proof band's
@@ -61,7 +61,7 @@ export function ProcessSection() {
                   a number worth looking at rather than a list marker. */}
               <span
                 aria-hidden="true"
-                className="block bg-[linear-gradient(180deg,#F3F5FA_35%,rgba(96,165,250,0.5)_100%)] bg-clip-text font-ibm-plex text-[2.5rem] font-light leading-none tracking-tight text-transparent md:text-[2.75rem]"
+                className="block bg-[linear-gradient(180deg,rgb(var(--fg-rgb))_35%,rgba(96,165,250,0.5)_100%)] bg-clip-text font-ibm-plex text-[2.5rem] font-light leading-none tracking-tight text-transparent md:text-[2.75rem]"
               >
                 {step.n}
               </span>
@@ -70,12 +70,12 @@ export function ProcessSection() {
                   reader and "01" alone tells it nothing. */}
               <span className="sr-only">Step {Number(step.n)}: </span>
 
-              <h3 className="mt-5 text-[1.0625rem] font-light leading-snug text-[#F3F5FA] transition-colors duration-300 group-hover:text-blue-100">
+              <h3 className="mt-5 text-[1.0625rem] font-light leading-snug text-foreground transition-colors duration-300 group-hover:text-blue-600 dark:group-hover:text-blue-100">
                 {step.title}
               </h3>
-              <p className="mt-2 text-[0.9375rem] leading-[1.7] text-white/50">{step.desc}</p>
+              <p className="mt-2 text-[0.9375rem] leading-[1.7] text-muted-foreground">{step.desc}</p>
 
-              <span className="mt-5 inline-block rounded-full border border-white/[0.08] bg-white/[0.03] px-2.5 py-1 text-[10px] uppercase tracking-[0.15em] text-white/45 transition-colors duration-300 group-hover:border-blue-400/25 group-hover:text-blue-200/70">
+              <span className="mt-5 inline-block rounded-full border border-border bg-card px-2.5 py-1 text-[10px] uppercase tracking-[0.15em] text-muted-foreground transition-colors duration-300 group-hover:border-blue-400/25 group-hover:text-blue-600 dark:group-hover:text-blue-200/70">
                 {step.signal}
               </span>
             </div>
@@ -85,7 +85,7 @@ export function ProcessSection() {
 
       <a
         href="#health-check"
-        className={`${motion.link} ${motion.fade} group mt-16 inline-flex items-center gap-2 text-[0.9375rem] tracking-wide text-blue-300/85 transition-colors hover:text-blue-300 md:mt-20`}
+        className={`${motion.link} ${motion.fade} group mt-16 inline-flex items-center gap-2 text-[0.9375rem] tracking-wide text-blue-600 dark:text-blue-300/85 transition-colors hover:text-blue-500 dark:hover:text-blue-300 md:mt-20`}
       >
         Start with step one — a free 15-minute call
         <Chevron className="transition-transform group-hover:translate-x-0.5" />

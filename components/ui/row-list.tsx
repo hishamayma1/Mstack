@@ -21,7 +21,7 @@ import { stagger } from "@/lib/motion"
 
 export function RowList({ children, className = "" }: { children: ReactNode; className?: string }) {
   return (
-    <ul className={`divide-y divide-white/[0.07] border-y border-white/[0.07] ${className}`}>
+    <ul className={`divide-y divide-border border-y border-border ${className}`}>
       {children}
     </ul>
   )
@@ -57,13 +57,13 @@ export function Row({
   const body = (
     <div className="flex flex-col gap-3 py-6 sm:flex-row sm:items-baseline sm:gap-8">
       {index ? (
-        <span className="shrink-0 pt-0.5 font-ibm-plex text-[11px] tabular-nums tracking-[0.2em] text-white/25 transition-colors duration-300 group-hover:text-blue-300/80 sm:w-10">
+        <span className="shrink-0 pt-0.5 font-ibm-plex text-[11px] tabular-nums tracking-[0.2em] text-muted-foreground transition-colors duration-300 group-hover:text-blue-300/80 sm:w-10">
           {index}
         </span>
       ) : null}
 
       <div className="min-w-0 flex-1">
-        <h3 className="flex items-center gap-2.5 text-[1.0625rem] font-light leading-snug text-[#F3F5FA]">
+        <h3 className="flex items-center gap-2.5 text-[1.0625rem] font-light leading-snug text-foreground">
           {accent ? (
             <span
               aria-hidden="true"
@@ -74,7 +74,7 @@ export function Row({
             {title}
           </span>
         </h3>
-        {desc ? <p className="mt-2 max-w-[62ch] text-[0.9375rem] leading-[1.7] text-white/50">{desc}</p> : null}
+        {desc ? <p className="mt-2 max-w-[62ch] text-[0.9375rem] leading-[1.7] text-muted-foreground">{desc}</p> : null}
         {children}
       </div>
 
@@ -82,7 +82,7 @@ export function Row({
         <div className="flex shrink-0 items-center gap-4 sm:justify-end">
           {meta}
           {href ? (
-            <Chevron className="text-white/25 transition-all duration-300 group-hover:translate-x-1 group-hover:text-blue-300" />
+            <Chevron className="text-muted-foreground transition-all duration-300 group-hover:translate-x-1 group-hover:text-blue-300" />
           ) : null}
         </div>
       ) : null}
@@ -104,7 +104,7 @@ export function Row({
     <li className={motion.rise} style={stagger(order)}>
       <Link
         href={href}
-        className={`${motion.row} group -mx-4 block rounded-xl px-4 transition-colors hover:bg-white/[0.02] focus-visible:bg-white/[0.03] focus-visible:outline-none`}
+        className={`${motion.row} group -mx-4 block rounded-xl px-4 transition-colors hover:bg-accent/40 focus-visible:bg-accent/50 focus-visible:outline-none`}
       >
         {body}
       </Link>

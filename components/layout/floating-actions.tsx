@@ -57,14 +57,14 @@ export function FloatingActions() {
         aria-label="Back to top"
         tabIndex={showTop ? 0 : -1}
         aria-hidden={!showTop}
-        className={`flex items-center justify-center w-11 h-11 rounded-xl border border-white/[0.12] text-white/70 hover:text-white hover:border-white/25 hover:bg-white/[0.08] transition-all duration-300 ${
+        className={`flex items-center justify-center w-11 h-11 rounded-xl border border-glass-border text-muted-foreground hover:text-foreground hover:border-foreground/25 hover:bg-accent/60 transition-all duration-300 ${
           showTop ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2 pointer-events-none"
         }`}
         style={{
           backdropFilter: "blur(16px)",
           WebkitBackdropFilter: "blur(16px)",
-          background: "rgba(16,20,31,0.55)",
-          boxShadow: "0 8px 32px rgba(0,0,0,0.35)",
+          background: "var(--glass-bg)",
+          boxShadow: "var(--shadow-fab)",
         }}
       >
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
@@ -98,12 +98,12 @@ function ContactPill() {
   return (
     <Link
       href="/contact"
-      className="flex items-center gap-2 px-4 py-3 md:px-5 rounded-xl border border-blue-500/40 text-blue-300 text-[11px] tracking-widest hover:text-white hover:border-blue-400 hover:bg-blue-500/20 transition-all duration-200"
+      className="flex items-center gap-2 px-4 py-3 md:px-5 rounded-xl border border-blue-500/40 text-blue-600 dark:text-blue-300 text-[11px] tracking-widest hover:text-foreground hover:border-blue-400 hover:bg-blue-500/20 transition-all duration-200"
       style={{
         backdropFilter: "blur(16px)",
         WebkitBackdropFilter: "blur(16px)",
-        background: "rgba(16,20,31,0.55)",
-        boxShadow: "0 8px 32px rgba(0,0,0,0.35)",
+        background: "var(--glass-bg)",
+        boxShadow: "var(--shadow-fab)",
         fontFamily: "system-ui, -apple-system, sans-serif",
       }}
     >

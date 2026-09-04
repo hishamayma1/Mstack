@@ -9,7 +9,7 @@ export function ServiceFAQSection({ faqs }: { faqs: ServiceFAQ[] }) {
   if (faqs.length === 0) return null
 
   return (
-    <section id="faq" className="py-28 px-6 md:px-12 lg:px-20 border-t border-white/[0.08]">
+    <section id="faq" className="py-28 px-6 md:px-12 lg:px-20 border-t border-border">
       <div className="max-w-3xl mx-auto">
         <SectionHeader
           eyebrow="QUESTIONS"
@@ -21,18 +21,18 @@ export function ServiceFAQSection({ faqs }: { faqs: ServiceFAQ[] }) {
           {faqs.map((faq) => (
             <details
               key={faq.question}
-              className="group rounded-xl border border-white/[0.08] bg-[#10141f] open:border-blue-500/25 transition-colors"
+              className="group rounded-xl border border-border bg-card open:border-blue-500/25 transition-colors"
             >
               <summary className="flex items-start justify-between gap-6 p-6 cursor-pointer list-none [&::-webkit-details-marker]:hidden">
-                <span className="text-base font-light text-[#F3F5FA]">{faq.question}</span>
+                <span className="text-base font-light text-foreground">{faq.question}</span>
                 <span
                   aria-hidden="true"
-                  className="mt-1 shrink-0 text-white/35 transition-transform duration-300 group-open:rotate-45"
+                  className="mt-1 shrink-0 text-muted-foreground transition-transform duration-300 group-open:rotate-45"
                 >
                   +
                 </span>
               </summary>
-              <p className="px-6 pb-6 text-sm text-white/55 leading-relaxed">{faq.answer}</p>
+              <p className="px-6 pb-6 text-sm text-muted-foreground leading-relaxed">{faq.answer}</p>
             </details>
           ))}
         </div>

@@ -32,7 +32,7 @@
 }
 
 .rail::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.04);
+  background: rgba(var(--fg-rgb), 0.04);
   border-radius: 999px;
 }
 

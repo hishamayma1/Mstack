@@ -82,7 +82,7 @@ export function StickyScroll({ items, ariaLabel }: { items: StickyScrollItem[]; 
               ref={(el) => {
                 refs.current[i] = el
               }}
-              className="relative border-l border-white/[0.07] pl-6 md:pl-8"
+              className="relative border-l border-border pl-6 md:pl-8"
             >
               {/* The lit segment travels down the rail, which is the only
                   progress indicator the section needs. */}
@@ -97,7 +97,7 @@ export function StickyScroll({ items, ariaLabel }: { items: StickyScrollItem[]; 
                 <div className="flex items-baseline gap-4">
                   <span
                     className={`font-ibm-plex text-[11px] tabular-nums tracking-[0.2em] transition-colors duration-500 ${
-                      on ? "text-blue-300/90" : "text-white/25"
+                      on ? "text-blue-300/90" : "text-muted-foreground"
                     }`}
                   >
                     {item.index}
@@ -106,8 +106,8 @@ export function StickyScroll({ items, ariaLabel }: { items: StickyScrollItem[]; 
                       showing the active entry, so dimming the others would
                       just be four fifths of the section made hard to read. */}
                   <h3
-                    className={`text-[1.25rem] font-light leading-snug text-[#F3F5FA] transition-colors duration-500 md:text-[1.5rem] ${
-                      on ? "" : "lg:text-white/35"
+                    className={`text-[1.25rem] font-light leading-snug text-foreground transition-colors duration-500 md:text-[1.5rem] ${
+                      on ? "" : "lg:text-muted-foreground"
                     }`}
                   >
                     {item.title}
@@ -115,14 +115,14 @@ export function StickyScroll({ items, ariaLabel }: { items: StickyScrollItem[]; 
                 </div>
 
                 <p
-                  className={`mt-3 max-w-[46ch] text-[0.9375rem] leading-[1.7] text-white/55 transition-colors duration-500 ${
-                    on ? "" : "lg:text-white/25"
+                  className={`mt-3 max-w-[46ch] text-[0.9375rem] leading-[1.7] text-muted-foreground transition-colors duration-500 ${
+                    on ? "" : "lg:text-muted-foreground/60"
                   }`}
                 >
                   {item.desc}
                 </p>
 
-                {item.meta ? <div className="mt-4 text-[0.8125rem] text-white/40">{item.meta}</div> : null}
+                {item.meta ? <div className="mt-4 text-[0.8125rem] text-muted-foreground">{item.meta}</div> : null}
 
                 {/* Small screens get the detail inline, since there is no
                     panel to put it in. */}
@@ -138,7 +138,7 @@ export function StickyScroll({ items, ariaLabel }: { items: StickyScrollItem[]; 
       {/* ── The pinned panel ─────────────────────────────────────────────── */}
       <div className="hidden lg:col-span-6 lg:block xl:col-span-7">
         <div className="sticky top-28">
-          <div className="relative overflow-hidden rounded-2xl border border-white/[0.08] bg-[linear-gradient(160deg,#0E1526_0%,#0A0F1B_100%)] p-8 xl:p-10">
+          <div className="relative overflow-hidden rounded-2xl border border-border bg-card p-8 xl:p-10">
             <span
               aria-hidden="true"
               className="pointer-events-none absolute -right-16 -top-16 h-64 w-64 rounded-full bg-[radial-gradient(closest-side,rgba(37,99,235,0.22),transparent)] blur-2xl"
@@ -149,15 +149,15 @@ export function StickyScroll({ items, ariaLabel }: { items: StickyScrollItem[]; 
             <div key={current.id} className={`${motion.swap} relative`}>
               <span
                 aria-hidden="true"
-                className="block bg-[linear-gradient(180deg,#F3F5FA_35%,rgba(96,165,250,0.5)_100%)] bg-clip-text font-ibm-plex text-[3.5rem] font-light leading-none tracking-tight text-transparent"
+                className="block bg-[linear-gradient(180deg,rgb(var(--fg-rgb))_35%,rgba(96,165,250,0.5)_100%)] bg-clip-text font-ibm-plex text-[3.5rem] font-light leading-none tracking-tight text-transparent"
               >
                 {current.index}
               </span>
 
-              <h4 className="mt-6 text-[1.75rem] font-light leading-tight tracking-tight text-[#F3F5FA] xl:text-[2rem]">
+              <h4 className="mt-6 text-[1.75rem] font-light leading-tight tracking-tight text-foreground xl:text-[2rem]">
                 {current.title}
               </h4>
-              <p className="mt-4 max-w-[48ch] text-[0.9375rem] leading-[1.75] text-white/55">
+              <p className="mt-4 max-w-[48ch] text-[0.9375rem] leading-[1.75] text-muted-foreground">
                 {current.desc}
               </p>
 
@@ -190,7 +190,7 @@ function Detail({ item, compact = false }: { item: StickyScrollItem; compact?: b
               className={
                 compact
                   ? undefined
-                  : "flex items-center gap-2.5 rounded-xl border border-white/[0.07] bg-white/[0.03] px-3 py-2 transition-colors duration-300 hover:border-blue-400/25"
+                  : "flex items-center gap-2.5 rounded-xl border border-border bg-card px-3 py-2 transition-colors duration-300 hover:border-blue-400/25"
               }
             >
               <AppLogo slug={slug} size={compact ? 22 : 28} showName={!compact} />
@@ -202,7 +202,7 @@ function Detail({ item, compact = false }: { item: StickyScrollItem; compact?: b
       {item.href ? (
         <Link
           href={item.href}
-          className={`${motion.link} group inline-flex items-center gap-2 text-[0.875rem] tracking-wide text-blue-300/85 transition-colors hover:text-blue-300 ${
+          className={`${motion.link} group inline-flex items-center gap-2 text-[0.875rem] tracking-wide text-blue-600 dark:text-blue-300/85 transition-colors hover:text-blue-700 dark:hover:text-blue-300 ${
             compact ? "mt-5" : "mt-8"
           }`}
         >

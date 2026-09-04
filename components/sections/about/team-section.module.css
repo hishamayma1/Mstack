@@ -60,19 +60,19 @@
 .bio {
   font-size: 0.82rem;
   line-height: 1.65;
-  color: rgba(255, 255, 255, 0.55);
+  color: rgba(var(--fg-rgb), 0.55);
 }
 
 .email {
   align-self: flex-start;
   font-size: 0.72rem;
   letter-spacing: 0.02em;
-  color: rgba(147, 197, 253, 0.8);
+  color: rgba(var(--accent-soft-rgb), 0.8);
   text-decoration: none;
   transition: color 200ms ease;
 }
 
 .email:hover,
 .email:focus-visible {
-  color: #93c5fd;
+  color: rgb(var(--accent-soft-rgb));
 }

@@ -5,7 +5,7 @@ import { PARTNERS } from "@/lib/content/site"
 
 export function PartnersSection() {
   return (
-    <section id="partners" className="py-32 px-6 md:px-12 lg:px-20 border-t border-white/[0.08]">
+    <section id="partners" className="py-32 px-6 md:px-12 lg:px-20 border-t border-border">
       <div className="max-w-6xl mx-auto">
         <div className="mb-16 max-w-2xl">
           <Tag>PARTNERS &amp; CERTIFICATIONS</Tag>
@@ -22,8 +22,8 @@ export function PartnersSection() {
                   <path d="M12 2l2.4 7.2H22l-6 4.6 2.3 7.2L12 16.4l-6.3 4.6 2.3-7.2-6-4.6h7.6z" />
                 </svg>
               </div>
-              <p className="text-sm font-light text-[#F3F5FA] leading-snug">{p.name}</p>
-              <span className="text-xs text-white/40 tracking-wide">{p.type}</span>
+              <p className="text-sm font-light text-foreground leading-snug">{p.name}</p>
+              <span className="text-xs text-muted-foreground tracking-wide">{p.type}</span>
             </BentoCard>
           ))}
         </MouseGlowGrid>

@@ -43,7 +43,7 @@ export function ResourcesExplorer({
   }
 
   return (
-    <section className="py-24 px-6 md:px-12 lg:px-20 border-t border-white/[0.08]">
+    <section className="py-24 px-6 md:px-12 lg:px-20 border-t border-border">
       <div className="max-w-6xl mx-auto">
         <div className="mb-4 max-w-2xl">
           <Tag>RESOURCE LIBRARY</Tag>
@@ -60,12 +60,12 @@ export function ResourcesExplorer({
                 onClick={() => setResourcesTab(t.id)}
                 className="px-5 py-2.5 rounded-full text-sm tracking-wide border transition-all duration-200"
                 style={{
-                  background: isActive ? "rgba(59,130,246,0.18)" : "rgba(255,255,255,0.03)",
-                  borderColor: isActive ? "rgba(96,165,250,0.4)" : "rgba(255,255,255,0.08)",
-                  color: isActive ? "rgba(255,255,255,0.95)" : "rgba(255,255,255,0.55)",
+                  background: isActive ? "rgba(59,130,246,0.18)" : "rgba(var(--fg-rgb),0.03)",
+                  borderColor: isActive ? "rgba(96,165,250,0.4)" : "rgba(var(--fg-rgb),0.08)",
+                  color: isActive ? "rgba(var(--fg-rgb),0.95)" : "rgba(var(--fg-rgb),0.55)",
                 }}
               >
-                {t.label} <span className="text-white/35">({counts[t.id]})</span>
+                {t.label} <span className="text-muted-foreground">({counts[t.id]})</span>
               </button>
             )
           })}

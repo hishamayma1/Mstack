@@ -72,24 +72,24 @@ export function ResourceGridExplorer({
       </div>
 
       {filtered.length === 0 ? (
-        <div className="rounded-2xl border border-white/[0.08] p-8 text-center">
-          <p className="text-sm text-white/45">Nothing matches — try a different search or tag.</p>
+        <div className="rounded-2xl border border-border p-8 text-center">
+          <p className="text-sm text-muted-foreground">Nothing matches — try a different search or tag.</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
           {filtered.map((item) => (
-            <article key={item.id} className="rounded-2xl border border-white/[0.08] bg-[#10141f] p-7 flex flex-col transition-all duration-300 hover:border-blue-500/30 hover:bg-[#131a29]">
+            <article key={item.id} className="rounded-2xl border border-border bg-card p-7 flex flex-col transition-all duration-300 hover:border-blue-500/30 hover:bg-accent/30">
               <div className="mb-4">
                 <Tag>{item.tag}</Tag>
               </div>
               <h4 className="text-base font-light mb-2">{item.title}</h4>
-              <p className="text-sm text-white/55 leading-relaxed">{item.description}</p>
+              <p className="text-sm text-muted-foreground leading-relaxed">{item.description}</p>
               {item.href ? (
                 <a
                   href={item.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="mt-5 pt-4 border-t border-white/[0.08] text-xs text-blue-300/80 hover:text-blue-300 transition-colors tracking-wide"
+                  className="mt-5 pt-4 border-t border-border text-xs text-blue-600 dark:text-blue-300/80 hover:text-blue-700 dark:hover:text-blue-300 transition-colors tracking-wide"
                 >
                   {item.hrefLabel} →
                 </a>

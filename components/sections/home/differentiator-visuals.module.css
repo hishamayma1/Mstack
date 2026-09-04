@@ -21,7 +21,7 @@
 /* The dotted ground every panel sits on — Aceternity's `bg-dot-white/[0.2]`,
    which is a Tailwind plugin this project does not have. */
 .dots {
-  background-image: radial-gradient(rgba(255, 255, 255, 0.11) 1px, transparent 1px);
+  background-image: radial-gradient(rgba(var(--fg-rgb), 0.11) 1px, transparent 1px);
   background-size: 16px 16px;
   background-position: -8px -8px;
 }

@@ -4,6 +4,7 @@ import { Geist, Geist_Mono, IBM_Plex_Sans } from 'next/font/google'
 import { Courier_Prime } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import { StoreHydrator } from '@/components/providers/store-hydrator'
+import { ThemeProvider } from '@/components/providers/theme-provider'
 import './globals.css'
 
 const geistSans = Geist({ subsets: ["latin"], variable: "--font-geist-sans", display: "swap" });
@@ -54,9 +55,11 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} ${courierPrime.variable} ${ibmPlexSans.variable} font-sans antialiased`}
         suppressHydrationWarning
       >
-        <StoreHydrator />
-        {children}
-        <Analytics />
+        <ThemeProvider>
+          <StoreHydrator />
+          {children}
+          <Analytics />
+        </ThemeProvider>
       </body>
     </html>
   )

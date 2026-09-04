@@ -33,7 +33,7 @@ export function CTAButtons({
       {secondaryLabel && secondaryHref ? (
         <Link
           href={secondaryHref}
-          className={`${pad} border border-white/15 text-white/75 text-sm rounded-xl hover:border-blue-500/40 hover:text-white hover:bg-white/[0.05] transition-all tracking-widest font-medium text-center whitespace-nowrap`}
+          className={`${pad} border border-border text-foreground/80 text-sm rounded-xl hover:border-blue-500/40 hover:text-foreground hover:bg-accent/40 transition-all tracking-widest font-medium text-center whitespace-nowrap`}
         >
           {secondaryLabel}
         </Link>
@@ -58,8 +58,8 @@ export function SectionCTA({
   secondaryHref?: string
 }) {
   return (
-    <div className="mt-10 rounded-2xl border border-white/[0.08] bg-white/[0.02] px-6 py-6 md:px-8 flex flex-col md:flex-row md:items-center gap-5 md:gap-8">
-      <p className="text-sm text-white/60 leading-relaxed md:flex-1">{text}</p>
+    <div className="mt-10 rounded-2xl border border-border bg-card px-6 py-6 md:px-8 flex flex-col md:flex-row md:items-center gap-5 md:gap-8">
+      <p className="text-sm text-muted-foreground leading-relaxed md:flex-1">{text}</p>
       <div className="shrink-0">
         <CTAButtons
           primaryLabel={primaryLabel}

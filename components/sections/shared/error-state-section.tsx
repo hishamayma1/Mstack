@@ -44,7 +44,7 @@ export function ErrorStateSection({
       <div className="relative max-w-4xl mx-auto w-full text-center">
         <span
           aria-hidden="true"
-          className="block font-pixel text-6xl md:text-8xl text-white/[0.07] tracking-[0.2em] mb-6 select-none"
+          className="block font-pixel text-6xl md:text-8xl text-foreground/[0.07] tracking-[0.2em] mb-6 select-none"
         >
           {code}
         </span>
@@ -60,10 +60,10 @@ export function ErrorStateSection({
           {title}
         </RevealText>
 
-        <p className="mt-6 text-base text-white/55 leading-relaxed max-w-xl mx-auto">{message}</p>
+        <p className="mt-6 text-base text-muted-foreground leading-relaxed max-w-xl mx-auto">{message}</p>
 
         {detail ? (
-          <p className="mt-5 inline-block rounded-lg border border-white/[0.08] bg-white/[0.02] px-3.5 py-2 font-pixel text-[11px] tracking-wider text-white/35">
+          <p className="mt-5 inline-block rounded-lg border border-border bg-accent/20 px-3.5 py-2 font-pixel text-[11px] tracking-wider text-muted-foreground">
             {detail}
           </p>
         ) : null}
@@ -72,7 +72,7 @@ export function ErrorStateSection({
 
         {links && links.length > 0 ? (
           <div className="mt-16 text-left">
-            <p className="text-[11px] tracking-widest text-white/35 mb-4 text-center">
+            <p className="text-[11px] tracking-widest text-muted-foreground mb-4 text-center">
               OR TRY ONE OF THESE
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -80,18 +80,18 @@ export function ErrorStateSection({
                 <Link
                   key={l.href}
                   href={l.href}
-                  className="group rounded-2xl border border-white/[0.08] bg-white/[0.02] p-5 transition-all hover:border-blue-500/30 hover:bg-white/[0.05]"
+                  className="group rounded-2xl border border-border bg-accent/20 p-5 transition-all hover:border-blue-500/30 hover:bg-accent/40"
                 >
                   <span className="flex items-center justify-between gap-3 text-sm font-light">
                     {l.label}
                     <span
                       aria-hidden="true"
-                      className="text-blue-300/60 group-hover:text-blue-300 transition-colors"
+                      className="text-blue-600 dark:text-blue-300/60 group-hover:text-blue-700 dark:group-hover:text-blue-300 transition-colors"
                     >
                       →
                     </span>
                   </span>
-                  <span className="mt-1.5 block text-xs text-white/45 leading-relaxed">
+                  <span className="mt-1.5 block text-xs text-muted-foreground leading-relaxed">
                     {l.description}
                   </span>
                 </Link>

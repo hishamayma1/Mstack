@@ -47,7 +47,7 @@ export default function FrontendError({
   }, [error])
 
   return (
-    <div className="bg-[#0A0E17] text-[#F3F5FA] min-h-screen font-sans antialiased">
+    <div className="bg-background text-foreground min-h-screen font-sans antialiased">
       <MobileNav />
       <ErrorStateSection
         code="500"
@@ -66,7 +66,7 @@ export default function FrontendError({
             </button>
             <Link
               href="/"
-              className="px-8 py-3 border border-white/15 text-white/75 text-sm rounded-xl hover:border-blue-500/40 hover:text-white hover:bg-white/[0.05] transition-all tracking-widest font-medium text-center whitespace-nowrap"
+              className="px-8 py-3 border border-border text-muted-foreground text-sm rounded-xl hover:border-blue-500/40 hover:text-foreground hover:bg-accent/40 transition-all tracking-widest font-medium text-center whitespace-nowrap"
             >
               Back to Home
             </Link>

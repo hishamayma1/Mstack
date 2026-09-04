@@ -1,6 +1,9 @@
 // ─────────────────────────────────────────────────────────────────────────────
 // MICROSOFT PRODUCT LOGOS — the only file you edit to swap in real logo art.
 //
+// The official product marks now ship in public/images/logos/ and every entry
+// below points at one. The monogram fallback stays for any product added later.
+//
 // HOW TO ADD A REAL LOGO
 //   1. Download the official mark from Microsoft's brand assets
 //      (https://www.microsoft.com/design/brand — the product icon set) and drop
@@ -27,22 +30,22 @@ export type AppLogo = {
 }
 
 export const APP_LOGOS = {
-  teams: { name: "Microsoft Teams", src: null, monogram: "T", accent: "98, 100, 167" },
-  sharepoint: { name: "SharePoint", src: null, monogram: "SP", accent: "3, 120, 124" },
-  onedrive: { name: "OneDrive", src: null, monogram: "OD", accent: "0, 120, 212" },
-  outlook: { name: "Outlook", src: null, monogram: "O", accent: "0, 114, 198" },
-  exchange: { name: "Exchange Online", src: null, monogram: "EX", accent: "0, 114, 198" },
-  "power-apps": { name: "Power Apps", src: null, monogram: "PA", accent: "116, 43, 164" },
-  "power-automate": { name: "Power Automate", src: null, monogram: "PF", accent: "11, 83, 148" },
-  "power-bi": { name: "Power BI", src: null, monogram: "BI", accent: "225, 175, 0" },
-  intune: { name: "Microsoft Intune", src: null, monogram: "IN", accent: "0, 120, 212" },
-  entra: { name: "Microsoft Entra", src: null, monogram: "EN", accent: "0, 150, 199" },
-  defender: { name: "Microsoft Defender", src: null, monogram: "DF", accent: "56, 118, 191" },
-  purview: { name: "Microsoft Purview", src: null, monogram: "PV", accent: "80, 140, 200" },
-  copilot: { name: "Microsoft Copilot", src: null, monogram: "CP", accent: "116, 90, 220" },
-  planner: { name: "Microsoft Planner", src: null, monogram: "PL", accent: "49, 117, 44" },
-  bookings: { name: "Microsoft Bookings", src: null, monogram: "BK", accent: "3, 120, 124" },
-  "microsoft-365": { name: "Microsoft 365", src: null, monogram: "365", accent: "0, 114, 198" },
+  teams: { name: "Microsoft Teams", src: "/images/logos/teams.svg", monogram: "T", accent: "98, 100, 167" },
+  sharepoint: { name: "SharePoint", src: "/images/logos/sharepoint.svg", monogram: "SP", accent: "3, 120, 124" },
+  onedrive: { name: "OneDrive", src: "/images/logos/onedrive.svg", monogram: "OD", accent: "0, 120, 212" },
+  outlook: { name: "Outlook", src: "/images/logos/outlook.svg", monogram: "O", accent: "0, 114, 198" },
+  exchange: { name: "Exchange Online", src: "/images/logos/exchange.svg", monogram: "EX", accent: "0, 114, 198" },
+  "power-apps": { name: "Power Apps", src: "/images/logos/power-apps.svg", monogram: "PA", accent: "116, 43, 164" },
+  "power-automate": { name: "Power Automate", src: "/images/logos/power-automate.svg", monogram: "PF", accent: "11, 83, 148" },
+  "power-bi": { name: "Power BI", src: "/images/logos/power-bi.svg", monogram: "BI", accent: "225, 175, 0" },
+  intune: { name: "Microsoft Intune", src: "/images/logos/intune.svg", monogram: "IN", accent: "0, 120, 212" },
+  entra: { name: "Microsoft Entra", src: "/images/logos/entra.svg", monogram: "EN", accent: "0, 150, 199" },
+  defender: { name: "Microsoft Defender", src: "/images/logos/defender.svg", monogram: "DF", accent: "56, 118, 191" },
+  purview: { name: "Microsoft Purview", src: "/images/logos/purview.svg", monogram: "PV", accent: "80, 140, 200" },
+  copilot: { name: "Microsoft Copilot", src: "/images/logos/copilot.svg", monogram: "CP", accent: "116, 90, 220" },
+  planner: { name: "Microsoft Planner", src: "/images/logos/planner.svg", monogram: "PL", accent: "49, 117, 44" },
+  bookings: { name: "Microsoft Bookings", src: "/images/logos/bookings.svg", monogram: "BK", accent: "3, 120, 124" },
+  "microsoft-365": { name: "Microsoft 365", src: "/images/logos/microsoft-365.svg", monogram: "365", accent: "0, 114, 198" },
 } as const satisfies Record<string, AppLogo>
 
 export type AppLogoSlug = keyof typeof APP_LOGOS
@@ -82,3 +85,13 @@ export const USE_CASE_LOGOS: Record<string, AppLogoSlug> = {
   "Power Apps": "power-apps",
   "IT Support": "microsoft-365",
 }
+
+// The second hero's row: one mark per thing we actually sell, in the order the
+// service levels introduce them — collaboration, then the platform we automate
+// on, then the security work. Deliberately not HERO_LOGOS (recognition) or
+// STACK_LOGOS (coverage); this row answers "what do you do", so every mark on
+// it has a service behind it.
+export const SERVICE_LOGOS: AppLogoSlug[] = [
+  "sharepoint", "teams", "power-automate", "power-apps",
+  "power-bi", "entra", "intune", "defender",
+]

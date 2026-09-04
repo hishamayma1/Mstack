@@ -15,7 +15,7 @@ export function IndustryRelatedSection({
   if (industries.length === 0) return null
 
   return (
-    <section className="py-24 px-6 md:px-12 lg:px-20 border-t border-white/[0.08]">
+    <section className="py-24 px-6 md:px-12 lg:px-20 border-t border-border">
       <div className="max-w-6xl mx-auto">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
           <div className="max-w-xl">
@@ -26,7 +26,7 @@ export function IndustryRelatedSection({
           </div>
           <Link
             href="/industries"
-            className="text-xs text-blue-300/80 hover:text-blue-300 transition-colors tracking-wide shrink-0"
+            className="text-xs text-blue-600 dark:text-blue-300/80 hover:text-blue-500 dark:hover:text-blue-300 transition-colors tracking-wide shrink-0"
           >
             View all industries →
           </Link>
@@ -37,7 +37,7 @@ export function IndustryRelatedSection({
             <Link
               key={ind.id}
               href={`/industries/${ind.slug}`}
-              className="px-4 py-2.5 rounded-xl border border-white/[0.08] bg-white/[0.02] text-sm text-white/60 hover:text-white hover:border-blue-500/30 hover:bg-white/[0.05] transition-all"
+              className="px-4 py-2.5 rounded-xl border border-border bg-card text-sm text-muted-foreground hover:text-foreground hover:border-blue-500/30 hover:bg-accent/60 transition-all"
             >
               {ind.title}
             </Link>

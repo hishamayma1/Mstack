@@ -36,8 +36,8 @@ export default function GlobalError({
           alignItems: "center",
           justifyContent: "center",
           padding: "24px",
-          background: "#0A0E17",
-          color: "#F3F5FA",
+          background: "var(--ge-bg)",
+          color: "var(--ge-fg)",
           fontFamily:
             "system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
           WebkitFontSmoothing: "antialiased",
@@ -45,13 +45,27 @@ export default function GlobalError({
       >
         <title>Something went wrong | MStack360</title>
 
+        {/* This page renders outside the app's normal CSS pipeline (see the
+            module comment above), so it can't reach globals.css's theme
+            tokens. This tiny self-contained stylesheet mirrors just the two
+            values this page needs, keyed off the OS-level color-scheme
+            preference — the only theme signal available without the
+            next-themes script, which also lives in the (unreached) root
+            layout. */}
+        <style>{`
+          :root { --ge-bg: #F7F8FA; --ge-fg: #0A0E17; --ge-fg-rgb: 10, 14, 23; }
+          @media (prefers-color-scheme: dark) {
+            :root { --ge-bg: #0A0E17; --ge-fg: #F3F5FA; --ge-fg-rgb: 255, 255, 255; }
+          }
+        `}</style>
+
         <main style={{ maxWidth: "34rem", width: "100%", textAlign: "center" }}>
           <p
             style={{
               margin: "0 0 28px",
               fontSize: "11px",
               letterSpacing: "0.25em",
-              color: "rgba(255,255,255,0.5)",
+              color: "rgba(var(--ge-fg-rgb), 0.5)",
             }}
           >
             MSTACK360
@@ -74,7 +88,7 @@ export default function GlobalError({
               margin: "0 0 32px",
               fontSize: "15px",
               lineHeight: 1.7,
-              color: "rgba(255,255,255,0.55)",
+              color: "rgba(var(--ge-fg-rgb), 0.55)",
             }}
           >
             The site hit an unexpected problem and couldn&apos;t finish loading. This is
@@ -88,12 +102,12 @@ export default function GlobalError({
                 display: "inline-block",
                 padding: "8px 14px",
                 borderRadius: "8px",
-                border: "1px solid rgba(255,255,255,0.08)",
-                background: "rgba(255,255,255,0.02)",
+                border: "1px solid rgba(var(--ge-fg-rgb), 0.08)",
+                background: "rgba(var(--ge-fg-rgb), 0.02)",
                 fontSize: "11px",
                 letterSpacing: "0.08em",
                 fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace",
-                color: "rgba(255,255,255,0.35)",
+                color: "rgba(var(--ge-fg-rgb), 0.35)",
               }}
             >
               Reference: {error.digest}
@@ -132,8 +146,8 @@ export default function GlobalError({
               style={{
                 padding: "12px 32px",
                 borderRadius: "12px",
-                border: "1px solid rgba(255,255,255,0.15)",
-                color: "rgba(255,255,255,0.75)",
+                border: "1px solid rgba(var(--ge-fg-rgb), 0.15)",
+                color: "rgba(var(--ge-fg-rgb), 0.75)",
                 fontSize: "14px",
                 letterSpacing: "0.1em",
                 fontWeight: 500,

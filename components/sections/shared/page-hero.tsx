@@ -34,7 +34,7 @@ export function PageHero({
           {title}
         </RevealText>
         {subtitle ? (
-          <p className="mt-6 text-base text-white/55 leading-relaxed max-w-2xl mx-auto">{subtitle}</p>
+          <p className="mt-6 text-base text-muted-foreground leading-relaxed max-w-2xl mx-auto">{subtitle}</p>
         ) : null}
         {actions ? <div className="mt-9">{actions}</div> : null}
       </div>

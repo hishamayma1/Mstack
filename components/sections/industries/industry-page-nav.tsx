@@ -16,25 +16,25 @@ export function IndustryPageNav({ items }: { items: NavItem[] }) {
       <div className="max-w-6xl mx-auto">
         <nav
           aria-label="On this page"
-          className="rounded-2xl border border-white/[0.08] px-3 py-2 flex items-center gap-1 overflow-x-auto"
+          className="rounded-2xl border border-border px-3 py-2 flex items-center gap-1 overflow-x-auto"
           style={{
             backdropFilter: "blur(16px)",
             WebkitBackdropFilter: "blur(16px)",
-            background: "rgba(16,20,31,0.72)",
+            background: "var(--glass-bg)",
           }}
         >
           {items.map((item) => (
             <a
               key={item.id}
               href={`#${item.id}`}
-              className="shrink-0 px-3.5 py-1.5 rounded-xl text-[11px] tracking-wide text-white/55 hover:text-white hover:bg-white/[0.06] transition-colors"
+              className="shrink-0 px-3.5 py-1.5 rounded-xl text-[11px] tracking-wide text-muted-foreground hover:text-foreground hover:bg-accent/60 transition-colors"
             >
               {item.label}
             </a>
           ))}
           <a
             href="#final-cta"
-            className="ml-auto shrink-0 px-4 py-1.5 rounded-xl text-[11px] tracking-wide text-blue-300 border border-blue-500/40 hover:text-white hover:border-blue-400 hover:bg-blue-500/20 transition-all"
+            className="ml-auto shrink-0 px-4 py-1.5 rounded-xl text-[11px] tracking-wide text-blue-600 dark:text-blue-300 border border-blue-500/40 hover:text-foreground hover:border-blue-400 hover:bg-blue-500/20 transition-all"
           >
             BOOK A CALL
           </a>

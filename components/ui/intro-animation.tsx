@@ -17,7 +17,7 @@ export function IntroAnimation() {
           {LETTERS.map((letter, i) => (
             <span
               key={`${letter}-${i}`}
-              className={`${styles.letter} font-sans font-bold text-[#F3F5FA]`}
+              className={`${styles.letter} font-sans font-bold text-foreground`}
               style={{ "--i": i } as CSSProperties}
             >
               {letter}

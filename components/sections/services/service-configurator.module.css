@@ -15,8 +15,8 @@
     to right,
     rgb(37 99 235) 0%,
     rgb(59 130 246) var(--fill, 50%),
-    rgba(255, 255, 255, 0.1) var(--fill, 50%),
-    rgba(255, 255, 255, 0.1) 100%
+    rgba(var(--fg-rgb), 0.1) var(--fill, 50%),
+    rgba(var(--fg-rgb), 0.1) 100%
   );
   outline: none;
   cursor: pointer;
@@ -28,7 +28,7 @@
   width: 22px;
   height: 22px;
   border-radius: 50%;
-  background: #f3f5fa;
+  background: var(--surface-solid);
   border: 3px solid rgb(37 99 235);
   cursor: grab;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.45);
@@ -44,7 +44,7 @@
   width: 22px;
   height: 22px;
   border-radius: 50%;
-  background: #f3f5fa;
+  background: var(--surface-solid);
   border: 3px solid rgb(37 99 235);
   cursor: grab;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.45);

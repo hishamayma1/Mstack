@@ -40,7 +40,7 @@
      baked into each PNG) keeps the files small and lets the backdrop be
      restyled without re-exporting art. */
   background: radial-gradient(120% 100% at 50% 0%, rgba(37, 68, 130, 0.55), transparent 60%),
-    linear-gradient(180deg, #16203a, #0b0f18);
+    var(--surface-solid);
   transform-style: preserve-3d;
   transform: rotateX(var(--rx)) rotateY(var(--ry)) scale(var(--scale));
   /* Settle-back: slight overshoot, spring-ish. */
@@ -102,7 +102,7 @@
   inset: 0;
   pointer-events: none;
   border-radius: 1rem;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(var(--fg-rgb), 0.1);
   transition: border-color 300ms ease;
 }
 

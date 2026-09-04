@@ -87,23 +87,23 @@ export function InfiniteMovingCards({
             {items.map((item) => (
               <li
                 key={`${copy}-${item.id}`}
-                className="flex w-[300px] shrink-0 flex-col gap-4 rounded-2xl border border-white/[0.07] bg-[linear-gradient(180deg,#0E1424_0%,#0A0F1B_100%)] p-6 transition-colors duration-300 hover:border-blue-400/20 sm:w-[360px]"
+                className="flex w-[300px] shrink-0 flex-col gap-4 rounded-2xl border border-border bg-card p-6 transition-colors duration-300 hover:border-blue-400/20 sm:w-[360px]"
               >
-                <p className="flex-1 text-[0.9375rem] leading-[1.75] text-white/55">
-                  <span aria-hidden="true" className="mr-1 text-white/20">
+                <p className="flex-1 text-[0.9375rem] leading-[1.75] text-muted-foreground">
+                  <span aria-hidden="true" className="mr-1 text-muted-foreground/60">
                     &ldquo;
                   </span>
                   {item.quote}
-                  <span aria-hidden="true" className="ml-0.5 text-white/20">
+                  <span aria-hidden="true" className="ml-0.5 text-muted-foreground/60">
                     &rdquo;
                   </span>
                 </p>
 
-                <div className="flex items-center gap-2.5 border-t border-white/[0.06] pt-4">
+                <div className="flex items-center gap-2.5 border-t border-border pt-4">
                   {item.logo ? <AppLogo slug={item.logo} size={20} /> : null}
-                  <span className="text-[0.8125rem] font-light text-white/75">{item.name}</span>
+                  <span className="text-[0.8125rem] font-light text-foreground/85">{item.name}</span>
                   {item.meta ? (
-                    <span className="ml-auto text-[10px] uppercase tracking-[0.15em] text-white/35">
+                    <span className="ml-auto text-[10px] uppercase tracking-[0.15em] text-muted-foreground/70">
                       {item.meta}
                     </span>
                   ) : null}

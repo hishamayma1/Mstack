@@ -103,7 +103,7 @@
 /* Pre-layers: flat accent slabs that arrive first and read as depth behind the
    panel. aria-hidden in the markup — purely decorative. */
 .prelayer {
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(var(--fg-rgb), 0.06);
 }
 
 .prelayer:nth-child(1) {
@@ -117,10 +117,10 @@
 .panel {
   display: flex;
   flex-direction: column;
-  border: 1px solid rgba(255, 255, 255, 0.09);
-  background: radial-gradient(120% 90% at 12% 0%, rgba(37, 68, 130, 0.42), transparent 55%),
-    #0b0f18;
-  box-shadow: 0 32px 80px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(var(--fg-rgb), 0.09);
+  background: radial-gradient(120% 90% at 12% 0%, var(--dropdown-tint), transparent 55%),
+    var(--surface-solid);
+  box-shadow: var(--shadow-dropdown);
   overflow-y: auto;
   overscroll-behavior: contain;
   -webkit-overflow-scrolling: touch;
@@ -158,7 +158,7 @@
 
 .item {
   counter-increment: navItem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid rgba(var(--fg-rgb), 0.05);
 }
 
 .item:last-of-type {
@@ -199,7 +199,7 @@
   gap: 0.7rem;
   padding: 0.72rem 0.75rem;
   border-radius: 0.9rem;
-  color: rgba(255, 255, 255, 0.88);
+  color: rgba(var(--fg-rgb), 0.88);
   font-size: 1.22rem;
   font-weight: 500;
   letter-spacing: -0.01em;
@@ -210,11 +210,11 @@
 
 .link:active {
   background: rgba(59, 130, 246, 0.14);
-  color: #fff;
+  color: rgb(var(--fg-rgb));
 }
 
 .link[data-active="true"] {
-  color: #fff;
+  color: rgb(var(--fg-rgb));
 }
 
 .num {
@@ -223,7 +223,7 @@
   font-weight: 400;
   letter-spacing: 0.06em;
   font-variant-numeric: tabular-nums;
-  color: rgba(147, 197, 253, 0.55);
+  color: rgba(var(--accent-soft-rgb), 0.55);
   transition: color 180ms ease;
 }
 
@@ -232,7 +232,7 @@
 }
 
 .link[data-active="true"] .num {
-  color: #60a5fa;
+  color: rgb(var(--accent-strong-rgb));
 }
 
 /* Accordion trigger. 44px min target — it sits right next to the link, so an
@@ -244,10 +244,10 @@
   justify-content: center;
   width: 44px;
   height: 44px;
-  border: 1px solid rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(var(--fg-rgb), 0.07);
   border-radius: 0.8rem;
-  background: rgba(255, 255, 255, 0.03);
-  color: rgba(147, 197, 253, 0.85);
+  background: rgba(var(--fg-rgb), 0.03);
+  color: rgba(var(--accent-soft-rgb), 0.85);
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
   transition: background-color 200ms ease, border-color 200ms ease, color 200ms ease;
@@ -256,7 +256,7 @@
 .expander[aria-expanded="true"] {
   background: rgba(59, 130, 246, 0.16);
   border-color: rgba(96, 165, 250, 0.35);
-  color: #fff;
+  color: rgb(var(--fg-rgb));
 }
 
 .chevron {
@@ -303,7 +303,7 @@
 .blurb {
   font-size: 0.7rem;
   line-height: 1.4;
-  color: rgba(255, 255, 255, 0.4);
+  color: rgba(var(--fg-rgb), 0.4);
 }
 
 .group {
@@ -317,7 +317,7 @@
   font-size: 0.58rem;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: rgba(147, 197, 253, 0.6);
+  color: rgba(var(--accent-soft-rgb), 0.6);
 }
 
 .subLink {
@@ -341,7 +341,7 @@
   height: 4px;
   margin-top: 0.42rem;
   border-radius: 999px;
-  background: rgba(96, 165, 250, 0.7);
+  background: rgba(var(--accent-strong-rgb), 0.7);
 }
 
 .subText {
@@ -353,13 +353,13 @@
 
 .subLabel {
   font-size: 0.82rem;
-  color: rgba(255, 255, 255, 0.82);
+  color: rgba(var(--fg-rgb), 0.82);
 }
 
 .subDesc {
   font-size: 0.66rem;
   line-height: 1.35;
-  color: rgba(255, 255, 255, 0.38);
+  color: rgba(var(--fg-rgb), 0.38);
 }
 
 .viewAll {
@@ -374,7 +374,7 @@
   font-size: 0.62rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: rgba(147, 197, 253, 0.9);
+  color: rgba(var(--accent-soft-rgb), 0.9);
   text-decoration: none;
 }
 
@@ -406,7 +406,7 @@
   border-radius: 0.85rem;
   border: 1px solid rgba(59, 130, 246, 0.4);
   background: rgba(59, 130, 246, 0.08);
-  color: #93c5fd;
+  color: rgb(var(--accent-soft-rgb));
   font-size: 0.68rem;
   letter-spacing: 0.1em;
   font-family: system-ui, -apple-system, sans-serif;
@@ -417,8 +417,8 @@
 
 .cta:active {
   background: rgba(59, 130, 246, 0.22);
-  border-color: #60a5fa;
-  color: #fff;
+  border-color: rgb(var(--accent-strong-rgb));
+  color: rgb(var(--fg-rgb));
 }
 
 .socials {
@@ -426,14 +426,14 @@
   flex-direction: column;
   gap: 0.5rem;
   padding-top: 0.85rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  border-top: 1px solid rgba(var(--fg-rgb), 0.06);
 }
 
 .socialsTitle {
   font-size: 0.58rem;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: rgba(147, 197, 253, 0.6);
+  color: rgba(var(--accent-soft-rgb), 0.6);
 }
 
 .socialsList {
@@ -447,7 +447,7 @@
 
 .socialsLink {
   font-size: 0.8rem;
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(var(--fg-rgb), 0.7);
   text-decoration: none;
   -webkit-tap-highlight-color: transparent;
 }
@@ -460,7 +460,7 @@
 .viewAll:focus-visible,
 .cta:focus-visible,
 .socialsLink:focus-visible {
-  outline: 2px solid #60a5fa;
+  outline: 2px solid rgb(var(--accent-strong-rgb));
   outline-offset: 2px;
   border-radius: 0.5rem;
 }

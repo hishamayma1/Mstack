@@ -16,9 +16,9 @@ function FAQItem({ item, isOpen, onToggle, delay }: { item: FAQCard; isOpen: boo
   return (
     <BentoCard className="overflow-hidden" delay={delay}>
       <button onClick={onToggle} className="w-full text-left p-6 flex items-center justify-between gap-4">
-        <span className="text-base font-light text-[#F3F5FA]">{item.question}</span>
+        <span className="text-base font-light text-foreground">{item.question}</span>
         <span
-          className="shrink-0 w-6 h-6 rounded-full border border-white/15 flex items-center justify-center text-white/50 transition-transform duration-300"
+          className="shrink-0 w-6 h-6 rounded-full border border-border flex items-center justify-center text-muted-foreground transition-transform duration-300"
           style={{ transform: isOpen ? "rotate(45deg)" : "rotate(0deg)" }}
         >
           +
@@ -26,10 +26,10 @@ function FAQItem({ item, isOpen, onToggle, delay }: { item: FAQCard; isOpen: boo
       </button>
       <div className="overflow-hidden transition-all duration-300 ease-in-out" style={{ maxHeight: isOpen ? "320px" : "0px" }}>
         <div className="px-6 pb-6">
-          <p className="text-sm text-blue-300/90 mb-4">{item.answer}</p>
+          <p className="text-sm text-blue-600 dark:text-blue-300/90 mb-4">{item.answer}</p>
           <ul className="space-y-2.5">
             {item.points.map((p) => (
-              <li key={p} className="flex gap-3 text-sm text-white/55 leading-relaxed">
+              <li key={p} className="flex gap-3 text-sm text-muted-foreground leading-relaxed">
                 <div className="w-1 h-1 rounded-full bg-blue-400/50 shrink-0 mt-2" />
                 {p}
               </li>
@@ -117,8 +117,8 @@ export function FAQExplorer({
         ) : null}
 
         {filtered.length === 0 ? (
-          <div className="rounded-2xl border border-white/[0.08] p-8 text-center">
-            <p className="text-sm text-white/45">No questions match — try a different search or category.</p>
+          <div className="rounded-2xl border border-border p-8 text-center">
+            <p className="text-sm text-muted-foreground">No questions match — try a different search or category.</p>
           </div>
         ) : (
           <div className="flex flex-col gap-3">
@@ -144,7 +144,7 @@ export function FAQExplorer({
   if (!standalone) return <div id="faq">{content}</div>
 
   return (
-    <section id="faq" className="py-32 px-6 md:px-12 lg:px-20 border-t border-white/[0.08] scroll-mt-24">
+    <section id="faq" className="py-32 px-6 md:px-12 lg:px-20 border-t border-border scroll-mt-24">
       {content}
     </section>
   )

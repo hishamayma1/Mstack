@@ -31,7 +31,7 @@ export function ServiceLevelsSection({ levels }: { levels: ServiceCard[] }) {
           <RevealText className="mt-5 text-4xl md:text-5xl lg:text-6xl font-light tracking-tight leading-[1.05]">
             {"Five Levels to\nDigital Excellence."}
           </RevealText>
-          <p className="mt-5 text-sm text-white/55 leading-relaxed max-w-xl">
+          <p className="mt-5 text-sm text-muted-foreground leading-relaxed max-w-xl">
             A progressive journey that transforms your Microsoft 365 environment from basic setup to
             intelligent automation. Every level has its own page — set your headcount and see what
             it costs.
@@ -46,7 +46,7 @@ export function ServiceLevelsSection({ levels }: { levels: ServiceCard[] }) {
               delay={index * 80}
             >
               <div className="flex items-center justify-between mb-5">
-                <span className="font-pixel text-[11px] text-white/30 tracking-widest">
+                <span className="font-pixel text-[11px] text-muted-foreground tracking-widest">
                   {String(index + 1).padStart(2, "0")}
                 </span>
                 {level.tagline ? <Tag>{level.tagline}</Tag> : null}
@@ -58,12 +58,12 @@ export function ServiceLevelsSection({ levels }: { levels: ServiceCard[] }) {
                     The heading carries the link instead. */}
                 <Link
                   href={`/solutions/${level.slug}`}
-                  className="hover:text-blue-300 transition-colors"
+                  className="hover:text-blue-500 dark:hover:text-blue-300 transition-colors"
                 >
                   {level.title}
                 </Link>
               </h3>
-              <p className="text-sm text-white/55 leading-relaxed mb-5">{level.summary}</p>
+              <p className="text-sm text-muted-foreground leading-relaxed mb-5">{level.summary}</p>
 
               {/* The products this level actually deploys — recognisable before
                   the service list is read. Swap the real marks in via
@@ -78,29 +78,29 @@ export function ServiceLevelsSection({ levels }: { levels: ServiceCard[] }) {
                 {level.highlights.map((highlight) => (
                   <span
                     key={highlight}
-                    className="text-[10px] px-2.5 py-1 rounded-full bg-white/[0.05] border border-white/[0.08] text-white/50 tracking-wide"
+                    className="text-[10px] px-2.5 py-1 rounded-full bg-card border border-border text-muted-foreground tracking-wide"
                   >
                     {highlight}
                   </span>
                 ))}
               </div>
 
-              <div className="mt-auto pt-4 border-t border-white/[0.08] flex flex-col gap-3">
+              <div className="mt-auto pt-4 border-t border-border flex flex-col gap-3">
                 {level.bestFor ? (
                   <div className="flex items-center gap-2">
                     <span aria-hidden="true" className="h-1 w-1 rounded-full bg-blue-400/70" />
-                    <span className="text-[11px] text-blue-300/80 tracking-wide">
+                    <span className="text-[11px] text-blue-600 dark:text-blue-300/80 tracking-wide">
                       Best for: {level.bestFor}
                     </span>
                   </div>
                 ) : null}
 
                 <div className="flex items-baseline justify-between gap-3">
-                  <span className="text-sm text-white/45">
+                  <span className="text-sm text-muted-foreground">
                     {level.fromPricePerSeat !== null ? (
                       <>
                         from{" "}
-                        <span className="text-white/85 text-base">
+                        <span className="text-foreground/85 text-base">
                           {formatMoney(level.fromPricePerSeat, level.currency)}
                         </span>{" "}
                         / user / mo
@@ -111,7 +111,7 @@ export function ServiceLevelsSection({ levels }: { levels: ServiceCard[] }) {
                   </span>
                   <Link
                     href={`/solutions/${level.slug}`}
-                    className="text-[11px] tracking-widest text-blue-300/80 hover:text-blue-300 transition-colors whitespace-nowrap"
+                    className="text-[11px] tracking-widest text-blue-600 dark:text-blue-300/80 hover:text-blue-500 dark:hover:text-blue-300 transition-colors whitespace-nowrap"
                   >
                     BUILD PLAN →
                   </Link>
@@ -121,7 +121,7 @@ export function ServiceLevelsSection({ levels }: { levels: ServiceCard[] }) {
           ))}
         </MouseGlowGrid>
 
-        <p className="mt-8 text-sm text-white/45 leading-relaxed max-w-3xl italic">
+        <p className="mt-8 text-sm text-muted-foreground leading-relaxed max-w-3xl italic">
           All 5 levels are available as ongoing support models. We don&apos;t just implement and
           leave. We support your full Microsoft 365 environment continuously, across every level, at
           the same time.

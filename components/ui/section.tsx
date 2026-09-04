@@ -21,13 +21,15 @@ type Tone = "base" | "raised" | "accent"
 type Size = "sm" | "md" | "lg"
 
 const TONE: Record<Tone, string> = {
-  // The page's own ground.
-  base: "bg-[#0A0E17]",
+  // The page's own ground — transparent, not an opaque fill, so the body's
+  // background (a flat color in dark mode, a soft blue gradient in light
+  // mode; see --page-gradient in globals.css) shows through every "base"
+  // section instead of being painted over by a same-color solid.
+  base: "",
   // One step up, with hairlines top and bottom. Used for every other band.
-  raised: "bg-[#0C111C] border-y border-white/[0.06]",
+  raised: "bg-card border-y border-border",
   // The two bands that ask for something: proof, and the offer.
-  accent:
-    "border-y border-white/[0.06] bg-[linear-gradient(180deg,#0C1526_0%,#0A0F1B_100%)]",
+  accent: "border-y border-border bg-accent/30",
 }
 
 const SIZE: Record<Size, string> = {
@@ -105,7 +107,7 @@ export function Eyebrow({ children, className = "" }: { children: ReactNode; cla
         className={`${motion.drawX} h-px w-8 shrink-0 bg-blue-400/50`}
         style={{ "--m-end": "50%" } as CSSProperties}
       />
-      <span className="text-[11px] font-medium uppercase tracking-[0.2em] text-blue-300/75">
+      <span className="text-[11px] font-medium uppercase tracking-[0.2em] text-blue-600 dark:text-blue-300/75">
         {children}
       </span>
     </p>
@@ -144,13 +146,13 @@ export function SectionIntro({
       ) : null}
       <RevealText
         stagger={2}
-        className={`${eyebrow ? "mt-4" : ""} text-[2rem] md:text-[2.5rem] font-light leading-[1.12] tracking-tight text-[#F3F5FA]`}
+        className={`${eyebrow ? "mt-4" : ""} text-[2rem] md:text-[2.5rem] font-light leading-[1.12] tracking-tight text-foreground`}
       >
         {title}
       </RevealText>
       {lead ? (
         <p
-          className={`${motion.rise} mt-5 text-[0.975rem] leading-[1.75] text-white/55 ${centered ? "mx-auto" : ""} max-w-[52ch]`}
+          className={`${motion.rise} mt-5 text-[0.975rem] leading-[1.75] text-muted-foreground ${centered ? "mx-auto" : ""} max-w-[52ch]`}
           style={stagger(2)}
         >
           {lead}

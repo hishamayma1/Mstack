@@ -24,7 +24,7 @@ import styles from "./hero-section.module.css"
 export function HeroSection() {
   return (
     <section className="relative min-h-[100svh] overflow-hidden flex flex-col">
-      <div className="absolute inset-0 w-full h-full z-0 bg-[#0A0E17]">
+      <div className="absolute inset-0 w-full h-full z-0">
         <HeroBackdrop />
       </div>
 
@@ -34,14 +34,14 @@ export function HeroSection() {
       {/* pt clears the fixed nav (top-4 + ~56px bar on mobile, taller on md) */}
       <div className="relative z-30 mt-auto w-full max-w-3xl flex flex-col px-6 md:px-12 pt-28 md:pt-32 pb-10 sm:pb-12">
         <h1
-          className={`${styles.rise} ${styles.headline} font-light text-[#F3F5FA] leading-[1.05] sm:leading-[1.0] tracking-tight mb-4 sm:mb-6 font-ibm-plex`}
+          className={`${styles.rise} ${styles.headline} font-light text-foreground leading-[1.05] sm:leading-[1.0] tracking-tight mb-4 sm:mb-6 font-ibm-plex`}
           style={{ "--i": 0 } as CSSProperties}
         >
           Your Cloud.<br />Our Expertise.
         </h1>
 
         <p
-          className={`${styles.rise} text-sm sm:text-lg text-white/55 leading-relaxed max-w-lg mb-6 sm:mb-8`}
+          className={`${styles.rise} text-sm sm:text-lg text-muted-foreground leading-relaxed max-w-lg mb-6 sm:mb-8`}
           style={{ "--i": 1 } as CSSProperties}
         >
           Expert Microsoft 365 consulting: security hardening, SharePoint setup,
@@ -60,7 +60,7 @@ export function HeroSection() {
           </Link>
           <a
             href="#services"
-            className="px-5 sm:px-6 py-3 border border-white/15 text-white/75 text-sm rounded-xl hover:border-blue-500/40 hover:text-white hover:bg-white/[0.05] transition-all tracking-wide font-medium"
+            className="px-5 sm:px-6 py-3 border border-border text-foreground/75 text-sm rounded-xl hover:border-blue-500/40 hover:text-foreground hover:bg-accent/60 transition-all tracking-wide font-medium"
           >
             Explore Our Services
           </a>
@@ -69,10 +69,10 @@ export function HeroSection() {
         <dl className="flex flex-wrap gap-x-6 sm:gap-x-8 gap-y-4 mb-6 sm:mb-8">
           {HERO_STATS.map((stat, i) => (
             <div key={stat.label} className={styles.rise} style={{ "--i": 3 + i } as CSSProperties}>
-              <dd className="text-2xl sm:text-4xl text-[#F3F5FA] font-light tracking-tight font-ibm-plex">
+              <dd className="text-2xl sm:text-4xl text-foreground font-light tracking-tight font-ibm-plex">
                 {stat.value}
               </dd>
-              <dt className="text-[10px] sm:text-xs text-white/45 tracking-widest uppercase mt-1 font-ibm-plex">
+              <dt className="text-[10px] sm:text-xs text-muted-foreground tracking-widest uppercase mt-1 font-ibm-plex">
                 {stat.label}
               </dt>
             </div>
@@ -82,7 +82,7 @@ export function HeroSection() {
         {/* The stack, as marks rather than a run-on list of names — the same
             products scroll past in full underneath, in the trust bar. */}
         <div className={styles.rise} style={{ "--i": 7 } as CSSProperties}>
-          <span className="block text-[10px] text-white/30 tracking-[0.25em] mb-3">WE WORK IN</span>
+          <span className="block text-[10px] text-muted-foreground tracking-[0.25em] mb-3">WE WORK IN</span>
           <AppLogoRow slugs={HERO_LOGOS} size={30} title="The Microsoft products we work in" />
         </div>
       </div>

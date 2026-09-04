@@ -23,7 +23,7 @@ export function SectionHeader({
         {title}
       </RevealText>
       {intro ? (
-        <p className="mt-6 text-base text-white/55 leading-relaxed">{intro}</p>
+        <p className="mt-6 text-base text-muted-foreground leading-relaxed">{intro}</p>
       ) : null}
     </div>
   )

@@ -7,7 +7,7 @@ import type { CaseStudyDetail } from "@/lib/cms/case-studies"
 // broke the problem down further.
 export function CaseStudyChallenge({ study }: { study: CaseStudyDetail }) {
   return (
-    <section id="challenge" className="py-24 px-6 md:px-12 lg:px-20 border-t border-white/[0.08]">
+    <section id="challenge" className="py-24 px-6 md:px-12 lg:px-20 border-t border-border">
       <div className="max-w-6xl mx-auto">
         <SectionHeader
           eyebrow="THE CHALLENGE"
@@ -20,13 +20,13 @@ export function CaseStudyChallenge({ study }: { study: CaseStudyDetail }) {
             {study.challengePoints.map((p) => (
               <li
                 key={p}
-                className="flex items-start gap-3.5 rounded-2xl border border-white/[0.08] bg-white/[0.02] p-6"
+                className="flex items-start gap-3.5 rounded-2xl border border-border bg-accent/20 p-6"
               >
                 <span
                   aria-hidden="true"
                   className="mt-[7px] h-1.5 w-1.5 shrink-0 rounded-full bg-blue-400/70"
                 />
-                <span className="text-sm text-white/60 leading-relaxed">{p}</span>
+                <span className="text-sm text-muted-foreground leading-relaxed">{p}</span>
               </li>
             ))}
           </ul>

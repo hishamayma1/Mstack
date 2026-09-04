@@ -19,7 +19,7 @@ function Frame({ children, className = "" }: { children: ReactNode; className?: 
   return (
     <div
       aria-hidden="true"
-      className={`${s.dots} relative flex min-h-[9rem] w-full flex-1 overflow-hidden rounded-xl border border-white/[0.06] bg-[#0B111C] p-4 ${className}`}
+      className={`${s.dots} relative flex min-h-[9rem] w-full flex-1 overflow-hidden rounded-xl border border-border bg-card p-4 ${className}`}
     >
       {children}
     </div>
@@ -32,7 +32,7 @@ function Pill({ slug, width, reverse = false }: { slug?: AppLogoSlug; width: str
   return (
     <div
       style={{ width }}
-      className={`flex items-center gap-2 rounded-full border border-white/[0.09] bg-[#0A0E17] p-1.5 ${
+      className={`flex items-center gap-2 rounded-full border border-border bg-background p-1.5 ${
         reverse ? "ml-auto flex-row-reverse" : ""
       }`}
     >
@@ -41,7 +41,7 @@ function Pill({ slug, width, reverse = false }: { slug?: AppLogoSlug; width: str
       ) : (
         <span className="h-[18px] w-[18px] shrink-0 rounded-full bg-[linear-gradient(135deg,#60A5FA,#2563EB)]" />
       )}
-      <span className="h-2 w-full rounded-full bg-white/[0.08]" />
+      <span className="h-2 w-full rounded-full bg-foreground/[0.08]" />
     </div>
   )
 }
@@ -118,13 +118,13 @@ function SecurityVisual() {
           <div
             key={row.label}
             style={{ width: row.w }}
-            className="flex items-center gap-2 rounded-lg border border-white/[0.09] bg-[#0A0E17] px-2.5 py-2"
+            className="flex items-center gap-2 rounded-lg border border-border bg-background px-2.5 py-2"
           >
             <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-blue-400/80" />
-            <span className="font-ibm-plex text-[10px] uppercase tracking-[0.18em] text-white/35">
+            <span className="font-ibm-plex text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
               {row.label}
             </span>
-            <span className="ml-auto h-1.5 w-8 rounded-full bg-white/[0.08]" />
+            <span className="ml-auto h-1.5 w-8 rounded-full bg-foreground/[0.08]" />
           </div>
         ))}
 
@@ -143,9 +143,9 @@ function SupportVisual() {
   return (
     <Frame>
       <div className={`${s.splay} flex w-full flex-col justify-center gap-2.5`}>
-        <div className="flex items-start gap-2 rounded-2xl border border-white/[0.09] bg-[#0A0E17] p-2.5">
+        <div className="flex items-start gap-2 rounded-2xl border border-border bg-background p-2.5">
           <span className="mt-0.5 h-6 w-6 shrink-0 rounded-full bg-[linear-gradient(135deg,#60A5FA,#2563EB)]" />
-          <span className="text-[11px] leading-[1.6] text-white/40">
+          <span className="text-[11px] leading-[1.6] text-muted-foreground">
             Conditional Access is blocking a new starter.
           </span>
         </div>
@@ -172,12 +172,12 @@ function PartnershipVisual() {
         ].map((c) => (
           <div
             key={c.k}
-            className="flex w-1/3 flex-col items-center justify-center gap-2 rounded-2xl border border-white/[0.09] bg-[#0A0E17] p-3 text-center"
+            className="flex w-1/3 flex-col items-center justify-center gap-2 rounded-2xl border border-border bg-background p-3 text-center"
           >
-            <span className="font-ibm-plex text-[10px] uppercase tracking-[0.18em] text-white/30">
+            <span className="font-ibm-plex text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
               {c.k}
             </span>
-            <span className="text-[0.8125rem] font-light text-white/70">{c.v}</span>
+            <span className="text-[0.8125rem] font-light text-foreground/70">{c.v}</span>
             <span className="h-1 w-8 rounded-full bg-blue-400/40" />
           </div>
         ))}

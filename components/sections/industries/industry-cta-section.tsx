@@ -18,7 +18,7 @@ export function IndustryCTASection({
   return (
     <section
       id="final-cta"
-      className={`${styles.backdrop} py-32 px-6 md:px-12 lg:px-20 border-t border-white/[0.08]`}
+      className={`${styles.backdrop} py-32 px-6 md:px-12 lg:px-20 border-t border-border`}
     >
       <div className={styles.glow} aria-hidden="true" />
       <div className={styles.floor} aria-hidden="true" />
@@ -28,7 +28,7 @@ export function IndustryCTASection({
         <RevealText className="text-4xl md:text-5xl lg:text-6xl font-light tracking-tight leading-[1.05] mb-6">
           {headline}
         </RevealText>
-        <p className="text-sm text-white/55 leading-relaxed mb-10">{subtext}</p>
+        <p className="text-sm text-muted-foreground leading-relaxed mb-10">{subtext}</p>
 
         <div className="mb-8">
           <CTAButtons
@@ -41,7 +41,7 @@ export function IndustryCTASection({
 
         <div className="flex items-center justify-center gap-6 flex-wrap">
           {TRUST_INDICATORS.map((t) => (
-            <div key={t} className="flex items-center gap-2 text-xs text-white/40">
+            <div key={t} className="flex items-center gap-2 text-xs text-muted-foreground">
               <span className="w-1 h-1 rounded-full bg-blue-400/60" />
               {t}
             </div>

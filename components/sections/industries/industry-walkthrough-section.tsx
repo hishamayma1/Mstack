@@ -11,7 +11,7 @@ import { INDUSTRY_WALKTHROUGH } from "@/lib/content/industry-media"
 // instead of scanning one column; on mobile every row stacks text-then-image.
 export function IndustryWalkthroughSection({ industryTitle }: { industryTitle: string }) {
   return (
-    <section id="how-it-works" className="py-28 px-6 md:px-12 lg:px-20 border-t border-white/[0.08]">
+    <section id="how-it-works" className="py-28 px-6 md:px-12 lg:px-20 border-t border-border">
       <div className="max-w-6xl mx-auto">
         <SectionHeader
           eyebrow="HOW IT WORKS"
@@ -25,18 +25,18 @@ export function IndustryWalkthroughSection({ industryTitle }: { industryTitle: s
             return (
               <div
                 key={step.n}
-                className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-10 items-center rounded-2xl border border-white/[0.08] bg-[#10141f] p-6 md:p-8"
+                className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-10 items-center rounded-2xl border border-border bg-card p-6 md:p-8"
               >
                 <div className={imageFirst ? "lg:order-2" : ""}>
-                  <span className="font-pixel text-[11px] text-white/30 tracking-widest block mb-5">
+                  <span className="font-pixel text-[11px] text-muted-foreground tracking-widest block mb-5">
                     {step.n}
                   </span>
                   <h3 className="text-2xl font-light tracking-tight mb-4">{step.title}</h3>
-                  <p className="text-sm text-white/55 leading-relaxed mb-6">{step.description}</p>
+                  <p className="text-sm text-muted-foreground leading-relaxed mb-6">{step.description}</p>
 
                   <ul className="space-y-2.5">
                     {step.bullets.map((b) => (
-                      <li key={b} className="flex items-start gap-3 text-sm text-white/70">
+                      <li key={b} className="flex items-start gap-3 text-sm text-foreground/70">
                         <span
                           aria-hidden="true"
                           className="mt-[7px] h-1 w-1 shrink-0 rounded-full bg-blue-400/70"

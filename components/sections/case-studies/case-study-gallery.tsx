@@ -12,7 +12,7 @@ export function CaseStudyGallery({ study }: { study: CaseStudyDetail }) {
   const single = study.gallery.length === 1
 
   return (
-    <section id="gallery" className="py-24 px-6 md:px-12 lg:px-20 border-t border-white/[0.08]">
+    <section id="gallery" className="py-24 px-6 md:px-12 lg:px-20 border-t border-border">
       <div className="max-w-6xl mx-auto">
         <SectionHeader eyebrow="THE RESULTS" title={"What It Looks\nLike Now."} />
 
@@ -28,7 +28,7 @@ export function CaseStudyGallery({ study }: { study: CaseStudyDetail }) {
                 priority={i === 0}
               />
               {item.caption ? (
-                <figcaption className="mt-3 text-xs text-white/40 leading-relaxed">
+                <figcaption className="mt-3 text-xs text-muted-foreground leading-relaxed">
                   {item.caption}
                 </figcaption>
               ) : null}

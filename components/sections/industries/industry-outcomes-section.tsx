@@ -9,26 +9,26 @@ export function IndustryOutcomesSection({ outcomes }: { outcomes: IndustryOutcom
   if (outcomes.length === 0) return null
 
   return (
-    <section id="outcomes" className="py-28 px-6 md:px-12 lg:px-20 border-t border-white/[0.08]">
+    <section id="outcomes" className="py-28 px-6 md:px-12 lg:px-20 border-t border-border">
       <div className="max-w-6xl mx-auto">
         <SectionHeader
           eyebrow="THE OUTCOME"
           title={"What Changes\nOnce It's Live."}
         />
 
-        <ol className="border-t border-white/[0.08]">
+        <ol className="border-t border-border">
           {outcomes.map((o, i) => (
             <li
               key={o.title}
-              className="grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-8 py-8 border-b border-white/[0.08] group hover:bg-white/[0.015] transition-colors"
+              className="grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-8 py-8 border-b border-border group hover:bg-accent/30 transition-colors"
             >
-              <span className="md:col-span-1 font-pixel text-[11px] text-white/30 tracking-widest">
+              <span className="md:col-span-1 font-pixel text-[11px] text-muted-foreground tracking-widest">
                 {String(i + 1).padStart(2, "0")}
               </span>
-              <h3 className="md:col-span-4 text-lg font-light group-hover:text-blue-300/90 transition-colors">
+              <h3 className="md:col-span-4 text-lg font-light group-hover:text-blue-500 dark:group-hover:text-blue-300/90 transition-colors">
                 {o.title}
               </h3>
-              <p className="md:col-span-7 text-sm text-white/55 leading-relaxed">{o.description}</p>
+              <p className="md:col-span-7 text-sm text-muted-foreground leading-relaxed">{o.description}</p>
             </li>
           ))}
         </ol>

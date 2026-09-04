@@ -30,14 +30,14 @@ export function CaseStudyHero({ study }: { study: CaseStudyDetail }) {
 
       <div className="relative z-10 max-w-6xl mx-auto">
         <nav aria-label="Breadcrumb" className="mb-6">
-          <ol className="flex items-center gap-2 text-xs text-white/40 tracking-wide">
+          <ol className="flex items-center gap-2 text-xs text-muted-foreground tracking-wide">
             <li>
-              <Link href="/case-studies" className="hover:text-white/70 transition-colors">
+              <Link href="/case-studies" className="hover:text-foreground transition-colors">
                 Case Studies
               </Link>
             </li>
             <li aria-hidden="true">/</li>
-            <li className="text-white/60">{study.client}</li>
+            <li className="text-foreground/60">{study.client}</li>
           </ol>
         </nav>
 
@@ -57,7 +57,7 @@ export function CaseStudyHero({ study }: { study: CaseStudyDetail }) {
           </div>
 
           {showClientEyebrow ? (
-            <p className="mt-6 text-sm text-white/45 tracking-wide">{study.client}</p>
+            <p className="mt-6 text-sm text-muted-foreground tracking-wide">{study.client}</p>
           ) : null}
           <RevealText
             as="h1"
@@ -66,7 +66,7 @@ export function CaseStudyHero({ study }: { study: CaseStudyDetail }) {
             {study.headline}
           </RevealText>
 
-          <p className="mt-6 text-base text-white/55 leading-relaxed">{study.summary}</p>
+          <p className="mt-6 text-base text-muted-foreground leading-relaxed">{study.summary}</p>
 
           <div className="mt-9">
             <CTAButtons
@@ -93,14 +93,14 @@ export function CaseStudyHero({ study }: { study: CaseStudyDetail }) {
             {metrics.map((m) => (
               <div
                 key={`${m.value}-${m.label}`}
-                className="rounded-2xl border border-white/[0.08] bg-white/[0.02] px-6 py-5"
+                className="rounded-2xl border border-border bg-accent/20 px-6 py-5"
               >
                 <dt className="sr-only">{m.label}</dt>
                 <dd>
-                  <span className="block text-3xl font-light text-blue-400 font-ibm-plex">
+                  <span className="block text-3xl font-light text-blue-600 dark:text-blue-400 font-ibm-plex">
                     {m.value}
                   </span>
-                  <span className="mt-1 block text-xs text-white/45 tracking-wide leading-relaxed">
+                  <span className="mt-1 block text-xs text-muted-foreground tracking-wide leading-relaxed">
                     {m.label}
                   </span>
                 </dd>

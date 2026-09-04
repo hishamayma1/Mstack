@@ -34,14 +34,14 @@ export function ServiceHero({
       <div className={styles.glow} aria-hidden="true" />
 
       <div className="relative z-10 max-w-6xl mx-auto">
-        <nav aria-label="Breadcrumb" className="mb-8 text-[11px] tracking-widest text-white/35">
-          <Link href="/solutions" className="hover:text-white/70 transition-colors">
+        <nav aria-label="Breadcrumb" className="mb-8 text-[11px] tracking-widest text-muted-foreground">
+          <Link href="/solutions" className="hover:text-foreground transition-colors">
             SOLUTIONS
           </Link>
           <span className="mx-2" aria-hidden="true">
             /
           </span>
-          <span className="text-white/60">{title.toUpperCase()}</span>
+          <span className="text-muted-foreground">{title.toUpperCase()}</span>
         </nav>
 
         <div className="grid grid-cols-1 lg:grid-cols-[1.3fr_1fr] gap-10 lg:gap-16 items-start">
@@ -58,7 +58,7 @@ export function ServiceHero({
               {headline}
             </RevealText>
 
-            <p className="mt-6 text-base text-white/55 leading-relaxed max-w-xl">{valueProp}</p>
+            <p className="mt-6 text-base text-muted-foreground leading-relaxed max-w-xl">{valueProp}</p>
 
             <div className="mt-9 flex flex-col sm:flex-row gap-3">
               <a
@@ -69,7 +69,7 @@ export function ServiceHero({
               </a>
               <Link
                 href="/contact"
-                className="px-8 py-3 border border-white/15 text-white/75 text-sm rounded-xl hover:border-blue-500/40 hover:text-white hover:bg-white/[0.05] transition-all tracking-widest font-medium text-center"
+                className="px-8 py-3 border border-border text-foreground/75 text-sm rounded-xl hover:border-blue-500/40 hover:text-foreground hover:bg-accent/60 transition-all tracking-widest font-medium text-center"
               >
                 Talk to Someone
               </Link>
@@ -78,26 +78,26 @@ export function ServiceHero({
 
           {/* Price card. Only rendered when there's a real rate to show —
               a "from £0" on a price-on-application service would be a lie. */}
-          <div className="rounded-2xl border border-white/[0.08] bg-[#10141f] p-8">
+          <div className="rounded-2xl border border-border bg-card p-8">
             {fromPricePerSeat !== null ? (
               <>
-                <span className="text-xs uppercase tracking-widest text-white/40">Starting from</span>
+                <span className="text-xs uppercase tracking-widest text-muted-foreground">Starting from</span>
                 <div className="mt-3 flex items-baseline gap-2">
                   <span className="text-5xl font-light tabular-nums">
                     {formatMoney(fromPricePerSeat, currency)}
                   </span>
-                  <span className="text-sm text-white/45">/ user / month</span>
+                  <span className="text-sm text-muted-foreground">/ user / month</span>
                 </div>
-                <p className="mt-3 text-xs text-white/40 leading-relaxed">
+                <p className="mt-3 text-xs text-muted-foreground leading-relaxed">
                   The per-user rate falls as your headcount rises. Set yours below to see the exact
                   figure.
                 </p>
               </>
             ) : (
               <>
-                <span className="text-xs uppercase tracking-widest text-white/40">Pricing</span>
+                <span className="text-xs uppercase tracking-widest text-muted-foreground">Pricing</span>
                 <div className="mt-3 text-3xl font-light">On application</div>
-                <p className="mt-3 text-xs text-white/40 leading-relaxed">
+                <p className="mt-3 text-xs text-muted-foreground leading-relaxed">
                   Scoped individually — configure what you need below and we&apos;ll price it,
                   usually within one working day.
                 </p>
@@ -105,11 +105,11 @@ export function ServiceHero({
             )}
 
             {stats.length > 0 ? (
-              <div className="mt-7 pt-7 border-t border-white/[0.08] grid grid-cols-3 gap-4">
+              <div className="mt-7 pt-7 border-t border-border grid grid-cols-3 gap-4">
                 {stats.map((stat) => (
                   <div key={stat.label}>
-                    <div className="text-xl font-light text-blue-300/90">{stat.value}</div>
-                    <div className="mt-1 text-[10px] uppercase tracking-widest text-white/35 leading-snug">
+                    <div className="text-xl font-light text-blue-600 dark:text-blue-300/90">{stat.value}</div>
+                    <div className="mt-1 text-[10px] uppercase tracking-widest text-muted-foreground leading-snug">
                       {stat.label}
                     </div>
                   </div>

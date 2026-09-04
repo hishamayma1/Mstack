@@ -11,7 +11,7 @@ export function SolutionAddonsSection({ addons }: { addons: ServiceCard[] }) {
   if (addons.length === 0) return null
 
   return (
-    <section id="add-ons" className="py-32 px-6 md:px-12 lg:px-20 border-t border-white/[0.08]">
+    <section id="add-ons" className="py-32 px-6 md:px-12 lg:px-20 border-t border-border">
       <div className="max-w-6xl mx-auto">
         <div className="mb-16 max-w-2xl">
           <Tag>SPECIALIST ENGAGEMENTS</Tag>
@@ -20,7 +20,7 @@ export function SolutionAddonsSection({ addons }: { addons: ServiceCard[] }) {
             <br />
             Specific Needs.
           </h2>
-          <p className="mt-5 text-sm text-white/55 leading-relaxed">
+          <p className="mt-5 text-sm text-muted-foreground leading-relaxed">
             Beyond the five service levels, these are the standalone engagements we run most often —
             scoped independently or layered on top of an existing plan.
           </p>
@@ -32,19 +32,19 @@ export function SolutionAddonsSection({ addons }: { addons: ServiceCard[] }) {
               <h3 className="text-lg font-light mb-2">
                 <Link
                   href={`/solutions/${addon.slug}`}
-                  className="hover:text-blue-300 transition-colors"
+                  className="hover:text-blue-500 dark:hover:text-blue-300 transition-colors"
                 >
                   {addon.title}
                 </Link>
               </h3>
-              <p className="text-sm text-white/55 leading-relaxed">{addon.summary}</p>
+              <p className="text-sm text-muted-foreground leading-relaxed">{addon.summary}</p>
 
               {addon.highlights.length > 0 ? (
                 <div className="mt-5 flex flex-wrap gap-1.5">
                   {addon.highlights.map((highlight) => (
                     <span
                       key={highlight}
-                      className="text-[10px] px-2.5 py-1 rounded-full bg-white/[0.05] border border-white/[0.08] text-white/50 tracking-wide"
+                      className="text-[10px] px-2.5 py-1 rounded-full bg-card border border-border text-muted-foreground tracking-wide"
                     >
                       {highlight}
                     </span>
@@ -53,11 +53,11 @@ export function SolutionAddonsSection({ addons }: { addons: ServiceCard[] }) {
               ) : null}
 
               <div className="mt-auto pt-5 flex items-baseline justify-between gap-3">
-                <span className="text-sm text-white/45">
+                <span className="text-sm text-muted-foreground">
                   {addon.fromPricePerSeat !== null ? (
                     <>
                       from{" "}
-                      <span className="text-white/85 text-base">
+                      <span className="text-foreground/85 text-base">
                         {formatMoney(addon.fromPricePerSeat, addon.currency)}
                       </span>{" "}
                       / user / mo
@@ -68,7 +68,7 @@ export function SolutionAddonsSection({ addons }: { addons: ServiceCard[] }) {
                 </span>
                 <Link
                   href={`/solutions/${addon.slug}`}
-                  className="text-[11px] tracking-widest text-blue-300/80 hover:text-blue-300 transition-colors whitespace-nowrap"
+                  className="text-[11px] tracking-widest text-blue-600 dark:text-blue-300/80 hover:text-blue-500 dark:hover:text-blue-300 transition-colors whitespace-nowrap"
                 >
                   {addon.fromPricePerSeat !== null ? "BUILD PLAN →" : "GET A PRICE →"}
                 </Link>

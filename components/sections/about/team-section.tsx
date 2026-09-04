@@ -17,7 +17,7 @@ import styles from "./team-section.module.css"
 // gesture.
 export function TeamSection() {
   return (
-    <section id="team" className="py-32 px-6 md:px-12 lg:px-20 border-t border-white/[0.08]">
+    <section id="team" className="py-32 px-6 md:px-12 lg:px-20 border-t border-border">
       <div className="max-w-6xl mx-auto">
         <div className="mb-16">
           <PixelIcon type="agents" size={40} />

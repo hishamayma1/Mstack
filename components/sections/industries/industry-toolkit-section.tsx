@@ -18,7 +18,7 @@ export function IndustryToolkitSection({
   if (tools.length === 0) return null
 
   return (
-    <section id="toolkit" className="py-28 px-6 md:px-12 lg:px-20 border-t border-white/[0.08]">
+    <section id="toolkit" className="py-28 px-6 md:px-12 lg:px-20 border-t border-border">
       <div className="max-w-6xl mx-auto">
         <SectionHeader
           eyebrow="YOUR TOOLKIT"
@@ -35,13 +35,13 @@ export function IndustryToolkitSection({
 
               <h3 className="text-lg font-light mb-4">{tool.name}</h3>
 
-              <p className="text-sm text-white/55 leading-relaxed mb-5">{tool.whatItIs}</p>
+              <p className="text-sm text-muted-foreground leading-relaxed mb-5">{tool.whatItIs}</p>
 
-              <div className="mt-auto pt-5 border-t border-white/[0.08]">
-                <span className="block text-[10px] tracking-widest text-white/30 mb-2">
+              <div className="mt-auto pt-5 border-t border-border">
+                <span className="block text-[10px] tracking-widest text-muted-foreground mb-2">
                   WHY {industryTitle.toUpperCase()} NEEDS IT
                 </span>
-                <p className="text-sm text-white/70 leading-relaxed">{tool.whyYouNeedIt}</p>
+                <p className="text-sm text-foreground/70 leading-relaxed">{tool.whyYouNeedIt}</p>
               </div>
             </BentoCard>
           ))}
