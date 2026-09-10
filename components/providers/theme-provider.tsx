@@ -4,11 +4,11 @@ import { useEffect } from "react"
 import { ThemeProvider as NextThemeProvider } from "next-themes"
 
 // Wraps next-themes: class-based (.dark on <html>, matching the token setup
-// in globals.css), defaults to dark for first-time visitors, and persists
+// in globals.css), defaults to light for first-time visitors, and persists
 // whatever the visitor picks in localStorage from then on.
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   return (
-    <NextThemeProvider attribute="class" defaultTheme="dark" enableSystem={false} disableTransitionOnChange={false}>
+    <NextThemeProvider attribute="class" defaultTheme="light" enableSystem={false} disableTransitionOnChange={false}>
       <ThemeReadyGate />
       {children}
     </NextThemeProvider>
