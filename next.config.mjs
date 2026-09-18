@@ -3,6 +3,12 @@ import { withPayload } from "@payloadcms/next/withPayload"
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  // The Vercel image optimizer hit its usage limit and started returning 402
+  // for every /_next/image request, breaking images sitewide. Serve files
+  // straight from public/ instead of routing them through the optimizer.
+  images: {
+    unoptimized: true,
+  },
   // Cache Components (Next 16). Lets the Payload data-access functions in
   // lib/payload-*.ts opt into the framework cache with "use cache", so a
   // collection is read once and reused across every page and every request
