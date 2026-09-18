@@ -48,6 +48,21 @@
   color: rgba(147, 197, 253, 0.9);
 }
 
+/* Every other card's role label and email pick up the teal accent instead of
+   blue, so a grid of otherwise-identical cards reads with some rhythm. */
+.cell:nth-child(even) .role {
+  color: rgba(var(--teal-rgb), 0.9);
+}
+
+.cell:nth-child(even) .email {
+  color: rgba(var(--teal-rgb), 0.8);
+}
+
+.cell:nth-child(even) .email:hover,
+.cell:nth-child(even) .email:focus-visible {
+  color: rgb(var(--teal-rgb));
+}
+
 /* ── Copy below the card ──────────────────────────────────────────────────── */
 
 .body {

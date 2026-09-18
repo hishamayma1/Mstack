@@ -32,7 +32,9 @@ export function SolutionAddonsSection({ addons }: { addons: ServiceCard[] }) {
               <h3 className="text-lg font-light mb-2">
                 <Link
                   href={`/solutions/${addon.slug}`}
-                  className="hover:text-blue-500 dark:hover:text-blue-300 transition-colors"
+                  className={`transition-colors ${
+                    index % 2 === 0 ? "hover:text-blue-500 dark:hover:text-blue-300" : "hover:text-teal"
+                  }`}
                 >
                   {addon.title}
                 </Link>
@@ -68,7 +70,11 @@ export function SolutionAddonsSection({ addons }: { addons: ServiceCard[] }) {
                 </span>
                 <Link
                   href={`/solutions/${addon.slug}`}
-                  className="text-[11px] tracking-widest text-blue-600 dark:text-blue-300/80 hover:text-blue-500 dark:hover:text-blue-300 transition-colors whitespace-nowrap"
+                  className={`text-[11px] tracking-widest transition-colors whitespace-nowrap ${
+                    index % 2 === 0
+                      ? "text-blue-600 dark:text-blue-300/80 hover:text-blue-500 dark:hover:text-blue-300"
+                      : "text-teal/80 hover:text-teal"
+                  }`}
                 >
                   {addon.fromPricePerSeat !== null ? "BUILD PLAN →" : "GET A PRICE →"}
                 </Link>

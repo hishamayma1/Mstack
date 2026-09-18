@@ -346,6 +346,7 @@
   min-height: 132px;
   overflow: hidden;
   background: radial-gradient(90% 120% at 20% 10%, rgba(59, 130, 246, 0.4), transparent 60%),
+    radial-gradient(70% 90% at 100% 100%, rgba(var(--teal-rgb), 0.28), transparent 65%),
     linear-gradient(140deg, rgba(30, 58, 138, 0.55), rgba(11, 15, 24, 0.9));
 }
 

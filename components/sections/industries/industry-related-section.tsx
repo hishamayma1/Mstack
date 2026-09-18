@@ -33,11 +33,13 @@ export function IndustryRelatedSection({
         </div>
 
         <div className="flex flex-wrap gap-2">
-          {industries.map((ind) => (
+          {industries.map((ind, i) => (
             <Link
               key={ind.id}
               href={`/industries/${ind.slug}`}
-              className="px-4 py-2.5 rounded-xl border border-border bg-card text-sm text-muted-foreground hover:text-foreground hover:border-blue-500/30 hover:bg-accent/60 transition-all"
+              className={`px-4 py-2.5 rounded-xl border border-border bg-card text-sm text-muted-foreground hover:text-foreground transition-all ${
+                i % 2 === 0 ? "hover:border-blue-500/30 hover:bg-accent/60" : "hover:border-teal/30 hover:bg-teal/10"
+              }`}
             >
               {ind.title}
             </Link>

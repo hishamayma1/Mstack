@@ -73,9 +73,12 @@ export function ProofSection() {
           block, because the hairlines here are the parent's background
           bleeding between the tiles rather than real borders. */}
       <ul className="mt-16 grid gap-px overflow-hidden rounded-2xl border border-border bg-border lg:grid-cols-3">
-        {TESTIMONIALS.slice(0, 3).map((t) => (
+        {TESTIMONIALS.slice(0, 3).map((t, i) => (
           <li key={t.name} className="flex flex-col gap-4 bg-card p-7">
-            <span className="text-[11px] tracking-[0.25em] text-blue-400/80" aria-label="5 out of 5">
+            <span
+              className={`text-[11px] tracking-[0.25em] ${i === 1 ? "text-teal/80" : "text-blue-400/80"}`}
+              aria-label="5 out of 5"
+            >
               ★★★★★
             </span>
             <p className="flex-1 text-[0.9375rem] leading-[1.75] text-muted-foreground">

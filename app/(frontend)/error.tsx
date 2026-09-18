@@ -60,7 +60,7 @@ export default function FrontendError({
             <button
               type="button"
               onClick={() => retry()}
-              className="px-8 py-3 bg-blue-600 text-white text-sm rounded-xl hover:bg-blue-500 transition-colors tracking-widest font-medium whitespace-nowrap"
+              className="px-8 py-3 bg-linear-to-br from-blue-600 to-cyan-600 text-white text-sm rounded-xl transition-[filter] duration-200 hover:brightness-110 active:brightness-95 tracking-widest font-medium whitespace-nowrap"
             >
               Try Again
             </button>

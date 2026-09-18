@@ -17,7 +17,13 @@ export function OurStorySection() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
           {OUR_STORY.map((m, i) => (
             <BentoCard key={m.year} className="p-7 flex flex-col min-h-[220px]" delay={i * 80}>
-              <span className="font-pixel text-[11px] text-blue-600 dark:text-blue-400/80 tracking-widest block mb-6">{m.year}</span>
+              <span
+                className={`font-pixel text-[11px] tracking-widest block mb-6 ${
+                  i % 2 === 0 ? "text-blue-600 dark:text-blue-400/80" : "text-teal"
+                }`}
+              >
+                {m.year}
+              </span>
               <h3 className="text-lg font-light mb-3 mt-auto">{m.title}</h3>
               <p className="text-sm text-muted-foreground leading-relaxed">{m.desc}</p>
             </BentoCard>

@@ -77,8 +77,13 @@ export function ResourceGridExplorer({
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-          {filtered.map((item) => (
-            <article key={item.id} className="rounded-2xl border border-border bg-card p-7 flex flex-col transition-all duration-300 hover:border-blue-500/30 hover:bg-accent/30">
+          {filtered.map((item, i) => (
+            <article
+              key={item.id}
+              className={`rounded-2xl border border-border bg-card p-7 flex flex-col transition-all duration-300 ${
+                i % 2 === 0 ? "hover:border-blue-500/30 hover:bg-accent/30" : "hover:border-teal/30 hover:bg-teal/5"
+              }`}
+            >
               <div className="mb-4">
                 <Tag>{item.tag}</Tag>
               </div>
@@ -89,7 +94,11 @@ export function ResourceGridExplorer({
                   href={item.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="mt-5 pt-4 border-t border-border text-xs text-blue-600 dark:text-blue-300/80 hover:text-blue-700 dark:hover:text-blue-300 transition-colors tracking-wide"
+                  className={`mt-5 pt-4 border-t border-border text-xs transition-colors tracking-wide ${
+                    i % 2 === 0
+                      ? "text-blue-600 dark:text-blue-300/80 hover:text-blue-700 dark:hover:text-blue-300"
+                      : "text-teal/80 hover:text-teal"
+                  }`}
                 >
                   {item.hrefLabel} →
                 </a>

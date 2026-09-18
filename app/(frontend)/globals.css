@@ -23,11 +23,19 @@
   --input: oklch(0 0 0 / 12%);
   --ring: oklch(0.546 0.214 259.815);
   --chart-1: oklch(0.546 0.214 259.815);
-  --chart-2: oklch(0.588 0.17 235);
+  --chart-2: oklch(0.609 0.126 221.723);
   --chart-3: oklch(0.6 0.188 220);
   --chart-4: oklch(0.5 0.24 280);
   --chart-5: oklch(0.45 0.2 300);
   --radius: 0.625rem;
+
+  /* Third palette color: a cyan/teal, analogous to --primary (hue ~260) so it
+     stays cohesive rather than competing — used as the secondary/tertiary
+     accent (alternating icon tones, secondary gradients, chart-2, hover
+     states) wherever every element reaching for blue would flatten the page.
+     --primary keeps sole ownership of "the" brand action color. */
+  --teal: oklch(0.609 0.126 221.723);
+  --teal-foreground: oklch(0.99 0.01 220);
   --sidebar: oklch(0.98 0.004 260);
   --sidebar-foreground: oklch(0.16 0.02 260);
   --sidebar-primary: oklch(0.546 0.214 259.815);
@@ -60,12 +68,19 @@
   --accent-strong-rgb: 37 99 235;
   --dropdown-tint: rgba(37, 99, 235, 0.06);
 
+  /* Teal channel triple, same pattern as --accent-*-rgb above, for the
+     secondary glows/gradient stops that pair with the blue ones. */
+  --teal-rgb: 8 145 178;
+
   /* Light mode reads better with a hint of the brand blue instead of a flat
      white canvas — a soft glow at the top, easing into a near-white base.
      Dark mode stays flat (its depth already comes from panel gradients), so
-     --page-gradient is `none` there. */
+     --page-gradient is `none` there. A second, quieter teal glow sits at the
+     opposite corner so the two accent hues bookend the page instead of only
+     blue ever showing up. */
   --page-gradient: radial-gradient(120% 60% at 50% -10%, rgba(37, 99, 235, 0.14), transparent 60%),
     radial-gradient(80% 50% at 100% 0%, rgba(96, 165, 250, 0.1), transparent 60%),
+    radial-gradient(70% 45% at 0% 100%, rgba(8, 145, 178, 0.07), transparent 60%),
     linear-gradient(180deg, #eef3fc 0%, #f8fafc 55%, #ffffff 100%);
 
   color-scheme: light;
@@ -92,10 +107,14 @@
   --input: oklch(1 0 0 / 14%);
   --ring: oklch(0.623 0.214 259.815);
   --chart-1: oklch(0.623 0.214 259.815);
-  --chart-2: oklch(0.696 0.17 235);
+  --chart-2: oklch(0.789 0.154 211.53);
   --chart-3: oklch(0.769 0.188 220);
   --chart-4: oklch(0.55 0.24 280);
   --chart-5: oklch(0.5 0.2 300);
+
+  --teal: oklch(0.789 0.154 211.53);
+  --teal-foreground: oklch(0.15 0.03 220);
+
   --sidebar: oklch(0.15 0.02 260);
   --sidebar-foreground: oklch(0.98 0.005 260);
   --sidebar-primary: oklch(0.623 0.214 259.815);
@@ -121,6 +140,7 @@
   --accent-soft-rgb: 147 197 253;
   --accent-strong-rgb: 96 165 250;
   --dropdown-tint: rgba(37, 68, 130, 0.4);
+  --teal-rgb: 34 211 238;
   --page-gradient: none;
 
   color-scheme: dark;
@@ -169,6 +189,8 @@
   --color-sidebar-ring: var(--sidebar-ring);
   --color-glass: var(--glass-bg);
   --color-glass-border: var(--glass-border);
+  --color-teal: var(--teal);
+  --color-teal-foreground: var(--teal-foreground);
 }
 
 @layer base {

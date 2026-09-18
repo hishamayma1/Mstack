@@ -42,7 +42,7 @@ export function IndustryCTASection({
         <div className="flex items-center justify-center gap-6 flex-wrap">
           {TRUST_INDICATORS.map((t) => (
             <div key={t} className="flex items-center gap-2 text-xs text-muted-foreground">
-              <span className="w-1 h-1 rounded-full bg-blue-400/60" />
+              <span className="w-1 h-1 rounded-full bg-teal/60" />
               {t}
             </div>
           ))}

@@ -21,7 +21,11 @@ export function ServiceOutcomesSection({ outcomes }: { outcomes: ServiceItem[] }
               key={outcome.title}
               className="grid grid-cols-1 md:grid-cols-[auto_1fr_1.2fr] gap-4 md:gap-10 py-8 border-t border-border last:border-b"
             >
-              <span className="font-pixel text-[11px] text-muted-foreground tracking-widest md:pt-1.5">
+              <span
+                className={`font-pixel text-[11px] tracking-widest md:pt-1.5 ${
+                  index % 2 === 0 ? "text-blue-400/80 dark:text-blue-300/70" : "text-teal/80"
+                }`}
+              >
                 {String(index + 1).padStart(2, "0")}
               </span>
               <h3 className="text-xl font-light">{outcome.title}</h3>

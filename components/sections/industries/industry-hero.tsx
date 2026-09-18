@@ -75,14 +75,18 @@ export function IndustryHero({
 
         {stats.length > 0 ? (
           <dl className="mt-16 grid grid-cols-1 sm:grid-cols-3 gap-3">
-            {stats.map((s) => (
+            {stats.map((s, i) => (
               <div
                 key={s.label}
                 className="rounded-2xl border border-border bg-card px-6 py-5"
               >
                 <dt className="sr-only">{s.label}</dt>
                 <dd>
-                  <span className="block text-3xl font-light text-blue-400 font-ibm-plex">{s.value}</span>
+                  <span
+                    className={`block text-3xl font-light font-ibm-plex ${i % 2 === 0 ? "text-blue-400" : "text-teal"}`}
+                  >
+                    {s.value}
+                  </span>
                   <span className="mt-1 block text-xs text-muted-foreground tracking-wide">{s.label}</span>
                 </dd>
               </div>

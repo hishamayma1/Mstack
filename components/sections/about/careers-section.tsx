@@ -12,9 +12,11 @@ export function CareersSection() {
             Join a Team That<br />Only Does Microsoft.
           </h2>
           <ul className="space-y-3">
-            {CAREERS_CULTURE.map((c) => (
+            {CAREERS_CULTURE.map((c, i) => (
               <li key={c} className="flex gap-3 text-sm text-muted-foreground leading-relaxed">
-                <div className="w-1 h-1 rounded-full bg-blue-400/50 shrink-0 mt-2" />
+                <div
+                  className={`w-1 h-1 rounded-full shrink-0 mt-2 ${i % 2 === 0 ? "bg-blue-400/50" : "bg-teal/50"}`}
+                />
                 {c}
               </li>
             ))}

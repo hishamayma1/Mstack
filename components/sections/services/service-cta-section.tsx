@@ -33,7 +33,7 @@ export function ServiceCTASection({
         <div className="mb-8 flex flex-col sm:flex-row gap-3 justify-center">
           <a
             href="#configure"
-            className="px-8 py-3 bg-blue-600 text-white text-sm rounded-xl hover:bg-blue-500 transition-colors tracking-widest font-medium text-center whitespace-nowrap"
+            className="px-8 py-3 bg-linear-to-br from-blue-600 to-cyan-600 text-white text-sm rounded-xl transition-[filter] duration-200 hover:brightness-110 active:brightness-95 tracking-widest font-medium text-center whitespace-nowrap"
           >
             Build My Plan
           </a>
@@ -48,7 +48,7 @@ export function ServiceCTASection({
         <div className="flex items-center justify-center gap-6 flex-wrap">
           {TRUST_INDICATORS.map((indicator) => (
             <div key={indicator} className="flex items-center gap-2 text-xs text-muted-foreground">
-              <span className="w-1 h-1 rounded-full bg-blue-400/60" />
+              <span className="w-1 h-1 rounded-full bg-teal/60" />
               {indicator}
             </div>
           ))}

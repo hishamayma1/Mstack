@@ -12,7 +12,20 @@ import type { FAQCard } from "@/lib/cms/resources"
 
 const ALL = "All"
 
-function FAQItem({ item, isOpen, onToggle, delay }: { item: FAQCard; isOpen: boolean; onToggle: () => void; delay: number }) {
+function FAQItem({
+  item,
+  isOpen,
+  onToggle,
+  delay,
+  tone = "blue",
+}: {
+  item: FAQCard
+  isOpen: boolean
+  onToggle: () => void
+  delay: number
+  /** Alternated across the list so the open panels don't all read identically. */
+  tone?: "blue" | "teal"
+}) {
   return (
     <BentoCard className="overflow-hidden" delay={delay}>
       <button onClick={onToggle} className="w-full text-left p-6 flex items-center justify-between gap-4">
@@ -26,11 +39,15 @@ function FAQItem({ item, isOpen, onToggle, delay }: { item: FAQCard; isOpen: boo
       </button>
       <div className="overflow-hidden transition-all duration-300 ease-in-out" style={{ maxHeight: isOpen ? "320px" : "0px" }}>
         <div className="px-6 pb-6">
-          <p className="text-sm text-blue-600 dark:text-blue-300/90 mb-4">{item.answer}</p>
+          <p className={`text-sm mb-4 ${tone === "blue" ? "text-blue-600 dark:text-blue-300/90" : "text-teal"}`}>
+            {item.answer}
+          </p>
           <ul className="space-y-2.5">
             {item.points.map((p) => (
               <li key={p} className="flex gap-3 text-sm text-muted-foreground leading-relaxed">
-                <div className="w-1 h-1 rounded-full bg-blue-400/50 shrink-0 mt-2" />
+                <div
+                  className={`w-1 h-1 rounded-full shrink-0 mt-2 ${tone === "blue" ? "bg-blue-400/50" : "bg-teal/50"}`}
+                />
                 {p}
               </li>
             ))}
@@ -129,6 +146,7 @@ export function FAQExplorer({
                 isOpen={openFAQ === item.id}
                 onToggle={() => setOpenFAQ(scope, openFAQ === item.id ? null : item.id)}
                 delay={i * 40}
+                tone={i % 2 === 0 ? "blue" : "teal"}
               />
             ))}
           </div>

@@ -439,7 +439,7 @@ export function ServiceConfigurator({
                 <button
                   type="submit"
                   disabled={pending}
-                  className="mt-1 w-full px-6 py-3.5 bg-blue-600 text-white text-sm rounded-xl hover:bg-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors tracking-widest font-medium"
+                  className="mt-1 w-full px-6 py-3.5 bg-linear-to-br from-blue-600 to-cyan-600 text-white text-sm rounded-xl transition-[filter] duration-200 hover:brightness-110 active:brightness-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:brightness-100 tracking-widest font-medium"
                 >
                   {pending ? "Sending…" : priced ? "Send My Configuration" : "Request a Price"}
                 </button>

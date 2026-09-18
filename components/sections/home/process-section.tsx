@@ -57,11 +57,17 @@ export function ProcessSection() {
               style={stagger(i, 5)}
             >
               {/* The figure. Same scale and family as the proof band's
-                  statistics, graded into blue at the baseline so it reads as
-                  a number worth looking at rather than a list marker. */}
+                  statistics, graded into an accent at the baseline so it reads
+                  as a number worth looking at rather than a list marker.
+                  Alternating blue/teal across the five gives the row rhythm
+                  instead of five identical gradients in a line. */}
               <span
                 aria-hidden="true"
-                className="block bg-[linear-gradient(180deg,rgb(var(--fg-rgb))_35%,rgba(96,165,250,0.5)_100%)] bg-clip-text font-ibm-plex text-[2.5rem] font-light leading-none tracking-tight text-transparent md:text-[2.75rem]"
+                className={`block bg-clip-text font-ibm-plex text-[2.5rem] font-light leading-none tracking-tight text-transparent md:text-[2.75rem] ${
+                  i % 2 === 0
+                    ? "bg-[linear-gradient(180deg,rgb(var(--fg-rgb))_35%,rgba(96,165,250,0.5)_100%)]"
+                    : "bg-[linear-gradient(180deg,rgb(var(--fg-rgb))_35%,rgba(var(--teal-rgb),0.55)_100%)]"
+                }`}
               >
                 {step.n}
               </span>

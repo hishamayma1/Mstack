@@ -48,6 +48,7 @@ export function TeamSection() {
                 // No `priority`: this section is well below the fold.
                 sizes="(min-width: 1024px) 30vw, (min-width: 768px) 45vw, 92vw"
                 caption={m.title}
+                accentRgb={i % 2 === 1 ? "var(--teal-rgb)" : undefined}
                 overlay={
                   <>
                     <h3 className={styles.name}>{m.name}</h3>

@@ -60,7 +60,10 @@ export function MediaFrame({
       <div
         aria-hidden="true"
         className="absolute inset-0"
-        style={{ background: "radial-gradient(420px circle at 50% 40%, rgba(59,130,246,0.10), transparent 65%)" }}
+        style={{
+          background:
+            "radial-gradient(420px circle at 50% 40%, rgba(59,130,246,0.10), transparent 65%), radial-gradient(300px circle at 85% 90%, rgba(8,145,178,0.08), transparent 65%)",
+        }}
       />
 
       <div className="relative z-10 text-center px-6">

@@ -18,10 +18,12 @@ export function ServiceFAQSection({ faqs }: { faqs: ServiceFAQ[] }) {
         />
 
         <div className="flex flex-col gap-2">
-          {faqs.map((faq) => (
+          {faqs.map((faq, i) => (
             <details
               key={faq.question}
-              className="group rounded-xl border border-border bg-card open:border-blue-500/25 transition-colors"
+              className={`group rounded-xl border border-border bg-card transition-colors ${
+                i % 2 === 0 ? "open:border-blue-500/25" : "open:border-teal/30"
+              }`}
             >
               <summary className="flex items-start justify-between gap-6 p-6 cursor-pointer list-none [&::-webkit-details-marker]:hidden">
                 <span className="text-base font-light text-foreground">{faq.question}</span>

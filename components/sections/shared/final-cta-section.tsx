@@ -37,7 +37,7 @@ export function FinalCTASection() {
         <div className="flex items-center justify-center gap-6 flex-wrap">
           {TRUST_INDICATORS.map((t) => (
             <div key={t} className="flex items-center gap-2 text-xs text-muted-foreground">
-              <span className="w-1 h-1 rounded-full bg-blue-400/60" />
+              <span className="w-1 h-1 rounded-full bg-teal/60" />
               {t}
             </div>
           ))}
@@ -45,7 +45,7 @@ export function FinalCTASection() {
 
         <p className="mt-10 text-xs text-muted-foreground">
           Prefer to browse first?{" "}
-          <Link href="/solutions" className="text-blue-600 dark:text-blue-300/80 hover:text-blue-700 dark:hover:text-blue-300 transition-colors">
+          <Link href="/solutions" className="text-teal hover:text-foreground transition-colors">
             See our service levels →
           </Link>
         </p>

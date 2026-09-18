@@ -26,6 +26,16 @@ export function FeatureGrid({ children, className = "" }: { children: ReactNode;
   )
 }
 
+// Icon-chip colour per card. Six identical blue badges in one grid read as
+// one repeated mark rather than six distinct claims, so cards alternate
+// between the brand blue and the palette's teal — both are interactive-safe
+// (this chip is never a hover/link affordance) and read as one family rather
+// than a rainbow of unrelated hues.
+const TONES = {
+  blue: "border-blue-500/25 bg-blue-500/10 text-blue-300/90 group-hover/cell:border-blue-400/45",
+  teal: "border-teal/25 bg-teal/10 text-teal group-hover/cell:border-teal/45",
+} as const
+
 export function FeatureCard({
   title,
   desc,
@@ -35,6 +45,7 @@ export function FeatureCard({
   /** Columns to span on the 3-column desktop grid. */
   span = 1,
   order = 0,
+  tone = "blue",
 }: {
   title: string
   desc: string
@@ -42,6 +53,7 @@ export function FeatureCard({
   visual: ReactNode
   span?: 1 | 2
   order?: number
+  tone?: keyof typeof TONES
 }) {
   return (
     // `bento-cell` is the hover hook a cell's visual keys its own animations
@@ -58,7 +70,9 @@ export function FeatureCard({
           that tells you the whole cell is a unit rather than a picture with a
           caption under it, so it stays. */}
       <div className="transition-transform duration-300 group-hover/cell:translate-x-1.5">
-        <span className="mb-3 flex h-9 w-9 items-center justify-center rounded-lg border border-blue-500/25 bg-blue-500/10 text-blue-300/90 transition-colors duration-300 group-hover/cell:border-blue-400/45">
+        <span
+          className={`mb-3 flex h-9 w-9 items-center justify-center rounded-lg border transition-colors duration-300 ${TONES[tone]}`}
+        >
           {icon}
         </span>
         <h3 className="text-[1.0625rem] font-light leading-snug text-foreground">{title}</h3>

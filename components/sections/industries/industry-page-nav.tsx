@@ -34,7 +34,7 @@ export function IndustryPageNav({ items }: { items: NavItem[] }) {
           ))}
           <a
             href="#final-cta"
-            className="ml-auto shrink-0 px-4 py-1.5 rounded-xl text-[11px] tracking-wide text-blue-600 dark:text-blue-300 border border-blue-500/40 hover:text-foreground hover:border-blue-400 hover:bg-blue-500/20 transition-all"
+            className="ml-auto shrink-0 px-4 py-1.5 rounded-xl text-[11px] tracking-wide text-teal border border-teal/40 hover:text-foreground hover:border-teal hover:bg-teal/20 transition-all"
           >
             BOOK A CALL
           </a>

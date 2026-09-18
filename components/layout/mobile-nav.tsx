@@ -213,7 +213,7 @@ export function MobileNav() {
           <div className="flex items-center gap-1.5 sm:gap-2">
             <ThemeToggle />
 
-            <button className="text-[12px] px-4 py-2 lg:px-5 lg:py-2.5 rounded-xl border border-blue-500/40 text-blue-600 dark:text-blue-300 hover:text-foreground hover:border-blue-400 hover:bg-blue-500/20 transition-all duration-200 tracking-wide hidden lg:block" style={{ fontFamily: "system-ui, -apple-system, sans-serif" }}>
+            <button className="text-[12px] px-4 py-2 lg:px-5 lg:py-2.5 rounded-xl border border-teal/40 text-teal hover:text-foreground hover:border-teal hover:bg-teal/20 transition-all duration-200 tracking-wide hidden lg:block" style={{ fontFamily: "system-ui, -apple-system, sans-serif" }}>
               FREE CONSULTATION
             </button>
 

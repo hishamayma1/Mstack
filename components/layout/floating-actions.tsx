@@ -98,7 +98,7 @@ function ContactPill() {
   return (
     <Link
       href="/contact"
-      className="flex items-center gap-2 px-4 py-3 md:px-5 rounded-xl border border-blue-500/40 text-blue-600 dark:text-blue-300 text-[11px] tracking-widest hover:text-foreground hover:border-blue-400 hover:bg-blue-500/20 transition-all duration-200"
+      className="flex items-center gap-2 px-4 py-3 md:px-5 rounded-xl border border-teal/40 text-teal text-[11px] tracking-widest hover:text-foreground hover:border-teal hover:bg-teal/20 transition-all duration-200"
       style={{
         backdropFilter: "blur(16px)",
         WebkitBackdropFilter: "blur(16px)",

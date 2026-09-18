@@ -17,7 +17,7 @@ export function FAQAccordion({ faqs }: { faqs: FAQCard[] }) {
 
   return (
     <div className="divide-y divide-border border-y border-border">
-      {faqs.map((item) => {
+      {faqs.map((item, itemIndex) => {
         const isOpen = open === item.id
         return (
           <div key={item.id}>
@@ -64,7 +64,9 @@ export function FAQAccordion({ faqs }: { faqs: FAQCard[] }) {
                         <li key={p} className="flex gap-3 text-[0.9375rem] leading-[1.7] text-muted-foreground">
                           <span
                             aria-hidden="true"
-                            className="mt-[0.6em] h-1 w-1 shrink-0 rounded-full bg-blue-400/50"
+                            className={`mt-[0.6em] h-1 w-1 shrink-0 rounded-full ${
+                              itemIndex % 2 === 0 ? "bg-blue-400/50" : "bg-teal/50"
+                            }`}
                           />
                           {p}
                         </li>

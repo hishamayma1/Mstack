@@ -204,7 +204,7 @@ export function IndustriesSection() {
                   null in INDUSTRIES) point at the hub rather than a 404. */}
               <Link
                 href={industry.slug ? `/industries/${industry.slug}` : "/industries"}
-                className="mt-7 inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-blue-600 text-white text-sm font-medium tracking-wide hover:bg-blue-500 transition-colors"
+                className="mt-7 inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-linear-to-br from-blue-600 to-cyan-600 text-white text-sm font-medium tracking-wide transition-[filter] duration-200 hover:brightness-110 active:brightness-95"
               >
                 {industry.slug
                   ? `See Our ${industry.title} Solutions`

@@ -17,8 +17,20 @@ export function PartnersSection() {
         <MouseGlowGrid className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
           {PARTNERS.map((p, i) => (
             <BentoCard key={`${p.name}-${p.type}`} className="p-6 flex flex-col gap-2" delay={i * 50}>
-              <div className="w-9 h-9 rounded-lg border border-blue-500/30 bg-blue-500/10 flex items-center justify-center mb-2">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-blue-300">
+              <div
+                className={`w-9 h-9 rounded-lg border flex items-center justify-center mb-2 ${
+                  i % 2 === 0 ? "border-blue-500/30 bg-blue-500/10" : "border-teal/30 bg-teal/10"
+                }`}
+              >
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  className={i % 2 === 0 ? "text-blue-300" : "text-teal"}
+                >
                   <path d="M12 2l2.4 7.2H22l-6 4.6 2.3 7.2L12 16.4l-6.3 4.6 2.3-7.2-6-4.6h7.6z" />
                 </svg>
               </div>

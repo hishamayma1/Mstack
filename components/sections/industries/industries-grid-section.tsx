@@ -64,7 +64,13 @@ export function IndustriesGridSection({ industries }: { industries: IndustryCard
                   </div>
                 ) : null}
 
-                <span className="mt-auto pt-5 border-t border-border text-xs text-blue-600 dark:text-blue-300/80 tracking-wide group-hover/card:text-blue-500 dark:group-hover/card:text-blue-300 transition-colors">
+                <span
+                  className={`mt-auto pt-5 border-t border-border text-xs tracking-wide transition-colors ${
+                    i % 2 === 0
+                      ? "text-blue-600 dark:text-blue-300/80 group-hover/card:text-blue-500 dark:group-hover/card:text-blue-300"
+                      : "text-teal/80 group-hover/card:text-teal"
+                  }`}
+                >
                   See the toolkit for {ind.title} →
                 </span>
               </BentoCard>

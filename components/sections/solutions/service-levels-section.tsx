@@ -88,8 +88,15 @@ export function ServiceLevelsSection({ levels }: { levels: ServiceCard[] }) {
               <div className="mt-auto pt-4 border-t border-border flex flex-col gap-3">
                 {level.bestFor ? (
                   <div className="flex items-center gap-2">
-                    <span aria-hidden="true" className="h-1 w-1 rounded-full bg-blue-400/70" />
-                    <span className="text-[11px] text-blue-600 dark:text-blue-300/80 tracking-wide">
+                    <span
+                      aria-hidden="true"
+                      className={`h-1 w-1 rounded-full ${index % 2 === 0 ? "bg-blue-400/70" : "bg-teal/70"}`}
+                    />
+                    <span
+                      className={`text-[11px] tracking-wide ${
+                        index % 2 === 0 ? "text-blue-600 dark:text-blue-300/80" : "text-teal"
+                      }`}
+                    >
                       Best for: {level.bestFor}
                     </span>
                   </div>

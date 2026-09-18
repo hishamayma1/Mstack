@@ -26,14 +26,14 @@ export function CTAButtons({
     >
       <Link
         href={primaryHref}
-        className={`${pad} bg-blue-600 text-white text-sm rounded-xl hover:bg-blue-500 transition-colors tracking-widest font-medium text-center whitespace-nowrap`}
+        className={`${pad} bg-linear-to-br from-blue-600 to-cyan-600 text-white text-sm rounded-xl transition-[filter] duration-200 hover:brightness-110 active:brightness-95 tracking-widest font-medium text-center whitespace-nowrap`}
       >
         {primaryLabel}
       </Link>
       {secondaryLabel && secondaryHref ? (
         <Link
           href={secondaryHref}
-          className={`${pad} border border-border text-foreground/80 text-sm rounded-xl hover:border-blue-500/40 hover:text-foreground hover:bg-accent/40 transition-all tracking-widest font-medium text-center whitespace-nowrap`}
+          className={`${pad} border border-border text-foreground/80 text-sm rounded-xl hover:border-teal/40 hover:text-foreground hover:bg-teal/10 transition-all tracking-widest font-medium text-center whitespace-nowrap`}
         >
           {secondaryLabel}
         </Link>

@@ -49,7 +49,7 @@ export function LeadMagnetSection() {
         <div className="rounded-2xl border border-border bg-card/70 p-8 md:p-9">
           <p className="text-[11px] uppercase tracking-[0.2em] text-muted-foreground">What you get</p>
           <ul className="mt-6 space-y-5">
-            {HEALTH_CHECK_DELIVERABLES.map((d) => (
+            {HEALTH_CHECK_DELIVERABLES.map((d, i) => (
               <li key={d} className="flex items-start gap-3.5">
                 <svg
                   aria-hidden="true"
@@ -61,7 +61,7 @@ export function LeadMagnetSection() {
                   strokeWidth="2.2"
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  className="mt-[0.35em] shrink-0 text-blue-400/85"
+                  className={`mt-[0.35em] shrink-0 ${i % 2 === 0 ? "text-blue-400/85" : "text-teal/85"}`}
                 >
                   <path d="M4 12.5l5 5L20 6.5" />
                 </svg>

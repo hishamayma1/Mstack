@@ -39,7 +39,9 @@ export function IndustryWalkthroughSection({ industryTitle }: { industryTitle: s
                       <li key={b} className="flex items-start gap-3 text-sm text-foreground/70">
                         <span
                           aria-hidden="true"
-                          className="mt-[7px] h-1 w-1 shrink-0 rounded-full bg-blue-400/70"
+                          className={`mt-[7px] h-1 w-1 shrink-0 rounded-full ${
+                            i % 2 === 0 ? "bg-blue-400/70" : "bg-teal/70"
+                          }`}
                         />
                         {b}
                       </li>

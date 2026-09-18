@@ -54,7 +54,7 @@
   height: 2px;
   width: 100%;
   transform-origin: left center;
-  background: linear-gradient(90deg, rgba(96, 165, 250, 0.9), rgba(96, 165, 250, 0.25));
+  background: linear-gradient(90deg, rgba(96, 165, 250, 0.9), rgba(var(--teal-rgb), 0.5));
   animation: advance var(--advance-ms, 3200ms) linear forwards;
 }
 

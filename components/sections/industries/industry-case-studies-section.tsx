@@ -20,9 +20,13 @@ export function IndustryCaseStudiesSection({ caseStudies }: { caseStudies: CaseS
         />
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
-          {caseStudies.map((c) => (
+          {caseStudies.map((c, i) => (
             <Link key={c.id} href={`/case-studies/${c.slug}`} className="block group">
-              <article className="h-full rounded-2xl border border-border bg-card p-8 flex flex-col transition-all duration-300 group-hover:border-blue-500/30 group-hover:bg-accent/40">
+              <article
+                className={`h-full rounded-2xl border border-border bg-card p-8 flex flex-col transition-all duration-300 ${
+                  i % 2 === 0 ? "group-hover:border-blue-500/30 group-hover:bg-accent/40" : "group-hover:border-teal/30 group-hover:bg-teal/5"
+                }`}
+              >
                 <div className="flex items-start justify-between gap-4 mb-6">
                   <h3 className="text-lg font-light">{c.client}</h3>
                   <Tag>{c.industry}</Tag>
@@ -30,10 +34,18 @@ export function IndustryCaseStudiesSection({ caseStudies }: { caseStudies: CaseS
                 <p className="text-sm text-muted-foreground leading-relaxed mb-6">{c.result}</p>
                 <div className="mt-auto pt-5 border-t border-border flex items-end justify-between gap-4">
                   <span className="flex items-baseline gap-2">
-                    <span className="text-2xl font-light text-blue-400 font-ibm-plex">{c.stat.value}</span>
+                    <span className={`text-2xl font-light font-ibm-plex ${i % 2 === 0 ? "text-blue-400" : "text-teal"}`}>
+                      {c.stat.value}
+                    </span>
                     <span className="text-xs text-muted-foreground tracking-wide">{c.stat.label}</span>
                   </span>
-                  <span className="shrink-0 text-xs text-blue-600 dark:text-blue-300/70 group-hover:text-blue-500 dark:group-hover:text-blue-300 transition-colors tracking-wide">
+                  <span
+                    className={`shrink-0 text-xs transition-colors tracking-wide ${
+                      i % 2 === 0
+                        ? "text-blue-600 dark:text-blue-300/70 group-hover:text-blue-500 dark:group-hover:text-blue-300"
+                        : "text-teal/80 group-hover:text-teal"
+                    }`}
+                  >
                     Read story →
                   </span>
                 </div>

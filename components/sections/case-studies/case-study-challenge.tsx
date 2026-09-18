@@ -17,14 +17,14 @@ export function CaseStudyChallenge({ study }: { study: CaseStudyDetail }) {
 
         {study.challengePoints.length > 0 ? (
           <ul className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            {study.challengePoints.map((p) => (
+            {study.challengePoints.map((p, i) => (
               <li
                 key={p}
                 className="flex items-start gap-3.5 rounded-2xl border border-border bg-accent/20 p-6"
               >
                 <span
                   aria-hidden="true"
-                  className="mt-[7px] h-1.5 w-1.5 shrink-0 rounded-full bg-blue-400/70"
+                  className={`mt-[7px] h-1.5 w-1.5 shrink-0 rounded-full ${i % 2 === 0 ? "bg-blue-400/70" : "bg-teal/70"}`}
                 />
                 <span className="text-sm text-muted-foreground leading-relaxed">{p}</span>
               </li>

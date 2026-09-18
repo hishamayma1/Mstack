@@ -29,11 +29,15 @@ export function ServiceRelatedSection({ services }: { services: ServiceLink[] })
                 {group.heading}
               </span>
               <div className="mt-3 flex flex-wrap gap-2">
-                {group.items.map((service) => (
+                {group.items.map((service, i) => (
                   <Link
                     key={service.id}
                     href={`/solutions/${service.slug}`}
-                    className="px-4 py-2 rounded-full border border-border bg-card text-sm text-muted-foreground hover:border-blue-500/40 hover:text-foreground hover:bg-accent/60 transition-all"
+                    className={`px-4 py-2 rounded-full border border-border bg-card text-sm text-muted-foreground hover:text-foreground transition-all ${
+                      i % 2 === 0
+                        ? "hover:border-blue-500/40 hover:bg-accent/60"
+                        : "hover:border-teal/40 hover:bg-teal/10"
+                    }`}
                   >
                     {service.title}
                   </Link>

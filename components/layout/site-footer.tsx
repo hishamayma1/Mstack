@@ -49,7 +49,7 @@ export async function SiteFooter() {
 
             <Link
               href="/contact"
-              className="mt-7 inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-blue-500/40 text-blue-600 dark:text-blue-300 text-xs tracking-widest hover:text-foreground hover:border-blue-400 hover:bg-blue-500/20 transition-all"
+              className="mt-7 inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-teal/40 text-teal text-xs tracking-widest hover:text-foreground hover:border-teal hover:bg-teal/20 transition-all"
             >
               BOOK A FREE CONSULTATION
               <span aria-hidden="true">→</span>
@@ -63,7 +63,7 @@ export async function SiteFooter() {
               className={`${styles.reveal} lg:col-span-2`}
             >
               <h2 className="flex items-center gap-2 text-[11px] tracking-widest text-muted-foreground mb-4">
-                <span aria-hidden="true" className="h-1 w-1 rounded-full bg-blue-400/70" />
+                <span aria-hidden="true" className="h-1 w-1 rounded-full bg-teal/70" />
                 {column.heading.toUpperCase()}
               </h2>
               <ul className="space-y-2.5">

@@ -24,7 +24,7 @@
   background:
     radial-gradient(58% 68% at 50% 100%, rgba(59, 130, 246, 0.30), transparent 70%),
     radial-gradient(40% 55% at 18% 100%, rgba(99, 102, 241, 0.20), transparent 70%),
-    radial-gradient(40% 55% at 82% 100%, rgba(56, 189, 248, 0.18), transparent 70%);
+    radial-gradient(40% 55% at 82% 100%, rgba(var(--teal-rgb), 0.22), transparent 70%);
   animation: glowBreathe 16s ease-in-out infinite alternate;
 }
 

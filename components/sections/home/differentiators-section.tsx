@@ -60,6 +60,7 @@ export function DifferentiatorsSection() {
             title={d.title}
             desc={d.desc}
             span={SPANS[i] ?? 1}
+            tone={i % 2 === 0 ? "blue" : "teal"}
             visual={DIFFERENTIATOR_VISUALS[d.icon]}
             icon={
               <svg

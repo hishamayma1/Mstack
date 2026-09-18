@@ -24,7 +24,11 @@ export function CaseStudyApproach({ study }: { study: CaseStudyDetail }) {
             <MouseGlowGrid className="grid grid-cols-1 gap-3">
               {study.approach.map((step, i) => (
                 <BentoCard key={step.title} className="p-7 flex flex-col" delay={i * 70}>
-                  <span className="font-pixel text-[11px] text-muted-foreground tracking-widest block mb-4">
+                  <span
+                    className={`font-pixel text-[11px] tracking-widest block mb-4 ${
+                      i % 2 === 0 ? "text-blue-400/70 dark:text-blue-300/60" : "text-teal/70"
+                    }`}
+                  >
                     {String(i + 1).padStart(2, "0")}
                   </span>
                   <h3 className="text-lg font-light mb-2">{step.title}</h3>

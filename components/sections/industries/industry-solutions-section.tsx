@@ -27,7 +27,11 @@ export function IndustrySolutionsSection({
         <MouseGlowGrid className="grid grid-cols-1 md:grid-cols-2 gap-3">
           {solutions.map((s, i) => (
             <BentoCard key={s.title} className="p-8 flex flex-col" delay={i * 70}>
-              <span className="font-pixel text-[11px] text-muted-foreground tracking-widest block mb-5">
+              <span
+                className={`font-pixel text-[11px] tracking-widest block mb-5 ${
+                  i % 2 === 0 ? "text-blue-400/70 dark:text-blue-300/60" : "text-teal/70"
+                }`}
+              >
                 {String(i + 1).padStart(2, "0")}
               </span>
               <h3 className="text-lg font-light mb-2">{s.title}</h3>

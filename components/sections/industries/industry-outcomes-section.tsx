@@ -22,10 +22,20 @@ export function IndustryOutcomesSection({ outcomes }: { outcomes: IndustryOutcom
               key={o.title}
               className="grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-8 py-8 border-b border-border group hover:bg-accent/30 transition-colors"
             >
-              <span className="md:col-span-1 font-pixel text-[11px] text-muted-foreground tracking-widest">
+              <span
+                className={`md:col-span-1 font-pixel text-[11px] tracking-widest ${
+                  i % 2 === 0 ? "text-blue-400/70 dark:text-blue-300/60" : "text-teal/70"
+                }`}
+              >
                 {String(i + 1).padStart(2, "0")}
               </span>
-              <h3 className="md:col-span-4 text-lg font-light group-hover:text-blue-500 dark:group-hover:text-blue-300/90 transition-colors">
+              <h3
+                className={`md:col-span-4 text-lg font-light transition-colors ${
+                  i % 2 === 0
+                    ? "group-hover:text-blue-500 dark:group-hover:text-blue-300/90"
+                    : "group-hover:text-teal"
+                }`}
+              >
                 {o.title}
               </h3>
               <p className="md:col-span-7 text-sm text-muted-foreground leading-relaxed">{o.description}</p>

@@ -88,16 +88,18 @@ export function StickyScroll({ items, ariaLabel }: { items: StickyScrollItem[]; 
                   progress indicator the section needs. */}
               <span
                 aria-hidden="true"
-                className={`absolute -left-px top-0 h-full w-px origin-top bg-[linear-gradient(180deg,rgba(96,165,250,0.9),rgba(59,130,246,0.15))] transition-transform duration-500 ease-out ${
-                  on ? "scale-y-100" : "scale-y-0"
-                }`}
+                className={`absolute -left-px top-0 h-full w-px origin-top transition-transform duration-500 ease-out ${
+                  i % 2 === 0
+                    ? "bg-[linear-gradient(180deg,rgba(96,165,250,0.9),rgba(59,130,246,0.15))]"
+                    : "bg-[linear-gradient(180deg,rgba(34,211,238,0.9),rgba(8,145,178,0.15))]"
+                } ${on ? "scale-y-100" : "scale-y-0"}`}
               />
 
               <div className="py-9 md:py-12 lg:py-16">
                 <div className="flex items-baseline gap-4">
                   <span
                     className={`font-ibm-plex text-[11px] tabular-nums tracking-[0.2em] transition-colors duration-500 ${
-                      on ? "text-blue-300/90" : "text-muted-foreground"
+                      on ? (i % 2 === 0 ? "text-blue-300/90" : "text-teal") : "text-muted-foreground"
                     }`}
                   >
                     {item.index}
@@ -142,6 +144,10 @@ export function StickyScroll({ items, ariaLabel }: { items: StickyScrollItem[]; 
             <span
               aria-hidden="true"
               className="pointer-events-none absolute -right-16 -top-16 h-64 w-64 rounded-full bg-[radial-gradient(closest-side,rgba(37,99,235,0.22),transparent)] blur-2xl"
+            />
+            <span
+              aria-hidden="true"
+              className="pointer-events-none absolute -bottom-20 -left-10 h-56 w-56 rounded-full bg-[radial-gradient(closest-side,rgba(8,145,178,0.16),transparent)] blur-2xl"
             />
 
             {/* Re-keyed on the active entry, so the swap keyframe replays on

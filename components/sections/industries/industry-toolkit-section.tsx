@@ -29,7 +29,13 @@ export function IndustryToolkitSection({
         <MouseGlowGrid className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
           {tools.map((tool, i) => (
             <BentoCard key={tool.name} className="p-7 flex flex-col" delay={i * 60}>
-              <span className="inline-flex self-start items-center px-2.5 py-1 rounded-full text-[10px] tracking-widest text-blue-300/70 bg-blue-500/[0.08] border border-blue-500/15 mb-5">
+              <span
+                className={`inline-flex self-start items-center px-2.5 py-1 rounded-full text-[10px] tracking-widest mb-5 ${
+                  i % 2 === 0
+                    ? "text-blue-300/70 bg-blue-500/[0.08] border border-blue-500/15"
+                    : "text-teal bg-teal/[0.08] border border-teal/20"
+                }`}
+              >
                 {tool.category.toUpperCase()}
               </span>
 

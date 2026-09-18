@@ -22,7 +22,7 @@ export function CaseStudiesImpactSection({ caseStudies }: { caseStudies: CaseStu
             </dt>
           </div>
           <div>
-            <dd className="text-2xl font-light text-blue-600 dark:text-blue-300/90 font-ibm-plex leading-none">
+            <dd className="text-2xl font-light text-teal font-ibm-plex leading-none">
               {sectors.length}
             </dd>
             <dt className="mt-1.5 text-[11px] text-muted-foreground tracking-wide">Sectors covered</dt>

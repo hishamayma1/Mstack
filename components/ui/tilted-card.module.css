@@ -69,7 +69,7 @@
   opacity: 0;
   background: radial-gradient(
     340px circle at var(--mx) var(--my),
-    rgba(147, 197, 253, 0.22),
+    rgba(var(--tilt-accent, 147 197 253), 0.22),
     transparent 62%
   );
   transition: opacity 420ms ease;
@@ -107,7 +107,7 @@
 }
 
 .figure[data-tilting="true"] .border {
-  border-color: rgba(96, 165, 250, 0.4);
+  border-color: rgba(var(--tilt-accent, 96 165 250), 0.4);
 }
 
 /* Cursor-following caption. Pointer-only by construction — it's positioned from

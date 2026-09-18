@@ -9,7 +9,7 @@ export function CaseStudyQuoteSection({ study }: { study: CaseStudyDetail }) {
   return (
     <section className="py-24 px-6 md:px-12 lg:px-20 border-t border-border">
       <figure className="max-w-3xl mx-auto text-center">
-        <span aria-hidden="true" className="block text-5xl text-blue-400/25 leading-none mb-6">
+        <span aria-hidden="true" className="block text-5xl text-teal/25 leading-none mb-6">
           &ldquo;
         </span>
         <blockquote className="text-2xl md:text-3xl font-light leading-[1.35] tracking-tight text-foreground/85">

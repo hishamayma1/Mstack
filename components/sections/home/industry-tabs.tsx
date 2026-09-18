@@ -107,7 +107,7 @@ export function IndustryTabs() {
 
         <Link
           href={industry.slug ? `/industries/${industry.slug}` : "/industries"}
-          className="group mt-8 inline-flex w-fit items-center gap-2 rounded-xl bg-blue-600 px-6 py-3 text-sm font-medium tracking-wide text-white transition-colors hover:bg-blue-500"
+          className="group mt-8 inline-flex w-fit items-center gap-2 rounded-xl bg-linear-to-br from-blue-600 to-cyan-600 px-6 py-3 text-sm font-medium tracking-wide text-white transition-[filter] duration-200 hover:brightness-110 active:brightness-95"
         >
           {industry.slug ? `${industry.title} solutions` : "Browse all sectors"}
           <Chevron className="transition-transform group-hover:translate-x-0.5" />

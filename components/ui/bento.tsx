@@ -66,7 +66,7 @@ function Media({
           />
           <span
             aria-hidden="true"
-            className="absolute inset-0 bg-[radial-gradient(120%_100%_at_20%_0%,rgba(37,99,235,0.16),transparent_70%)]"
+            className="absolute inset-0 bg-[radial-gradient(120%_100%_at_20%_0%,rgba(37,99,235,0.16),transparent_70%),radial-gradient(90%_80%_at_100%_100%,rgba(8,145,178,0.12),transparent_70%)]"
           />
           {label ? (
             <span className="absolute bottom-5 left-5 font-ibm-plex text-[10px] uppercase tracking-[0.2em] text-muted-foreground/70">

@@ -26,7 +26,11 @@ export function ServiceIncludesSection({
         <MouseGlowGrid className="grid grid-cols-1 md:grid-cols-2 gap-3">
           {includes.map((item, index) => (
             <BentoCard key={item.title} className="p-8" delay={index * 70}>
-              <span className="font-pixel text-[11px] text-muted-foreground tracking-widest">
+              <span
+                className={`font-pixel text-[11px] tracking-widest ${
+                  index % 2 === 0 ? "text-blue-400/80 dark:text-blue-300/70" : "text-teal/80"
+                }`}
+              >
                 {String(index + 1).padStart(2, "0")}
               </span>
               <h3 className="mt-4 text-lg font-light">{item.title}</h3>

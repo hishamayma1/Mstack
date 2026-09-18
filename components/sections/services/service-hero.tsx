@@ -63,7 +63,7 @@ export function ServiceHero({
             <div className="mt-9 flex flex-col sm:flex-row gap-3">
               <a
                 href="#configure"
-                className="px-8 py-3 bg-blue-600 text-white text-sm rounded-xl hover:bg-blue-500 transition-colors tracking-widest font-medium text-center"
+                className="px-8 py-3 bg-linear-to-br from-blue-600 to-cyan-600 text-white text-sm rounded-xl transition-[filter] duration-200 hover:brightness-110 active:brightness-95 tracking-widest font-medium text-center"
               >
                 Build My Plan
               </a>
@@ -106,9 +106,13 @@ export function ServiceHero({
 
             {stats.length > 0 ? (
               <div className="mt-7 pt-7 border-t border-border grid grid-cols-3 gap-4">
-                {stats.map((stat) => (
+                {stats.map((stat, i) => (
                   <div key={stat.label}>
-                    <div className="text-xl font-light text-blue-600 dark:text-blue-300/90">{stat.value}</div>
+                    <div
+                      className={`text-xl font-light ${i % 2 === 0 ? "text-blue-600 dark:text-blue-300/90" : "text-teal"}`}
+                    >
+                      {stat.value}
+                    </div>
                     <div className="mt-1 text-[10px] uppercase tracking-widest text-muted-foreground leading-snug">
                       {stat.label}
                     </div>

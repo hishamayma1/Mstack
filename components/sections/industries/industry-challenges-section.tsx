@@ -30,7 +30,7 @@ export function IndustryChallengesSection({
             <BentoCard key={c.title} className="p-8 flex gap-5" delay={i * 60}>
               <span
                 aria-hidden="true"
-                className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-blue-400/70"
+                className={`mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full ${i % 2 === 0 ? "bg-blue-400/70" : "bg-teal/70"}`}
               />
               <div>
                 <h3 className="text-lg font-light mb-2">{c.title}</h3>

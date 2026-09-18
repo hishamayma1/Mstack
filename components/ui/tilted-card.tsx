@@ -1,7 +1,7 @@
 "use client"
 
 import Image from "next/image"
-import { useRef, type PointerEvent, type ReactNode } from "react"
+import { useRef, type CSSProperties, type PointerEvent, type ReactNode } from "react"
 import styles from "./tilted-card.module.css"
 
 /*
@@ -32,6 +32,8 @@ export function TiltedCard({
   rotateAmplitude = 11,
   scaleOnHover = 1.04,
   className = "",
+  /** Tilt sheen/border tint, as an "R G B" triple. Defaults to the brand blue. */
+  accentRgb,
 }: {
   src: string
   alt: string
@@ -42,6 +44,7 @@ export function TiltedCard({
   rotateAmplitude?: number
   scaleOnHover?: number
   className?: string
+  accentRgb?: string
 }) {
   const rectRef = useRef<DOMRect | null>(null)
 
@@ -88,6 +91,7 @@ export function TiltedCard({
   return (
     <figure
       className={className ? `${styles.figure} ${className}` : styles.figure}
+      style={accentRgb ? ({ "--tilt-accent": accentRgb } as CSSProperties) : undefined}
       onPointerEnter={begin}
       onPointerMove={track}
       onPointerLeave={end}

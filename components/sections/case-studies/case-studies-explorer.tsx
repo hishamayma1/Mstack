@@ -116,13 +116,19 @@ export function CaseStudiesExplorer({ caseStudies }: { caseStudies: CaseStudyCar
           </div>
         ) : view === "list" ? (
           <ul className="border-t border-border">
-            {filtered.map((c) => (
+            {filtered.map((c, i) => (
               <li key={c.id}>
                 <Link
                   href={`/case-studies/${c.slug}`}
                   className="group grid grid-cols-1 md:grid-cols-12 gap-3 md:gap-6 items-baseline py-6 border-b border-border hover:bg-accent/40 transition-colors"
                 >
-                  <span className="md:col-span-4 text-base font-light group-hover:text-blue-600 dark:group-hover:text-blue-300/90 transition-colors">
+                  <span
+                    className={`md:col-span-4 text-base font-light transition-colors ${
+                      i % 2 === 0
+                        ? "group-hover:text-blue-600 dark:group-hover:text-blue-300/90"
+                        : "group-hover:text-teal"
+                    }`}
+                  >
                     {c.client}
                   </span>
                   <span className="md:col-span-3 text-xs text-muted-foreground tracking-wide">
@@ -131,7 +137,11 @@ export function CaseStudiesExplorer({ caseStudies }: { caseStudies: CaseStudyCar
                   <span className="md:col-span-3 text-sm text-muted-foreground leading-relaxed">
                     {c.stat.label}
                   </span>
-                  <span className="md:col-span-2 md:text-right text-xl font-light text-blue-600 dark:text-blue-400 font-ibm-plex">
+                  <span
+                    className={`md:col-span-2 md:text-right text-xl font-light font-ibm-plex ${
+                      i % 2 === 0 ? "text-blue-600 dark:text-blue-400" : "text-teal"
+                    }`}
+                  >
                     {c.stat.value}
                   </span>
                 </Link>
@@ -140,9 +150,13 @@ export function CaseStudiesExplorer({ caseStudies }: { caseStudies: CaseStudyCar
           </ul>
         ) : (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
-            {filtered.map((c) => (
+            {filtered.map((c, i) => (
               <Link key={c.id} href={`/case-studies/${c.slug}`} className="block group">
-                <article className="h-full rounded-2xl border border-border bg-card p-8 flex flex-col transition-all duration-300 group-hover:border-blue-500/30 group-hover:bg-accent/30">
+                <article
+                  className={`h-full rounded-2xl border border-border bg-card p-8 flex flex-col transition-all duration-300 ${
+                    i % 2 === 0 ? "group-hover:border-blue-500/30 group-hover:bg-accent/30" : "group-hover:border-teal/30 group-hover:bg-teal/5"
+                  }`}
+                >
                   <MediaFrame
                     src={c.heroImage?.url}
                     alt={c.heroImage?.alt ?? ""}
@@ -170,12 +184,18 @@ export function CaseStudiesExplorer({ caseStudies }: { caseStudies: CaseStudyCar
 
                   <div className="mt-auto pt-5 border-t border-border flex items-end justify-between gap-4">
                     <span className="flex items-baseline gap-2">
-                      <span className="text-2xl font-light text-blue-600 dark:text-blue-400 font-ibm-plex">
+                      <span className={`text-2xl font-light font-ibm-plex ${i % 2 === 0 ? "text-blue-600 dark:text-blue-400" : "text-teal"}`}>
                         {c.stat.value}
                       </span>
                       <span className="text-xs text-muted-foreground tracking-wide">{c.stat.label}</span>
                     </span>
-                    <span className="shrink-0 text-xs text-blue-600 dark:text-blue-300/70 group-hover:text-blue-700 dark:group-hover:text-blue-300 transition-colors tracking-wide">
+                    <span
+                      className={`shrink-0 text-xs transition-colors tracking-wide ${
+                        i % 2 === 0
+                          ? "text-blue-600 dark:text-blue-300/70 group-hover:text-blue-700 dark:group-hover:text-blue-300"
+                          : "text-teal/80 group-hover:text-teal"
+                      }`}
+                    >
                       Read story →
                     </span>
                   </div>

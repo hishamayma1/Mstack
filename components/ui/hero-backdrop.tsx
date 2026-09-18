@@ -16,12 +16,14 @@ const FloatingLines = dynamic(() => import("@/components/ui/floating-lines"), {
   ssr: false,
 })
 
-const DARK_GRADIENT = ["#1D4ED8", "#3B82F6", "#60A5FA"]
+// Third stop lands on the palette's teal rather than another blue, so the
+// line sweep reads as brand-blue-to-teal instead of a flat monochrome fade.
+const DARK_GRADIENT = ["#1D4ED8", "#3B82F6", "#22D3EE"]
 
-// Light mode gets its own, airier stops (sky-200/300/400) rather than reusing
-// DARK_GRADIENT's deeper blue-700/500/400 — that mix reads fine glowing on a
-// black backdrop but feels heavy against white.
-const LIGHT_GRADIENT = ["#BAE6FD", "#7DD3FC", "#38BDF8"]
+// Light mode gets its own, airier stops (sky-200/300 into a soft cyan) rather
+// than reusing DARK_GRADIENT's deeper blue-700/500 — that mix reads fine
+// glowing on a black backdrop but feels heavy against white.
+const LIGHT_GRADIENT = ["#BAE6FD", "#7DD3FC", "#67E8F9"]
 
 // The RGB complement (255-r, 255-g, 255-b) of LIGHT_GRADIENT, channel by
 // channel. CSS `invert(1)` is an exact per-channel 1-x, so feeding the shader
@@ -29,7 +31,7 @@ const LIGHT_GRADIENT = ["#BAE6FD", "#7DD3FC", "#38BDF8"]
 // colors — unlike stacking `invert` with a `hue-rotate`, which approximates a
 // 180° hue turn in HSL space and visibly drifts saturated blues toward
 // purple/pink instead of restoring them.
-const LIGHT_GRADIENT_PREIMAGE = ["#451902", "#822C03", "#C74207"]
+const LIGHT_GRADIENT_PREIMAGE = ["#451902", "#822C03", "#981706"]
 
 export function HeroBackdrop() {
   const [show, setShow] = useState(false)

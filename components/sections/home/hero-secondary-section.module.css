@@ -25,15 +25,14 @@
   pointer-events: none;
 }
 
-/* One soft blue wash behind the headline. A gradient, not a blur layer. */
+/* One soft blue wash behind the headline, with a teal companion glow off to
+   the side so the section isn't monochrome-blue. */
 .glow {
   position: absolute;
   inset: 0;
-  background: radial-gradient(
-    ellipse 55% 45% at 50% 38%,
-    rgba(37, 99, 235, 0.16),
-    transparent 70%
-  );
+  background:
+    radial-gradient(ellipse 55% 45% at 50% 38%, rgba(37, 99, 235, 0.16), transparent 70%),
+    radial-gradient(ellipse 40% 35% at 85% 60%, rgba(var(--teal-rgb), 0.1), transparent 70%);
   pointer-events: none;
 }
 
@@ -55,8 +54,8 @@
   width: 5px;
   height: 5px;
   border-radius: 9999px;
-  background: #3b82f6;
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.18);
+  background: #0891b2;
+  box-shadow: 0 0 0 3px rgba(8, 145, 178, 0.18);
 }
 
 /* Fluid, same technique as the main hero — one clamp instead of breakpoint
@@ -79,12 +78,17 @@
 }
 
 .primary {
-  background: #2563eb;
+  background: linear-gradient(to bottom right, #2563eb, #0891b2);
   color: #fff;
+  transition: filter 200ms ease;
 }
 
 .primary:hover {
-  background: #3b82f6;
+  filter: brightness(1.1);
+}
+
+.primary:active {
+  filter: brightness(0.95);
 }
 
 .arrow {
@@ -103,7 +107,7 @@
 }
 
 .secondary:hover {
-  border-color: rgba(59, 130, 246, 0.4);
+  border-color: rgba(var(--teal-rgb), 0.4);
   background: rgba(var(--fg-rgb), 0.05);
   color: rgb(var(--fg-rgb));
 }

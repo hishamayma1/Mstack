@@ -84,10 +84,12 @@ export function InfiniteMovingCards({
             aria-label={copy === 0 ? ariaLabel : undefined}
             aria-hidden={copy === 0 ? undefined : true}
           >
-            {items.map((item) => (
+            {items.map((item, i) => (
               <li
                 key={`${copy}-${item.id}`}
-                className="flex w-[300px] shrink-0 flex-col gap-4 rounded-2xl border border-border bg-card p-6 transition-colors duration-300 hover:border-blue-400/20 sm:w-[360px]"
+                className={`flex w-[300px] shrink-0 flex-col gap-4 rounded-2xl border border-border bg-card p-6 transition-colors duration-300 sm:w-[360px] ${
+                  i % 2 === 0 ? "hover:border-blue-400/20" : "hover:border-teal/25"
+                }`}
               >
                 <p className="flex-1 text-[0.9375rem] leading-[1.75] text-muted-foreground">
                   <span aria-hidden="true" className="mr-1 text-muted-foreground/60">
