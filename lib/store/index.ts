@@ -25,7 +25,11 @@ import { persist, createJSONStorage } from "zustand/middleware"
 //     result grid — not the tab bar, the filter chips, or the page around them.
 // ─────────────────────────────────────────────────────────────────────────────
 
-export type ResourceTabId = "blog" | "guides" | "faq" | "tools"
+// The blog used to be a tab here; it now has its own route (/blog).
+export type ResourceTabId = "guides" | "faq" | "tools"
+
+/** Ordering options on the /blog index. */
+export type BlogSort = "newest" | "oldest" | "title"
 
 /** Ordering options on the /case-studies index. */
 export type CaseStudySort = "newest" | "client" | "industry"
@@ -48,6 +52,7 @@ type UIStore = {
   openFAQ: Record<string, string | null>
   caseStudySort: CaseStudySort
   caseStudyView: CaseStudyView
+  blogSort: BlogSort
 
   actions: {
     setQuery: (key: string, query: string) => void
@@ -58,6 +63,7 @@ type UIStore = {
     setOpenFAQ: (scope: string, id: string | null) => void
     setCaseStudySort: (sort: CaseStudySort) => void
     setCaseStudyView: (view: CaseStudyView) => void
+    setBlogSort: (sort: BlogSort) => void
   }
 }
 
@@ -67,11 +73,12 @@ export const useUIStore = create<UIStore>()(
   persist(
     (set) => ({
       explorers: {},
-      resourcesTab: "blog",
+      resourcesTab: "guides",
       industryIndex: 0,
       openFAQ: {},
       caseStudySort: "newest",
       caseStudyView: "grid",
+      blogSort: "newest",
 
       // Created once, never replaced — this object's identity is what makes
       // useUIActions() safe to call from any component without subscribing it
@@ -106,6 +113,8 @@ export const useUIStore = create<UIStore>()(
         setCaseStudySort: (caseStudySort) => set({ caseStudySort }),
 
         setCaseStudyView: (caseStudyView) => set({ caseStudyView }),
+
+        setBlogSort: (blogSort) => set({ blogSort }),
       },
     }),
     {
@@ -126,8 +135,16 @@ export const useUIStore = create<UIStore>()(
         openFAQ: s.openFAQ,
         caseStudySort: s.caseStudySort,
         caseStudyView: s.caseStudyView,
+        blogSort: s.blogSort,
       }),
-      version: 1,
+      version: 2,
+      // v1 could persist resourcesTab "blog", a tab that no longer exists —
+      // left alone, /resources would render with no panel selected.
+      migrate: (persisted, version) => {
+        const state = (persisted ?? {}) as Omit<Partial<UIStore>, "resourcesTab"> & { resourcesTab?: string }
+        if (version < 2 && state.resourcesTab === "blog") state.resourcesTab = "guides"
+        return state as UIStore
+      },
       // Critical for SSR: without this, zustand reads sessionStorage during
       // the first client render, which produces markup that doesn't match the
       // server HTML and React throws a hydration error. Instead the first
@@ -163,3 +180,5 @@ export const useOpenFAQ = (scope: string, fallback: string | null) =>
 export const useCaseStudySort = () => useUIStore((s) => s.caseStudySort)
 
 export const useCaseStudyView = () => useUIStore((s) => s.caseStudyView)
+
+export const useBlogSort = () => useUIStore((s) => s.blogSort)

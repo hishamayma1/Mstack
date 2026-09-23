@@ -1,0 +1,415 @@
+/*
+ * Blog index + article styles.
+ *
+ * Same rules as the rest of the site: tokens only (so both themes work with
+ * no extra code), transform/opacity for anything that moves, and every
+ * scroll-driven animation wrapped in @supports + reduced-motion so a browser
+ * without it simply shows the finished state.
+ */
+
+/* ── Cover art ─────────────────────────────────────────────────────────────
+   Drawn when an article has no cover image. A faint grid, a brand glow and
+   three stacked bars — the same "stack" motif as the logo — so an image-less
+   card reads as designed rather than missing. Pure CSS: no request, no
+   layout shift, nothing to decode.                                          */
+
+.art {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background:
+    radial-gradient(420px circle at 18% 12%, rgb(var(--accent-strong-rgb) / 0.16), transparent 62%),
+    radial-gradient(320px circle at 92% 96%, rgb(var(--teal-rgb) / 0.14), transparent 60%),
+    rgb(var(--fg-rgb) / 0.02);
+}
+
+.art::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgb(var(--fg-rgb) / 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(var(--fg-rgb) / 0.05) 1px, transparent 1px);
+  background-size: 28px 28px;
+  mask-image: radial-gradient(ellipse 80% 80% at 70% 60%, #000 30%, transparent 100%);
+  -webkit-mask-image: radial-gradient(ellipse 80% 80% at 70% 60%, #000 30%, transparent 100%);
+}
+
+.artTeal {
+  background:
+    radial-gradient(420px circle at 18% 12%, rgb(var(--teal-rgb) / 0.16), transparent 62%),
+    radial-gradient(320px circle at 92% 96%, rgb(var(--accent-strong-rgb) / 0.12), transparent 60%),
+    rgb(var(--fg-rgb) / 0.02);
+}
+
+.bars {
+  position: absolute;
+  right: 8%;
+  bottom: 14%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+  width: 46%;
+}
+
+.bar {
+  height: 14px;
+  border-radius: 6px;
+  transform-origin: right center;
+  transition: transform 500ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.bar:nth-child(1) {
+  width: 100%;
+  background: linear-gradient(90deg, rgb(var(--accent-strong-rgb) / 0.35), rgb(var(--accent-strong-rgb) / 0.85));
+}
+.bar:nth-child(2) {
+  width: 72%;
+  background: linear-gradient(90deg, rgb(var(--teal-rgb) / 0.3), rgb(var(--teal-rgb) / 0.75));
+  transition-delay: 40ms;
+}
+.bar:nth-child(3) {
+  width: 44%;
+  background: rgb(var(--fg-rgb) / 0.18);
+  transition-delay: 80ms;
+}
+
+.artTeal .bar:nth-child(1) {
+  background: linear-gradient(90deg, rgb(var(--teal-rgb) / 0.35), rgb(var(--teal-rgb) / 0.85));
+}
+.artTeal .bar:nth-child(2) {
+  background: linear-gradient(90deg, rgb(var(--accent-strong-rgb) / 0.3), rgb(var(--accent-strong-rgb) / 0.75));
+}
+
+.artLarge .bars {
+  gap: 14px;
+  width: 40%;
+  top: 16%;
+  bottom: auto;
+}
+.artLarge .bar {
+  height: 36px;
+  border-radius: 12px;
+}
+
+/* The bars stretch a touch when their card is hovered — a small sign of life
+   that costs one transform. */
+.card:hover .bar,
+.card:focus-visible .bar {
+  transform: scaleX(1.06);
+}
+
+.card:hover .coverImg,
+.card:focus-visible .coverImg {
+  transform: scale(1.03);
+}
+
+.coverImg {
+  transition: transform 600ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Card lift — 3px, matching the weight of the site's tile hover. */
+.card {
+  transition:
+    transform 300ms cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 300ms ease,
+    background-color 300ms ease,
+    box-shadow 300ms ease;
+}
+
+.card:hover,
+.card:focus-visible {
+  transform: translate3d(0, -3px, 0);
+  box-shadow: 0 18px 40px -18px rgb(var(--shadow-tint) / 0.28);
+}
+
+.arrow {
+  display: inline-block;
+  transition: transform 300ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.card:hover .arrow,
+.card:focus-visible .arrow {
+  transform: translate3d(4px, 0, 0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card,
+  .bar,
+  .coverImg,
+  .arrow {
+    transition: none;
+  }
+  .card:hover,
+  .card:focus-visible {
+    transform: none;
+  }
+}
+
+/* ── Reading progress ──────────────────────────────────────────────────────
+   Driven by the page's own scroll position, on the compositor, with no
+   JavaScript and no scroll listener. Without scroll-timeline support the bar
+   simply isn't shown — an unmoving bar would be worse than none.           */
+
+.progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  z-index: 60;
+  pointer-events: none;
+  display: none;
+}
+
+.progressFill {
+  height: 100%;
+  background: linear-gradient(90deg, rgb(var(--accent-strong-rgb)), var(--teal));
+  transform-origin: left center;
+  transform: scaleX(0);
+}
+
+@supports (animation-timeline: scroll()) {
+  .progress {
+    display: block;
+  }
+  .progressFill {
+    animation: progressGrow linear both;
+    animation-timeline: scroll(root block);
+  }
+}
+
+@keyframes progressGrow {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+/* ── Article prose ─────────────────────────────────────────────────────────
+   Typography for the rich-text body. Line length is capped by the column
+   (~68ch), sizes step down on small screens, and headings leave room for the
+   fixed nav when jumped to from the table of contents.                     */
+
+.prose {
+  font-size: 1.0625rem;
+  line-height: 1.8;
+  color: rgb(var(--fg-rgb) / 0.82);
+  overflow-wrap: break-word;
+}
+
+.prose > * + * {
+  margin-top: 1.4em;
+}
+
+/* Every rule below targets the body's *direct* children (what Lexical
+   writes: paragraphs, headings, lists, quotes). Content blocks render their
+   own markup one level down, so these rules never restyle a block's lists,
+   links or titles. */
+.prose > h2,
+.prose > h3,
+.prose > h4 {
+  color: var(--foreground);
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  scroll-margin-top: 7.5rem;
+}
+
+.prose > h2 {
+  margin-top: 2.4em;
+  font-size: 1.75rem;
+  line-height: 1.2;
+}
+
+.prose > h3 {
+  margin-top: 2em;
+  font-size: 1.3rem;
+  line-height: 1.3;
+}
+
+.prose > h4 {
+  margin-top: 1.8em;
+  font-size: 1.1rem;
+}
+
+.prose > h2 + *,
+.prose > h3 + *,
+.prose > h4 + * {
+  margin-top: 0.8em;
+}
+
+/* Heading anchor — appears on hover so a reader can copy a deep link. */
+.anchor {
+  margin-left: 0.4em;
+  color: rgb(var(--fg-rgb) / 0.3);
+  text-decoration: none;
+  opacity: 0;
+  transition: opacity 200ms ease, color 200ms ease;
+}
+
+.prose > h2:hover .anchor,
+.prose > h3:hover .anchor,
+.anchor:focus-visible {
+  opacity: 1;
+}
+
+.anchor:hover {
+  color: var(--teal);
+}
+
+.prose > :is(p, ul, ol, blockquote) strong {
+  color: var(--foreground);
+  font-weight: 600;
+}
+
+.prose > :is(p, ul, ol, blockquote, h2, h3, h4) a:not(.anchor),
+.prose .tableWrap a {
+  color: rgb(var(--accent-strong-rgb));
+  text-decoration: underline;
+  text-decoration-color: rgb(var(--accent-strong-rgb) / 0.35);
+  text-underline-offset: 3px;
+  transition: text-decoration-color 200ms ease, color 200ms ease;
+}
+
+.prose > :is(p, ul, ol, blockquote, h2, h3, h4) a:not(.anchor):hover,
+.prose .tableWrap a:hover {
+  text-decoration-color: currentColor;
+}
+
+.prose > ul,
+.prose > ol,
+.prose > :is(ul, ol) :is(ul, ol) {
+  padding-left: 1.4em;
+}
+
+.prose > ul,
+.prose > ul ul {
+  list-style: disc;
+}
+
+.prose > ol,
+.prose > ol ol {
+  list-style: decimal;
+}
+
+.prose > :is(ul, ol) li + li {
+  margin-top: 0.45em;
+}
+
+.prose > :is(ul, ol) li::marker {
+  color: var(--teal);
+}
+
+.prose > blockquote {
+  border-left: 2px solid var(--teal);
+  padding: 0.2em 0 0.2em 1.2em;
+  color: var(--foreground);
+  font-size: 1.15rem;
+  font-weight: 300;
+  line-height: 1.6;
+}
+
+.prose > hr {
+  border: 0;
+  height: 1px;
+  background: var(--border);
+  margin: 2.6em 0;
+}
+
+.prose :not(pre) > code {
+  font-family: var(--font-mono);
+  font-size: 0.88em;
+  padding: 0.15em 0.45em;
+  border-radius: 6px;
+  background: rgb(var(--fg-rgb) / 0.06);
+  color: var(--foreground);
+}
+
+.prose > figure img {
+  border-radius: 1rem;
+  border: 1px solid var(--border);
+}
+
+.tableWrap table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.92rem;
+  line-height: 1.5;
+}
+
+.tableWrap th,
+.tableWrap td {
+  text-align: left;
+  padding: 0.85rem 1rem;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+
+.tableWrap th {
+  color: var(--foreground);
+  font-weight: 500;
+  background: rgb(var(--fg-rgb) / 0.03);
+}
+
+.tableWrap tr:last-child td {
+  border-bottom: 0;
+}
+
+/* Tables scroll inside their own frame on a phone instead of forcing the
+   whole page to scroll sideways. */
+.tableWrap {
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  -webkit-overflow-scrolling: touch;
+}
+
+@media (max-width: 640px) {
+  .prose {
+    font-size: 1rem;
+    line-height: 1.75;
+  }
+  .prose > h2 {
+    font-size: 1.5rem;
+  }
+}
+
+/* ── TOC ───────────────────────────────────────────────────────────────────
+   The active marker slides between items instead of jumping, so the reader's
+   eye can follow where they are. */
+
+.tocLink {
+  position: relative;
+  transition: color 200ms ease, background-color 200ms ease;
+}
+
+.tocLink::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 8px;
+  bottom: 8px;
+  width: 2px;
+  border-radius: 2px;
+  background: linear-gradient(180deg, rgb(var(--accent-strong-rgb)), var(--teal));
+  transform: scaleY(0);
+  transition: transform 300ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.tocLink[aria-current="location"]::before {
+  transform: scaleY(1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tocLink::before {
+    transition: none;
+  }
+}
+
+/* Below lg the sticky reading bar sits under the nav, so a heading jumped to
+   from the checklist needs to land below both. */
+@media (max-width: 1023px) {
+  .prose > h2,
+  .prose > h3 {
+    scroll-margin-top: 10.5rem;
+  }
+}

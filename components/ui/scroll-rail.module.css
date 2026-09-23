@@ -1,0 +1,103 @@
+/*
+ * Horizontal chip rail. The track scrolls natively (so touch swipe, momentum
+ * and keyboard focus scrolling all come from the browser) with the scrollbar
+ * hidden; the edge fades and arrow buttons are what tell a reader there is
+ * more in that direction.
+ */
+
+.rail {
+  position: relative;
+  min-width: 0;
+}
+
+.track {
+  display: flex;
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x proximity;
+  scroll-padding-inline: 2.5rem;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-x pan-y;
+  /* Hidden scrollbar: Firefox, old Edge, then WebKit/Blink below. */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.track::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+.track > * {
+  scroll-snap-align: start;
+}
+
+/* Mouse drag in progress: no snapping fighting the pointer, no text
+   selection, and a grabbing cursor. */
+.dragging {
+  scroll-snap-type: none;
+  cursor: grabbing;
+  user-select: none;
+}
+
+.dragging * {
+  pointer-events: none;
+}
+
+/* Edge fades — masks the track itself, so they work on any background. */
+.fadeStart .track {
+  mask-image: linear-gradient(90deg, transparent, #000 2.5rem);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 2.5rem);
+}
+
+.fadeEnd .track {
+  mask-image: linear-gradient(90deg, #000 calc(100% - 2.5rem), transparent);
+  -webkit-mask-image: linear-gradient(90deg, #000 calc(100% - 2.5rem), transparent);
+}
+
+.fadeStart.fadeEnd .track {
+  mask-image: linear-gradient(90deg, transparent, #000 2.5rem, #000 calc(100% - 2.5rem), transparent);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 2.5rem, #000 calc(100% - 2.5rem), transparent);
+}
+
+.arrow {
+  position: absolute;
+  top: 50%;
+  z-index: 1;
+  width: 1.75rem;
+  height: 1.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--foreground);
+  box-shadow: 0 4px 14px rgb(var(--shadow-tint) / 0.12);
+  transform: translateY(-50%);
+  transition: opacity 200ms ease, transform 200ms ease;
+}
+
+.arrow:hover {
+  transform: translateY(-50%) scale(1.08);
+}
+
+.arrow[data-side="start"] {
+  left: 0;
+}
+
+.arrow[data-side="end"] {
+  right: 0;
+}
+
+.arrow[hidden] {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .arrow {
+    transition: none;
+  }
+}

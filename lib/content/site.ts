@@ -236,7 +236,8 @@ export const FOOTER_COLUMNS: FooterColumn[] = [
   {
     heading: "Resources",
     links: [
-      { label: "Guides & Articles", href: "/resources" },
+      { label: "Blog", href: "/blog" },
+      { label: "Guides & Checklists", href: "/resources" },
       { label: "Calculators & Tools", href: "/resources" },
       { label: "FAQs", href: "/resources#faq" },
       { label: "Book a Consultation", href: "/contact" },
@@ -341,9 +342,9 @@ export const NAV_MENUS: Record<string, NavMenu> = {
       {
         heading: "Learn",
         links: [
-          { label: "Guides & Articles", href: "/resources", desc: "Practical Microsoft 365 walkthroughs" },
+          { label: "Blog", href: "/blog", desc: "Practical Microsoft 365 walkthroughs" },
+          { label: "Guides & Checklists", href: "/resources", desc: "Download, print, work through" },
           { label: "FAQs", href: "/resources#faq", desc: "The questions we answer weekly" },
-          { label: "Our Process", href: "/#process", desc: "How an engagement actually runs" },
         ],
       },
       {
@@ -377,9 +378,9 @@ export const SITEMAP_INDUSTRY_TITLES = [
 // collections/CaseStudies.ts) and are fetched dynamically — see
 // lib/payload-case-studies.ts and app/(frontend)/case-studies/page.tsx.
 
-// Blog posts, guides, and tools now live in the "blog-posts", "guides",
+// Blog posts, guides, and tools live in the "blog-posts", "guides",
 // and "tools" Payload collections and are fetched dynamically — see
-// lib/payload-resources.ts and app/(frontend)/resources/page.tsx.
+// lib/cms/blog.ts (/blog) and lib/cms/resources.ts (/resources).
 
 // ── About page ───────────────────────────────────────────────────────────────
 export type StoryMilestone = { year: string; title: string; desc: string }

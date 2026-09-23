@@ -790,7 +790,7 @@ export interface Media {
   };
 }
 /**
- * Articles shown in the Blog section of /resources.
+ * Articles shown on /blog. Each one gets its own page at /blog/[slug].
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "blog-posts".
@@ -799,19 +799,28 @@ export interface BlogPost {
   id: string;
   title: string;
   /**
-   * URL-safe identifier, e.g. "security-audit-signs".
+   * URL-safe identifier, e.g. "security-audit-signs" → /blog/security-audit-signs.
    */
   slug: string;
   /**
-   * Short summary shown on the card.
+   * One or two sentences. Shown on cards, under the article title, and as the search snippet.
    */
   excerpt: string;
   /**
-   * Drives the tag filter on /resources.
+   * The topic. Drives the filters and topic cards on /blog.
    */
   tag: 'Security' | 'SharePoint' | 'Automation' | 'Power Platform' | 'Migration' | 'General';
   /**
-   * Full article body — reserved for a future article detail page.
+   * Optional. Two to four one-line takeaways shown in a summary box at the top of the article.
+   */
+  keyTakeaways?:
+    | {
+        point: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Full article. Use Heading 2 / Heading 3 for sections — they build the "On this page" navigation. Type "/" or use the + menu for blocks: steps, checklist, table, pros & cons, key numbers, FAQ, callout, quote, video, code.
    */
   body?: {
     root: {
@@ -829,6 +838,22 @@ export interface BlogPost {
     [k: string]: unknown;
   } | null;
   coverImage?: (string | null) | Media;
+  /**
+   * Shown under the title and in the "Written by" box.
+   */
+  author?: {
+    name?: string | null;
+    role?: string | null;
+    bio?: string | null;
+    /**
+     * Full profile URL.
+     */
+    linkedin?: string | null;
+  };
+  /**
+   * Pin to "Start with these" on /blog. The first featured post gets the large card.
+   */
+  featured?: boolean | null;
   status: 'draft' | 'published';
   publishedDate: string;
   updatedAt: string;
@@ -1322,8 +1347,23 @@ export interface BlogPostsSelect<T extends boolean = true> {
   slug?: T;
   excerpt?: T;
   tag?: T;
+  keyTakeaways?:
+    | T
+    | {
+        point?: T;
+        id?: T;
+      };
   body?: T;
   coverImage?: T;
+  author?:
+    | T
+    | {
+        name?: T;
+        role?: T;
+        bio?: T;
+        linkedin?: T;
+      };
+  featured?: T;
   status?: T;
   publishedDate?: T;
   updatedAt?: T;

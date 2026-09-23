@@ -64,7 +64,6 @@ export default async function HomePage() {
       <IntroAnimation />
       <MobileNav />
       <HeroSection />
-      {/* <HeroSecondarySection /> */}
       <TrustBarSection />
       <ChallengesSection />
       <ProcessSection />

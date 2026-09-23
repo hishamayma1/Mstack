@@ -2,7 +2,7 @@ import { getPayload } from "payload"
 import config from "@payload-config"
 import { cacheLife, cacheTag } from "next/cache"
 
-// Flat, frontend-friendly shape shared by blog posts, guides, and tools —
+// Flat, frontend-friendly shape shared by guides and tools —
 // they render through the same ResourceGridExplorer component, so they're
 // normalized to the same fields here rather than each keeping its own
 // Payload document shape (richText body, group fields, etc.) downstream.
@@ -25,28 +25,6 @@ export type FAQCard = {
 
 async function payloadClient() {
   return getPayload({ config })
-}
-
-export async function getBlogPosts(): Promise<ResourceCard[]> {
-  "use cache"
-  cacheLife("hours")
-  cacheTag("blog-posts")
-
-  const payload = await payloadClient()
-  const { docs } = await payload.find({
-    collection: "blog-posts",
-    where: { status: { equals: "published" } },
-    sort: "-publishedDate",
-    limit: 100,
-  })
-  return docs.map((doc) => ({
-    id: String(doc.id),
-    title: doc.title,
-    description: doc.excerpt,
-    tag: doc.tag,
-    href: null,
-    hrefLabel: "",
-  }))
 }
 
 export async function getGuides(): Promise<ResourceCard[]> {
