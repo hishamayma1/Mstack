@@ -10,6 +10,7 @@ import {
   AsideCTA,
   AuthorCard,
   KeyTakeaways,
+  MentionedPeople,
   PrevNext,
 } from "@/components/sections/blog/article-extras"
 import { BlogRelatedSection } from "@/components/sections/blog/blog-related-section"
@@ -92,6 +93,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
         timeRequired: `PT${post.readingMinutes}M`,
         articleSection: post.tag,
         author: { "@type": post.author.name === "MStack360 Team" ? "Organization" : "Person", name: post.author.name },
+        mentions: post.mentions.length ? post.mentions.map((p) => ({ "@type": "Person", name: p.name })) : undefined,
         publisher: { "@type": "Organization", name: "MStack360" },
         image: post.cover ? (SITE_URL && post.cover.url.startsWith("/") ? `${SITE_URL}${post.cover.url}` : post.cover.url) : undefined,
         mainEntityOfPage: url,
@@ -164,6 +166,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
             </div>
 
             <AuthorCard author={post.author} />
+            <MentionedPeople people={post.mentions} />
             <PrevNext previous={previous} next={next} />
           </article>
 

@@ -224,23 +224,6 @@ html[data-theme="dark"] {
   background-color: var(--theme-elevation-100);
 }
 
-.table {
-  border-radius: var(--style-radius-m);
-  overflow: hidden;
-}
-
-.table thead th {
-  font-size: 11px;
-  letter-spacing: 0.09em;
-  text-transform: uppercase;
-  color: var(--theme-elevation-500);
-  background-color: var(--theme-elevation-50);
-}
-
-.table tbody tr:hover {
-  background-color: var(--theme-elevation-50);
-}
-
 /* Inputs get a visible edge and a brand focus ring. */
 .field-type input:not([type="checkbox"]):not([type="radio"]),
 .field-type textarea,
@@ -284,6 +267,460 @@ html[data-theme="dark"] {
   color: var(--theme-elevation-500);
   max-width: 70ch;
   line-height: 1.55;
+}
+
+/* ── List views (every collection's table) ───────────────────────────────── */
+/*
+   Applies to every collection list and to the list inside relationship
+   pickers, because they share Payload's markup. Nothing here is per-collection:
+   - The "primary" column is whichever comes right after the checkbox (title,
+     company, client, name…), so each table gets one strong, clickable column.
+   - Select values render as `span.selected--<value>`, so every status/role/tag
+     becomes a badge, and known values get a colour.
+   - On narrow screens the table scrolls sideways with the checkbox and primary
+     column pinned, instead of squashing every column.
+*/
+
+.collection-list {
+  --list-row-pad-y: 13px;
+  --list-row-pad-x: 16px;
+  --list-select-col: 48px;
+}
+
+/* Header */
+.list-header__title {
+  font-size: clamp(1.6rem, 2.6vw, 2.1rem);
+  font-weight: 400;
+  letter-spacing: -0.015em;
+}
+
+.list-header__title-actions .btn,
+.list-header__actions .btn {
+  border-radius: var(--style-radius-s);
+}
+
+/* Search + Columns / Filters */
+.list-controls .search-bar {
+  border: 1px solid var(--theme-elevation-100);
+  border-radius: var(--style-radius-m);
+  background-color: var(--theme-elevation-50);
+  transition:
+    border-color 150ms ease,
+    box-shadow 150ms ease;
+}
+
+.list-controls .search-bar:focus-within {
+  border-color: var(--mstack-accent-border);
+  box-shadow: 0 0 0 3px var(--mstack-accent-soft);
+}
+
+.list-controls .search-filter__input {
+  font-size: 14px;
+}
+
+.list-controls .search-bar__actions .pill {
+  border: 1px solid var(--theme-elevation-150);
+  border-radius: var(--style-radius-s);
+  background-color: var(--theme-elevation-100);
+  color: var(--theme-elevation-800);
+  font-size: 12.5px;
+  font-weight: 500;
+  transition:
+    border-color 130ms ease,
+    background-color 130ms ease;
+}
+
+.list-controls .search-bar__actions .pill:hover {
+  border-color: var(--mstack-accent-border);
+  background-color: var(--theme-elevation-150);
+}
+
+.list-controls__columns,
+.list-controls__where {
+  border-radius: var(--style-radius-m);
+}
+
+/* The table card */
+.table:not(.table--appearance-condensed) {
+  margin-top: 4px;
+  border: 1px solid var(--theme-elevation-100);
+  border-radius: var(--style-radius-m);
+  background-color: var(--theme-elevation-25, #080b13);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+  overscroll-behavior-x: contain;
+  scrollbar-width: thin;
+  scrollbar-color: var(--theme-elevation-200) transparent;
+
+  table {
+    border-collapse: separate;
+    border-spacing: 0;
+  }
+
+  th,
+  td {
+    min-width: 120px;
+    padding: var(--list-row-pad-y, 13px) var(--list-row-pad-x, 16px);
+    vertical-align: middle;
+    background-color: var(--theme-elevation-25, #080b13);
+    transition: background-color 120ms ease;
+  }
+
+  /* Header row */
+  thead th {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    padding-block: 11px;
+    background-color: var(--theme-elevation-50);
+    border-bottom: 1px solid var(--theme-elevation-100);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    color: var(--theme-elevation-500);
+  }
+
+  thead .sort-column {
+    gap: 6px;
+  }
+
+  thead .sort-column__label {
+    color: inherit;
+  }
+
+  thead .sort-column__buttons {
+    opacity: 0.45;
+    transition: opacity 120ms ease;
+  }
+
+  thead th:hover .sort-column__buttons,
+  thead .sort-column--active .sort-column__buttons {
+    opacity: 1;
+  }
+
+  /* Body rows: hairline dividers instead of zebra stripes */
+  tbody tr:nth-child(odd) {
+    background: none;
+  }
+
+  tbody td {
+    border-bottom: 1px solid var(--theme-elevation-50);
+    font-size: 13.5px;
+    line-height: 1.45;
+    color: var(--theme-elevation-700);
+  }
+
+  tbody tr:last-child td {
+    border-bottom: 0;
+  }
+
+  tbody tr:hover td {
+    background-color: var(--theme-elevation-50);
+  }
+
+  /* Selected rows (checkbox ticked) */
+  tbody tr:has(.select-row input:checked) td {
+    background-color: var(--mstack-accent-soft);
+  }
+
+  /* Checkbox column */
+  th:has(.select-all),
+  td.cell-_select {
+    width: var(--list-select-col, 48px);
+    min-width: var(--list-select-col, 48px);
+    max-width: var(--list-select-col, 48px);
+    padding-inline: 16px 8px;
+  }
+
+  /* Primary column: the one after the checkbox, or the first one when a
+     table has no checkboxes (e.g. inside a relationship picker). */
+  td.cell-_select + td,
+  tbody td:first-child:not(.cell-_select) {
+    min-width: 200px;
+    max-width: 380px;
+    color: var(--theme-elevation-1000);
+    font-weight: 500;
+    font-size: 14px;
+  }
+
+  td.cell-_select + td a,
+  tbody td:first-child:not(.cell-_select) a {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    overflow: hidden;
+    color: inherit;
+    text-decoration: none;
+    transition: color 120ms ease;
+  }
+
+  td.cell-_select + td a:hover,
+  tbody td:first-child:not(.cell-_select) a:hover,
+  tbody tr:hover td.cell-_select + td a {
+    color: var(--mstack-accent-hover);
+  }
+
+  /* Dates and numbers */
+  td[class*="cell-"][class$="At"],
+  td[class*="Date"] {
+    white-space: nowrap;
+    color: var(--theme-elevation-500);
+    font-size: 12.5px;
+  }
+
+  td.cell-seats,
+  td.cell-estimatedMonthly,
+  td.cell-order,
+  td.cell-filesize,
+  td.cell-width,
+  td.cell-height {
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* true / false */
+  code.bool-cell {
+    padding: 2px 8px;
+    border-radius: 999px;
+    font-family: inherit;
+    font-size: 11.5px;
+    font-weight: 600;
+    background-color: var(--theme-elevation-100);
+    color: var(--theme-elevation-500);
+  }
+
+  /* Media preview */
+  .cell-filename .file {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .cell-filename .file__thumbnail {
+    width: 48px;
+    height: 48px;
+    min-height: 48px;
+    border-radius: var(--style-radius-s);
+    border: 1px solid var(--theme-elevation-100);
+    background-color: var(--theme-elevation-100);
+  }
+
+  .cell-filename .file__filename {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+/* Select values as badges (status, role, tag, category, industry…) */
+.table td span[class^="selected--"] {
+  --badge: var(--theme-elevation-500);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--badge) 35%, transparent);
+  background-color: color-mix(in srgb, var(--badge) 14%, transparent);
+  color: color-mix(in srgb, var(--badge) 70%, #ffffff);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
+/* Status-like columns get a dot; free categories (tags) don't. */
+.table td.cell-status span[class^="selected--"]::before,
+.table td.cell-role span[class^="selected--"]::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: currentColor;
+}
+
+.table td span.selected--published,
+.table td span.selected--won {
+  --badge: #22c55e;
+}
+
+.table td span.selected--draft {
+  --badge: #94a3b8;
+}
+
+.table td span.selected--new,
+.table td span.selected--admin {
+  --badge: #3b82f6;
+}
+
+.table td span.selected--reviewing {
+  --badge: #f59e0b;
+}
+
+.table td span.selected--contacted,
+.table td span.selected--manager {
+  --badge: #a855f7;
+}
+
+.table td span.selected--proposal-sent {
+  --badge: #06b6d4;
+}
+
+.table td span.selected--lost {
+  --badge: #ef4444;
+}
+
+.table td span.selected--editor {
+  --badge: #14b8a6;
+}
+
+/* Pagination */
+.page-controls {
+  gap: 12px;
+  padding-top: 4px;
+  font-size: 13px;
+  color: var(--theme-elevation-500);
+}
+
+.paginator__page {
+  width: 32px;
+  height: 32px;
+  align-items: center;
+  border: 1px solid var(--theme-elevation-100);
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+  transition:
+    border-color 120ms ease,
+    background-color 120ms ease;
+}
+
+.paginator__page:not(.paginator__page--is-current):hover {
+  border-color: var(--mstack-accent-border);
+  background-color: var(--theme-elevation-100);
+}
+
+.paginator__page--is-current {
+  border-color: var(--mstack-accent);
+  background-color: var(--mstack-accent);
+  color: #ffffff;
+}
+
+.per-page__base-button {
+  padding: 6px 10px;
+  border: 1px solid var(--theme-elevation-100);
+  border-radius: var(--style-radius-s);
+  font-weight: 500;
+  color: var(--theme-elevation-700);
+}
+
+/* Empty list */
+.collection-list__no-results {
+  padding: 40px 24px;
+  border: 1px dashed var(--theme-elevation-150);
+  border-radius: var(--style-radius-m);
+  text-align: center;
+  color: var(--theme-elevation-500);
+}
+
+/* ── List views: responsive ── */
+
+/* Tablet and down: pin the checkbox + primary column while the rest scrolls. */
+@media (max-width: 1024px) {
+  .collection-list {
+    --list-row-pad-y: 12px;
+    --list-row-pad-x: 14px;
+  }
+
+  .table:not(.table--appearance-condensed) {
+    /* Payload bleeds the table past the gutter on small screens with padding
+       on the scroll container; pinned columns would stick inside that padding
+       and leave a strip of scrolled content showing. Keep it a plain card. */
+    width: 100%;
+    margin-inline: 0;
+    padding-inline: 0;
+    left: 0;
+
+    th:has(.select-all),
+    td.cell-_select {
+      position: sticky;
+      left: 0;
+      z-index: 3;
+    }
+
+    td.cell-_select + td,
+    th:has(.select-all) + th {
+      position: sticky;
+      left: var(--list-select-col, 48px);
+      z-index: 3;
+      box-shadow: 1px 0 0 var(--theme-elevation-100);
+    }
+
+    thead th:has(.select-all),
+    thead th:has(.select-all) + th {
+      z-index: 4;
+    }
+
+    td.cell-_select + td,
+    tbody td:first-child:not(.cell-_select) {
+      min-width: 170px;
+      max-width: 240px;
+    }
+  }
+}
+
+/* Phones */
+@media (max-width: 768px) {
+  .collection-list {
+    --list-row-pad-y: 11px;
+    --list-row-pad-x: 12px;
+    --list-select-col: 40px;
+  }
+
+  .list-header__title {
+    font-size: 1.5rem;
+  }
+
+  .collection-list__sub-header {
+    font-size: 12.5px;
+  }
+
+  .list-controls .search-bar__actions {
+    gap: 6px;
+  }
+
+  .table:not(.table--appearance-condensed) {
+    th,
+    td {
+      min-width: 110px;
+    }
+
+    th:has(.select-all),
+    td.cell-_select {
+      padding-inline: 12px 4px;
+    }
+
+    tbody td {
+      font-size: 13px;
+    }
+
+    td.cell-_select + td,
+    tbody td:first-child:not(.cell-_select) {
+      min-width: 150px;
+      max-width: 190px;
+      font-size: 13.5px;
+    }
+
+    .cell-filename .file__thumbnail {
+      width: 40px;
+      height: 40px;
+      min-height: 40px;
+    }
+  }
+
+  .page-controls {
+    justify-content: space-between;
+  }
 }
 
 /* ── Custom dashboard (components/admin/dashboard-welcome.tsx) ───────────── */
@@ -461,6 +898,120 @@ html[data-theme="dark"] {
   flex-basis: 100%;
   color: var(--theme-error-500);
   font-size: 12px;
+}
+
+/* ── Avatars (components/admin/avatar-badge.tsx) ─────────────────────────── */
+
+.mstack-avatar {
+  --avatar-size: 36px;
+  position: relative;
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: var(--avatar-size);
+  height: var(--avatar-size);
+  border-radius: 50%;
+  overflow: hidden;
+  background: linear-gradient(135deg, #2563eb, #0891b2);
+  color: #ffffff;
+  font-size: calc(var(--avatar-size) * 0.38);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  line-height: 1;
+  user-select: none;
+}
+
+.mstack-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.mstack-avatar--xs {
+  --avatar-size: 24px;
+}
+
+.mstack-avatar--sm {
+  --avatar-size: 28px;
+}
+
+.mstack-avatar--lg {
+  --avatar-size: 56px;
+}
+
+/* Account icon, top right: ringed while you're on your own account page. */
+.mstack-avatar--active {
+  box-shadow:
+    0 0 0 2px var(--theme-elevation-0),
+    0 0 0 4px var(--mstack-accent);
+}
+
+/* Users table: photo + linked name */
+.mstack-person-cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.mstack-person-cell > :last-child {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Author / Mentioned people cells */
+.mstack-people-cell {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  max-width: 100%;
+}
+
+.mstack-people-cell__name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mstack-people-cell__empty {
+  color: var(--theme-elevation-400);
+}
+
+.mstack-avatar-stack {
+  display: inline-flex;
+}
+
+.mstack-avatar-stack .mstack-avatar {
+  box-shadow: 0 0 0 2px var(--theme-elevation-25, #080b13);
+}
+
+.mstack-avatar-stack .mstack-avatar + .mstack-avatar {
+  margin-inline-start: -8px;
+}
+
+/* Dashboard greeting: photo beside the eyebrow + title */
+.mstack-dash__header {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: 16px;
+  align-items: center;
+}
+
+.mstack-dash__avatar {
+  grid-row: 1 / span 2;
+}
+
+.mstack-dash__header .mstack-dash__subtitle {
+  grid-column: 1 / -1;
+}
+
+@media (max-width: 768px) {
+  .mstack-dash__avatar {
+    --avatar-size: 44px;
+  }
 }
 
 /* ── Login ───────────────────────────────────────────────────────────────── */

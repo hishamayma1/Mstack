@@ -2,7 +2,7 @@ import Link from "next/link"
 import { RevealText } from "@/components/ui/reveal-text"
 import type { BlogPostDetail } from "@/lib/cms/blog"
 import { BlogCover } from "@/components/sections/blog/blog-card"
-import { AuthorAvatar } from "@/components/sections/blog/article-extras"
+import { AuthorAvatar, MentionStack } from "@/components/sections/blog/article-extras"
 import styles from "@/components/sections/shared/page-hero.module.css"
 
 // Article header: breadcrumb, title, standfirst, byline, then the cover.
@@ -45,16 +45,19 @@ export function ArticleHero({ post }: { post: BlogPostDetail }) {
 
           <p className="mt-6 text-base md:text-lg text-muted-foreground leading-relaxed">{post.excerpt}</p>
 
-          <div className="mt-8 flex items-center justify-center gap-3">
-            <AuthorAvatar name={post.author.name} size="sm" />
-            <div className="text-left">
-              <p className="text-sm text-foreground">{post.author.name}</p>
-              <p className="text-xs text-muted-foreground tracking-wide">
-                <time dateTime={post.publishedDate}>{post.dateLabel}</time>
-                <span aria-hidden="true"> · </span>
-                {post.readingMinutes} min read
-              </p>
+          <div className="mt-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-4">
+            <div className="flex items-center gap-3">
+              <AuthorAvatar name={post.author.name} src={post.author.avatar} size="sm" />
+              <div className="text-left">
+                <p className="text-sm text-foreground">{post.author.name}</p>
+                <p className="text-xs text-muted-foreground tracking-wide">
+                  <time dateTime={post.publishedDate}>{post.dateLabel}</time>
+                  <span aria-hidden="true"> · </span>
+                  {post.readingMinutes} min read
+                </p>
+              </div>
             </div>
+            <MentionStack people={post.mentions} />
           </div>
         </div>
 

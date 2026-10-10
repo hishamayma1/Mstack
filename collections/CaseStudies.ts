@@ -1,5 +1,6 @@
 import type { CollectionConfig } from "payload"
 import { SITEMAP_INDUSTRY_TITLES } from "@/lib/content/site"
+import { createdByField, stampCreatedBy } from "./author"
 
 // Case studies power the /case-studies index and one /case-studies/[slug]
 // page each. Only "Published" entries are ever fetched by the site (see
@@ -25,12 +26,15 @@ export const CaseStudies: CollectionConfig = {
   admin: {
     group: "Website",
     useAsTitle: "client",
-    defaultColumns: ["client", "industry", "status", "publishedDate"],
+    defaultColumns: ["client", "industry", "createdBy", "status", "publishedDate"],
     description: "Client success stories. Each one gets its own /case-studies/[slug] page.",
     preview: (doc) => (doc?.slug ? `/case-studies/${doc.slug}` : null),
   },
   access: {
     read: () => true,
+  },
+  hooks: {
+    beforeChange: [stampCreatedBy],
   },
   fields: [
     {
@@ -71,6 +75,7 @@ export const CaseStudies: CollectionConfig = {
         description: "Drives the default ordering — newest first.",
       },
     },
+    createdByField,
 
     {
       type: "tabs",

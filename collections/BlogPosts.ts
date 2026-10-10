@@ -8,6 +8,7 @@ import {
   lexicalEditor,
 } from "@payloadcms/richtext-lexical"
 import { BLOG_BLOCKS } from "./blog-blocks"
+import { createdByField, fillBylineFromAuthor, mentionsField, stampCreatedBy } from "./author"
 
 const TAG_OPTIONS = ["Security", "SharePoint", "Automation", "Power Platform", "Migration", "General"] as const
 
@@ -32,13 +33,14 @@ export const BlogPosts: CollectionConfig = {
   admin: {
     group: "Resources",
     useAsTitle: "title",
-    defaultColumns: ["title", "tag", "featured", "status", "publishedDate"],
+    defaultColumns: ["title", "tag", "createdBy", "featured", "status", "publishedDate"],
     description: "Articles shown on /blog. Each one gets its own page at /blog/[slug].",
   },
   access: {
     read: () => true,
   },
   hooks: {
+    beforeChange: [stampCreatedBy, fillBylineFromAuthor],
     afterChange: [revalidateBlog],
     afterDelete: [revalidateBlog],
   },
@@ -113,14 +115,20 @@ export const BlogPosts: CollectionConfig = {
     {
       name: "author",
       type: "group",
-      admin: { description: "Shown under the title and in the \"Written by\" box." },
+      label: "Byline",
+      admin: {
+        description:
+          "Shown under the title and in the \"Written by\" box. Filled from the author's account profile when the post is created or the author is changed; edit here to override. An empty name shows \"MStack360 Team\".",
+      },
       fields: [
-        { name: "name", type: "text", defaultValue: "MStack360 Team" },
+        { name: "name", type: "text" },
         { name: "role", type: "text" },
         { name: "bio", type: "textarea" },
         { name: "linkedin", type: "text", admin: { description: "Full profile URL." } },
       ],
     },
+    mentionsField,
+    createdByField,
     {
       name: "featured",
       type: "checkbox",

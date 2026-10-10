@@ -229,13 +229,37 @@ export interface ServiceRequest {
   createdAt: string;
 }
 /**
- * Everyone who can sign in to this dashboard.
+ * Everyone who can sign in to this dashboard. Only managers and administrators can add accounts.
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "users".
  */
 export interface User {
   id: string;
+  /**
+   * Full name. Shown as the author on blog posts and case studies.
+   */
+  name?: string | null;
+  /**
+   * A square photo works best. Shown on your account icon, in the dashboard tables, and on blog posts you write or are mentioned in. Initials are shown until one is added.
+   */
+  avatar?: (string | null) | Media;
+  /**
+   * Administrator: full access. Manager: can add and manage non-admin accounts. Editor (default): writes content, edits only their own account.
+   */
+  role: 'admin' | 'manager' | 'editor';
+  /**
+   * e.g. "Microsoft 365 Consultant". Shown next to the name in the blog "Written by" box.
+   */
+  jobTitle?: string | null;
+  /**
+   * A sentence or two for the blog "Written by" box.
+   */
+  bio?: string | null;
+  /**
+   * Full LinkedIn profile URL.
+   */
+  linkedin?: string | null;
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -254,6 +278,29 @@ export interface User {
     | null;
   password?: string | null;
   collection: 'users';
+}
+/**
+ * Images used across the site. Uploaded once, reused anywhere. Every image is compressed and converted to WebP automatically.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "media".
+ */
+export interface Media {
+  id: string;
+  alt: string;
+  _key?: string | null;
+  prefix?: string | null;
+  updatedAt: string;
+  createdAt: string;
+  url?: string | null;
+  thumbnailURL?: string | null;
+  filename?: string | null;
+  mimeType?: string | null;
+  filesize?: number | null;
+  width?: number | null;
+  height?: number | null;
+  focalX?: number | null;
+  focalY?: number | null;
 }
 /**
  * Each entry is one /solutions/[slug] page with its own price configurator. The tabs follow the page from top to bottom.
@@ -614,6 +661,10 @@ export interface CaseStudy {
    */
   publishedDate: string;
   /**
+   * Set to your account when you create this. Managers and administrators can reassign it.
+   */
+  createdBy?: (string | null) | User;
+  /**
    * Company or organisation name. Used as the page heading and card title.
    */
   client: string;
@@ -751,45 +802,6 @@ export interface CaseStudy {
   createdAt: string;
 }
 /**
- * Images and files used across the site. Uploaded once, reused anywhere.
- *
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "media".
- */
-export interface Media {
-  id: string;
-  alt: string;
-  updatedAt: string;
-  createdAt: string;
-  url?: string | null;
-  thumbnailURL?: string | null;
-  filename?: string | null;
-  mimeType?: string | null;
-  filesize?: number | null;
-  width?: number | null;
-  height?: number | null;
-  focalX?: number | null;
-  focalY?: number | null;
-  sizes?: {
-    thumbnail?: {
-      url?: string | null;
-      width?: number | null;
-      height?: number | null;
-      mimeType?: string | null;
-      filesize?: number | null;
-      filename?: string | null;
-    };
-    card?: {
-      url?: string | null;
-      width?: number | null;
-      height?: number | null;
-      mimeType?: string | null;
-      filesize?: number | null;
-      filename?: string | null;
-    };
-  };
-}
-/**
  * Articles shown on /blog. Each one gets its own page at /blog/[slug].
  *
  * This interface was referenced by `Config`'s JSON-Schema
@@ -839,7 +851,7 @@ export interface BlogPost {
   } | null;
   coverImage?: (string | null) | Media;
   /**
-   * Shown under the title and in the "Written by" box.
+   * Shown under the title and in the "Written by" box. Filled from the author's account profile when the post is created or the author is changed; edit here to override. An empty name shows "MStack360 Team".
    */
   author?: {
     name?: string | null;
@@ -850,6 +862,14 @@ export interface BlogPost {
      */
     linkedin?: string | null;
   };
+  /**
+   * Tag teammates who worked on or are featured in this article. They're shown with their photo and title on the post.
+   */
+  mentions?: (string | User)[] | null;
+  /**
+   * Set to your account when you create this. Managers and administrators can reassign it.
+   */
+  createdBy?: (string | null) | User;
   /**
    * Pin to "Start with these" on /blog. The first featured post gets the large card.
    */
@@ -1273,6 +1293,7 @@ export interface CaseStudiesSelect<T extends boolean = true> {
   slug?: T;
   status?: T;
   publishedDate?: T;
+  createdBy?: T;
   client?: T;
   industry?: T;
   headline?: T;
@@ -1363,6 +1384,8 @@ export interface BlogPostsSelect<T extends boolean = true> {
         bio?: T;
         linkedin?: T;
       };
+  mentions?: T;
+  createdBy?: T;
   featured?: T;
   status?: T;
   publishedDate?: T;
@@ -1424,6 +1447,8 @@ export interface FaqsSelect<T extends boolean = true> {
  */
 export interface MediaSelect<T extends boolean = true> {
   alt?: T;
+  _key?: T;
+  prefix?: T;
   updatedAt?: T;
   createdAt?: T;
   url?: T;
@@ -1435,36 +1460,18 @@ export interface MediaSelect<T extends boolean = true> {
   height?: T;
   focalX?: T;
   focalY?: T;
-  sizes?:
-    | T
-    | {
-        thumbnail?:
-          | T
-          | {
-              url?: T;
-              width?: T;
-              height?: T;
-              mimeType?: T;
-              filesize?: T;
-              filename?: T;
-            };
-        card?:
-          | T
-          | {
-              url?: T;
-              width?: T;
-              height?: T;
-              mimeType?: T;
-              filesize?: T;
-              filename?: T;
-            };
-      };
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "users_select".
  */
 export interface UsersSelect<T extends boolean = true> {
+  name?: T;
+  avatar?: T;
+  role?: T;
+  jobTitle?: T;
+  bio?: T;
+  linkedin?: T;
   updatedAt?: T;
   createdAt?: T;
   email?: T;

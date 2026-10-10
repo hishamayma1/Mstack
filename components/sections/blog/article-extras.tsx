@@ -1,27 +1,100 @@
+import Image from "next/image"
 import Link from "next/link"
-import type { BlogAuthor, BlogCard } from "@/lib/cms/blog"
+import type { BlogAuthor, BlogCard, BlogPerson } from "@/lib/cms/blog"
+import { initials } from "@/lib/people"
 import styles from "./blog.module.css"
 
 // The smaller pieces around an article body. All server components.
 
-function initials(name: string) {
-  return name
-    .split(/\s+/)
-    .filter(Boolean)
-    .slice(0, 2)
-    .map((w) => w[0]?.toUpperCase())
-    .join("")
-}
+const AVATAR_SIZES = {
+  xs: { box: "w-8 h-8 text-[10px]", px: 32 },
+  sm: { box: "w-10 h-10 text-xs", px: 40 },
+  md: { box: "w-14 h-14 text-sm", px: 56 },
+} as const
 
-export function AuthorAvatar({ name, size = "md" }: { name: string; size?: "sm" | "md" }) {
-  const box = size === "sm" ? "w-10 h-10 text-xs" : "w-14 h-14 text-sm"
+/** The account's photo, or initials on the brand gradient. Decorative — the name is always printed beside it. */
+export function AuthorAvatar({
+  name,
+  src = null,
+  size = "md",
+  className = "",
+}: {
+  name: string
+  src?: string | null
+  size?: keyof typeof AVATAR_SIZES
+  className?: string
+}) {
+  const { box, px } = AVATAR_SIZES[size]
   return (
     <span
       aria-hidden="true"
-      className={`${box} shrink-0 rounded-full flex items-center justify-center bg-linear-to-br from-blue-600 to-cyan-600 text-white tracking-wider`}
+      className={`${box} relative shrink-0 overflow-hidden rounded-full flex items-center justify-center bg-linear-to-br from-blue-600 to-cyan-600 text-white tracking-wider ${className}`}
     >
-      {initials(name)}
+      {src ? (
+        <Image src={src} alt="" width={px} height={px} className="h-full w-full object-cover" />
+      ) : (
+        initials(name)
+      )}
     </span>
+  )
+}
+
+/** "Name & Name" / "Name, Name +2" for the hero's "with …" line. */
+function peopleLabel(people: BlogPerson[]) {
+  const names = people.map((p) => p.name.split(/\s+/)[0])
+  if (names.length <= 2) return names.join(" & ")
+  return `${names.slice(0, 2).join(", ")} +${names.length - 2}`
+}
+
+/** Overlapping photos of the people mentioned on the post, for the hero byline. */
+export function MentionStack({ people }: { people: BlogPerson[] }) {
+  if (people.length === 0) return null
+  return (
+    <a href="#mentioned" className="group flex items-center gap-2.5 text-left">
+      <span className="text-xs text-muted-foreground">with</span>
+      <span className="flex -space-x-2">
+        {people.slice(0, 4).map((p) => (
+          <AuthorAvatar key={p.id} name={p.name} src={p.avatar} size="xs" className="ring-2 ring-background" />
+        ))}
+      </span>
+      <span className="text-sm text-foreground group-hover:text-blue-600 dark:group-hover:text-blue-300 transition-colors">
+        {peopleLabel(people)}
+      </span>
+    </a>
+  )
+}
+
+/** Everyone tagged under "Mentioned people", below the author card. */
+export function MentionedPeople({ people }: { people: BlogPerson[] }) {
+  if (people.length === 0) return null
+  return (
+    <section id="mentioned" aria-labelledby="mentioned-heading" className="mt-6 scroll-mt-28 rounded-2xl border border-border bg-card p-6 md:p-7">
+      <h2 id="mentioned-heading" className="text-[11px] font-normal tracking-widest text-muted-foreground">
+        MENTIONED IN THIS ARTICLE
+      </h2>
+      <ul className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
+        {people.map((p) => (
+          <li key={p.id} className="flex min-w-0 items-center gap-3 rounded-xl border border-border/70 bg-background/40 p-3">
+            <AuthorAvatar name={p.name} src={p.avatar} size="sm" />
+            <div className="min-w-0 flex-1">
+              <p className="truncate text-sm text-foreground">{p.name}</p>
+              {p.role ? <p className="truncate text-xs text-muted-foreground">{p.role}</p> : null}
+            </div>
+            {p.linkedin ? (
+              <a
+                href={p.linkedin}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`${p.name} on LinkedIn`}
+                className="shrink-0 rounded-lg px-2 py-1 text-xs tracking-wide text-blue-600 dark:text-blue-300/80 hover:text-blue-700 dark:hover:text-blue-300 hover:bg-accent/50 transition-colors"
+              >
+                LinkedIn →
+              </a>
+            ) : null}
+          </li>
+        ))}
+      </ul>
+    </section>
   )
 }
 
@@ -55,7 +128,7 @@ export function KeyTakeaways({ points, minutes }: { points: string[]; minutes: n
 export function AuthorCard({ author }: { author: BlogAuthor }) {
   return (
     <div className="mt-14 rounded-2xl border border-border bg-card p-6 md:p-7 flex gap-5 items-start">
-      <AuthorAvatar name={author.name} />
+      <AuthorAvatar name={author.name} src={author.avatar} />
       <div>
         <p className="text-[11px] tracking-widest text-muted-foreground">WRITTEN BY</p>
         <p className="mt-1 text-lg font-light">

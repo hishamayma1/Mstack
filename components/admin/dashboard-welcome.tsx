@@ -1,5 +1,7 @@
 import Link from "next/link"
 import type { ServerProps } from "payload"
+import { mediaUrl, relationId } from "@/lib/people"
+import { AvatarBadge } from "./avatar-badge"
 import { PushToggle } from "./push-toggle"
 
 // Rendered above the collection cards on /admin, via
@@ -93,13 +95,25 @@ export async function DashboardWelcome({ payload, user }: ServerProps) {
     },
   ]
 
-  // `user` is typed optional on ServerProps, and the greeting reads badly with
-  // a raw email anyway — fall back to something that works either way.
-  const greetingName = typeof user?.email === "string" ? user.email.split("@")[0] : null
+  // `user` is typed optional on ServerProps. Greet by first name when the
+  // account has one, else by the email handle.
+  const profile = (user ?? {}) as { name?: string | null; email?: string | null; avatar?: unknown }
+  const fullName = profile.name?.trim() || null
+  const greetingName =
+    fullName?.split(/\s+/)[0] ?? (typeof profile.email === "string" ? profile.email.split("@")[0] : null)
+
+  // The auth user carries `avatar` as an id; resolve it to a URL here.
+  let avatarUrl = mediaUrl(profile.avatar)
+  const avatarId = avatarUrl ? null : relationId(profile.avatar)
+  if (avatarId) {
+    const media = await payload.findByID({ collection: "media", id: avatarId, depth: 0 }).catch(() => null)
+    avatarUrl = mediaUrl(media)
+  }
 
   return (
     <section className="mstack-dash">
       <header className="mstack-dash__header">
+        <AvatarBadge name={fullName ?? profile.email ?? "You"} url={avatarUrl} size="lg" className="mstack-dash__avatar" />
         <p className="mstack-dash__eyebrow">MStack360 Dashboard</p>
         <h1 className="mstack-dash__title">
           {greetingName ? `Welcome back, ${greetingName}.` : "Welcome back."}

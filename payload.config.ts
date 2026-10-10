@@ -3,6 +3,7 @@ import { fileURLToPath } from "url"
 import { mongooseAdapter } from "@payloadcms/db-mongodb"
 import { nodemailerAdapter } from "@payloadcms/email-nodemailer"
 import { lexicalEditor } from "@payloadcms/richtext-lexical"
+import { uploadthingStorage } from "@payloadcms/storage-uploadthing"
 import { buildConfig, type CollectionSlug, type Payload } from "payload"
 import sharp from "sharp"
 
@@ -69,6 +70,33 @@ async function seedCollection(payload: Payload, slug: CollectionSlug, docs: Reco
   }
 }
 
+// There must always be an Administrator, or nobody can create admins or
+// manage the team. Accounts created before roles existed have no `role` and
+// all had full access, so those are promoted first. If every account already
+// has a role but none is an admin, the oldest account (the site owner) is
+// promoted. Once any admin exists this is a no-op.
+async function backfillAdminRole(payload: Payload) {
+  try {
+    const { totalDocs: admins } = await payload.count({ collection: "users", where: { role: { equals: "admin" } } })
+    if (admins > 0) return
+    const { docs } = await payload.update({
+      collection: "users",
+      where: { role: { exists: false } },
+      data: { role: "admin" },
+    })
+    if (docs.length) {
+      payload.logger.info(`Gave ${docs.length} existing account(s) the Administrator role.`)
+      return
+    }
+    const { docs: oldest } = await payload.find({ collection: "users", sort: "createdAt", limit: 1, depth: 0 })
+    if (!oldest[0]) return
+    await payload.update({ collection: "users", id: oldest[0].id, data: { role: "admin" } })
+    payload.logger.info(`No Administrator found — gave the oldest account (${oldest[0].email}) the Administrator role.`)
+  } catch (err) {
+    payload.logger.warn(`Role backfill skipped: ${(err as Error).message}`)
+  }
+}
+
 export default buildConfig({
   admin: {
     user: Users.slug,
@@ -84,6 +112,9 @@ export default buildConfig({
       description: "MStack360 content and sales dashboard.",
       icons: [{ rel: "icon", type: "image/png", url: "/icon-dark-32x32.png" }],
     },
+
+    // The account icon (top right) shows the signed-in user's photo.
+    avatar: { Component: "/components/admin/account-avatar#AccountAvatar" },
 
     components: {
       graphics: {
@@ -138,9 +169,28 @@ export default buildConfig({
   }),
   email: emailAdapter,
   sharp,
+  plugins: [
+    // Media files live on the UploadThing CDN instead of the local disk (which
+    // doesn't persist on Vercel). Images are already compressed to WebP by the
+    // Media collection's upload settings before this adapter sends them.
+    // `disablePayloadAccessControl` makes each file's `url` the direct CDN
+    // link rather than a /api/media/file/... route proxied through this app —
+    // fine because Media is publicly readable anyway.
+    uploadthingStorage({
+      enabled: Boolean(process.env.UPLOADTHING_TOKEN),
+      collections: {
+        media: { disablePayloadAccessControl: true },
+      },
+      options: {
+        token: process.env.UPLOADTHING_TOKEN,
+        acl: "public-read",
+      },
+    }),
+  ],
   // One-time seed so content pages have real data on a fresh database,
   // instead of shipping empty until someone fills in /admin.
   onInit: async (payload) => {
+    await backfillAdminRole(payload)
     await seedCollection(payload, "case-studies", CASE_STUDIES_SEED)
     await seedCollection(payload, "blog-posts", BLOG_POSTS_SEED)
     await seedCollection(payload, "guides", GUIDES_SEED)

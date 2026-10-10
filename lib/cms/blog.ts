@@ -1,7 +1,8 @@
 import { getPayload } from "payload"
 import config from "@payload-config"
 import { cacheLife, cacheTag } from "next/cache"
-import type { BlogPost, Media } from "@/payload-types"
+import type { BlogPost, Media, User } from "@/payload-types"
+import { mediaUrl } from "@/lib/people"
 
 // Flat, frontend-friendly shapes for /blog and /blog/[slug]. Everything the
 // components need is derived here once, on the server, inside the cache —
@@ -38,6 +39,17 @@ export type BlogAuthor = {
   role: string
   bio: string
   linkedin: string | null
+  /** The author account's photo, when the byline is that account. */
+  avatar: string | null
+}
+
+/** A teammate tagged on the post ("Mentioned people"). */
+export type BlogPerson = {
+  id: string
+  name: string
+  role: string
+  linkedin: string | null
+  avatar: string | null
 }
 
 /** Everything a /blog/[slug] page renders. */
@@ -47,6 +59,7 @@ export type BlogPostDetail = BlogCard & {
   faqs: BlogFaq[]
   keyTakeaways: string[]
   author: BlogAuthor
+  mentions: BlogPerson[]
   updatedAt: string
 }
 
@@ -199,6 +212,35 @@ function toImage(field: BlogPost["coverImage"]): BlogImage | null {
   }
 }
 
+// Profile links are typed in by hand; only real web links become <a href>.
+function safeLink(value: string | null | undefined): string | null {
+  const url = value?.trim()
+  return url && /^https?:\/\//i.test(url) ? url : null
+}
+
+// Populated, still-existing accounts only; the author is left out (they're
+// already credited) and each person appears once.
+function toPeople(values: BlogPost["mentions"], authorId: string | null): BlogPerson[] {
+  const seen = new Set<string>(authorId ? [authorId] : [])
+  const people: BlogPerson[] = []
+  for (const value of values ?? []) {
+    if (!value || typeof value !== "object") continue
+    const id = String(value.id)
+    if (seen.has(id)) continue
+    seen.add(id)
+    const name = value.name?.trim()
+    if (!name) continue
+    people.push({
+      id,
+      name,
+      role: value.jobTitle?.trim() ?? "",
+      linkedin: safeLink(value.linkedin),
+      avatar: mediaUrl(value.avatar),
+    })
+  }
+  return people
+}
+
 function toCard(doc: BlogPost): BlogCard {
   return {
     id: String(doc.id),
@@ -284,13 +326,24 @@ export async function getBlogPostBySlug(slug: string): Promise<BlogPostDetail | 
     collection: "blog-posts",
     where: { slug: { equals: slug }, status: { equals: "published" } },
     limit: 1,
-    depth: 1,
+    // 2, so the author's and mentioned people's photos are populated too.
+    depth: 2,
     pagination: false,
+    // Accounts are only ever read for their public profile — never email,
+    // role or auth fields — so nothing private enters the cache or the page.
+    populate: {
+      users: { name: true, jobTitle: true, linkedin: true, avatar: true },
+    },
   })
   const doc = docs[0] as BlogPost | undefined
   if (!doc) return null
 
   const toc = annotateHeadings(doc.body)
+  const account = typeof doc.createdBy === "object" && doc.createdBy ? (doc.createdBy as User) : null
+  const bylineName = doc.author?.name?.trim() || ""
+  // The byline is a snapshot that can be edited to credit someone else, so
+  // the account photo is only used while the byline still names that account.
+  const bylineIsAccount = Boolean(account) && (!bylineName || bylineName === account?.name?.trim())
 
   return {
     ...toCard(doc),
@@ -302,8 +355,10 @@ export async function getBlogPostBySlug(slug: string): Promise<BlogPostDetail | 
       name: doc.author?.name?.trim() || DEFAULT_AUTHOR,
       role: doc.author?.role?.trim() ?? "",
       bio: doc.author?.bio?.trim() ?? "",
-      linkedin: doc.author?.linkedin?.trim() || null,
+      linkedin: safeLink(doc.author?.linkedin),
+      avatar: bylineIsAccount ? mediaUrl(account?.avatar) : null,
     },
+    mentions: toPeople(doc.mentions, account ? String(account.id) : null),
     updatedAt: doc.updatedAt,
   }
 }
