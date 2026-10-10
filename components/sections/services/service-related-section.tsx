@@ -1,6 +1,7 @@
 import Link from "next/link"
 import { Tag } from "@/components/ui/tag"
 import type { ServiceKind } from "@/lib/cms/services"
+import { serviceTheme } from "@/lib/service-theme"
 
 type ServiceLink = { id: string; title: string; slug: string; kind: ServiceKind }
 
@@ -29,16 +30,16 @@ export function ServiceRelatedSection({ services }: { services: ServiceLink[] })
                 {group.heading}
               </span>
               <div className="mt-3 flex flex-wrap gap-2">
-                {group.items.map((service, i) => (
+                {group.items.map((service) => (
                   <Link
                     key={service.id}
                     href={`/solutions/${service.slug}`}
-                    className={`px-4 py-2 rounded-full border border-border bg-card text-sm text-muted-foreground hover:text-foreground transition-all ${
-                      i % 2 === 0
-                        ? "hover:border-blue-500/40 hover:bg-accent/60"
-                        : "hover:border-teal/40 hover:bg-teal/10"
-                    }`}
+                    data-svc={serviceTheme(service.slug)}
+                    className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-border bg-card text-sm text-muted-foreground hover:text-foreground hover:border-svc/40 hover:bg-svc/10 transition-all"
                   >
+                    {/* Each chip wears its own service's colour, so the
+                        palette doubles as a map of the catalogue. */}
+                    <span aria-hidden="true" className="h-2 w-2 rounded-full bg-linear-to-br from-svc to-svc-2" />
                     {service.title}
                   </Link>
                 ))}

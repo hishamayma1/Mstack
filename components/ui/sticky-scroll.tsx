@@ -41,6 +41,8 @@ export type StickyScrollItem = {
   href?: string
   /** Link text. */
   cta?: string
+  /** A service accent (lib/service-theme.ts). Omitted, the brand blue. */
+  theme?: string
 }
 
 export function StickyScroll({ items, ariaLabel }: { items: StickyScrollItem[]; ariaLabel: string }) {
@@ -82,24 +84,24 @@ export function StickyScroll({ items, ariaLabel }: { items: StickyScrollItem[]; 
               ref={(el) => {
                 refs.current[i] = el
               }}
+              data-svc={item.theme}
               className="relative border-l border-border pl-6 md:pl-8"
             >
               {/* The lit segment travels down the rail, which is the only
-                  progress indicator the section needs. */}
+                  progress indicator the section needs. It wears the entry's
+                  own accent, so the colour changes as you move down. */}
               <span
                 aria-hidden="true"
-                className={`absolute -left-px top-0 h-full w-px origin-top transition-transform duration-500 ease-out ${
-                  i % 2 === 0
-                    ? "bg-[linear-gradient(180deg,rgba(96,165,250,0.9),rgba(59,130,246,0.15))]"
-                    : "bg-[linear-gradient(180deg,rgba(34,211,238,0.9),rgba(8,145,178,0.15))]"
-                } ${on ? "scale-y-100" : "scale-y-0"}`}
+                className={`absolute -left-px top-0 h-full w-0.5 origin-top bg-linear-to-b from-svc to-svc-2/15 transition-transform duration-500 ease-out ${
+                  on ? "scale-y-100" : "scale-y-0"
+                }`}
               />
 
               <div className="py-9 md:py-12 lg:py-16">
                 <div className="flex items-baseline gap-4">
                   <span
                     className={`font-ibm-plex text-[11px] tabular-nums tracking-[0.2em] transition-colors duration-500 ${
-                      on ? (i % 2 === 0 ? "text-blue-300/90" : "text-teal") : "text-muted-foreground"
+                      on ? "text-svc-ink" : "text-muted-foreground"
                     }`}
                   >
                     {item.index}
@@ -140,14 +142,23 @@ export function StickyScroll({ items, ariaLabel }: { items: StickyScrollItem[]; 
       {/* ── The pinned panel ─────────────────────────────────────────────── */}
       <div className="hidden lg:col-span-6 lg:block xl:col-span-7">
         <div className="sticky top-28">
-          <div className="relative overflow-hidden rounded-2xl border border-border bg-card p-8 xl:p-10">
+          {/* The panel takes on the active entry's accent, so scrolling from
+              one level to the next visibly changes the room you're in. */}
+          <div
+            data-svc={current.theme}
+            className="relative overflow-hidden rounded-2xl border border-svc/25 bg-card p-8 transition-colors duration-500 xl:p-10"
+          >
             <span
               aria-hidden="true"
-              className="pointer-events-none absolute -right-16 -top-16 h-64 w-64 rounded-full bg-[radial-gradient(closest-side,rgba(37,99,235,0.22),transparent)] blur-2xl"
+              className="pointer-events-none absolute inset-x-0 top-0 h-1 bg-linear-to-r from-svc to-svc-2"
             />
             <span
               aria-hidden="true"
-              className="pointer-events-none absolute -bottom-20 -left-10 h-56 w-56 rounded-full bg-[radial-gradient(closest-side,rgba(8,145,178,0.16),transparent)] blur-2xl"
+              className="pointer-events-none absolute -right-16 -top-16 h-64 w-64 rounded-full bg-[radial-gradient(closest-side,color-mix(in_oklch,var(--svc)_28%,transparent),transparent)] blur-2xl"
+            />
+            <span
+              aria-hidden="true"
+              className="pointer-events-none absolute -bottom-20 -left-10 h-56 w-56 rounded-full bg-[radial-gradient(closest-side,color-mix(in_oklch,var(--svc-2)_20%,transparent),transparent)] blur-2xl"
             />
 
             {/* Re-keyed on the active entry, so the swap keyframe replays on
@@ -155,7 +166,7 @@ export function StickyScroll({ items, ariaLabel }: { items: StickyScrollItem[]; 
             <div key={current.id} className={`${motion.swap} relative`}>
               <span
                 aria-hidden="true"
-                className="block bg-[linear-gradient(180deg,rgb(var(--fg-rgb))_35%,rgba(96,165,250,0.5)_100%)] bg-clip-text font-ibm-plex text-[3.5rem] font-light leading-none tracking-tight text-transparent"
+                className="block bg-linear-to-br from-svc to-svc-2 bg-clip-text font-ibm-plex text-[3.5rem] font-light leading-none tracking-tight text-transparent"
               >
                 {current.index}
               </span>
@@ -196,7 +207,7 @@ function Detail({ item, compact = false }: { item: StickyScrollItem; compact?: b
               className={
                 compact
                   ? undefined
-                  : "flex items-center gap-2.5 rounded-xl border border-border bg-card px-3 py-2 transition-colors duration-300 hover:border-blue-400/25"
+                  : "flex items-center gap-2.5 rounded-xl border border-border bg-card px-3 py-2 transition-colors duration-300 hover:border-svc/30"
               }
             >
               <AppLogo slug={slug} size={compact ? 22 : 28} showName={!compact} />
@@ -208,7 +219,7 @@ function Detail({ item, compact = false }: { item: StickyScrollItem; compact?: b
       {item.href ? (
         <Link
           href={item.href}
-          className={`${motion.link} group inline-flex items-center gap-2 text-[0.875rem] tracking-wide text-blue-600 dark:text-blue-300/85 transition-colors hover:text-blue-700 dark:hover:text-blue-300 ${
+          className={`${motion.link} group inline-flex items-center gap-2 text-[0.875rem] tracking-wide text-svc-ink transition-opacity hover:opacity-80 ${
             compact ? "mt-5" : "mt-8"
           }`}
         >

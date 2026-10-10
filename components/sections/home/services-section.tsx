@@ -4,6 +4,7 @@ import { StickyScroll, type StickyScrollItem } from "@/components/ui/sticky-scro
 import { LEVEL_LOGOS } from "@/lib/content/app-logos"
 import { formatMoney } from "@/lib/pricing"
 import type { ServiceCard } from "@/lib/cms/services"
+import { serviceTheme } from "@/lib/service-theme"
 
 // The five service levels, as the homepage shows them.
 //
@@ -33,6 +34,7 @@ export function HomeServicesSection({ levels }: { levels: ServiceCard[] }) {
     logos: LEVEL_LOGOS[level.title],
     href: `/solutions/${level.slug}`,
     cta: `Explore ${level.title}`,
+    theme: serviceTheme(level.slug),
     meta:
       level.fromPricePerSeat !== null ? (
         <>

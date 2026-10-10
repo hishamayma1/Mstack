@@ -14,10 +14,13 @@ export function BentoCard({
   children,
   className = "",
   delay = 0,
+  theme,
 }: {
   children: ReactNode
   className?: string
   delay?: number
+  /** A service accent (lib/service-theme.ts) — tints the hover border and glow. */
+  theme?: string
 }) {
   // ~500ms of stagger compresses into ~24% of the entry range, which reads
   // the same on screen. Capped so a long grid's last card still animates.
@@ -25,7 +28,8 @@ export function BentoCard({
 
   return (
     <div
-      className={`${styles.reveal} group relative rounded-2xl border border-border bg-card overflow-hidden transition-colors duration-300 hover:border-blue-500/30 hover:bg-accent/40 ${className}`}
+      data-svc={theme}
+      className={`${styles.reveal} group relative isolate rounded-2xl border border-border bg-card overflow-hidden transition-colors duration-300 hover:border-svc/35 hover:bg-accent/40 ${className}`}
       style={
         {
           "--reveal-start": `${start}%`,
@@ -36,7 +40,7 @@ export function BentoCard({
       {/* Hover glow spot — follows the pointer via CSS vars set by MouseGlowGrid */}
       <div
         className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-        style={{ background: "radial-gradient(400px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(59,130,246,0.12), transparent 60%)" }}
+        style={{ background: "radial-gradient(400px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), color-mix(in oklch, var(--svc) 14%, transparent), transparent 60%)" }}
       />
       {children}
     </div>

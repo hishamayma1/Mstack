@@ -146,6 +146,123 @@
   color-scheme: dark;
 }
 
+/* Per-service accent themes. Every service gets its own hue so a visitor can
+   tell the nine apart at a glance — on the hub cards, the homepage scroller
+   and across its own page. A themed element carries `data-svc="<theme>"`
+   (see lib/service-theme.ts); everything inside reads the --svc-* tokens via
+   the `svc`, `svc-2` and `svc-ink` Tailwind colors.
+
+   The defaults are the brand blue, so a component that uses the tokens
+   outside any themed wrapper (BentoCard on the industries pages, say) looks
+   exactly as it did before.
+
+   --svc      solid accent: button fills, dots, borders, glows
+   --svc-2    partner hue, the second stop of every gradient
+   --svc-ink  accent as text — darker on light, lighter on dark, for contrast */
+:root {
+  --svc-h: 260;
+  --svc-h2: 222;
+  --svc-l: 0.58;
+  --svc-c: 0.2;
+}
+
+:root,
+[data-svc] {
+  --svc: oklch(var(--svc-l) var(--svc-c) var(--svc-h));
+  --svc-2: oklch(calc(var(--svc-l) + 0.06) calc(var(--svc-c) * 0.85) var(--svc-h2));
+  --svc-ink: oklch(0.5 calc(var(--svc-c) * 0.85) var(--svc-h));
+}
+
+.dark,
+.dark [data-svc] {
+  --svc-ink: oklch(0.82 calc(var(--svc-c) * 0.6) var(--svc-h));
+}
+
+[data-svc='blue']    { --svc-h: 260; --svc-h2: 222; }
+[data-svc='sky']     { --svc-h: 228; --svc-h2: 200; --svc-l: 0.6;  --svc-c: 0.15; }
+[data-svc='emerald'] { --svc-h: 158; --svc-h2: 185; --svc-l: 0.6;  --svc-c: 0.16; }
+[data-svc='violet']  { --svc-h: 292; --svc-h2: 265; --svc-l: 0.56; --svc-c: 0.22; }
+[data-svc='fuchsia'] { --svc-h: 328; --svc-h2: 295; --svc-l: 0.6;  --svc-c: 0.24; }
+[data-svc='orange']  { --svc-h: 45;  --svc-h2: 70;  --svc-l: 0.64; --svc-c: 0.19; }
+[data-svc='rose']    { --svc-h: 15;  --svc-h2: 350; --svc-l: 0.6;  --svc-c: 0.21; }
+[data-svc='teal']    { --svc-h: 188; --svc-h2: 160; --svc-l: 0.6;  --svc-c: 0.12; }
+[data-svc='amber']   { --svc-h: 68;  --svc-h2: 40;  --svc-l: 0.68; --svc-c: 0.17; }
+
+/* Blue bands. Two strengths, so the page can lean on the brand colour more
+   often without every blue section shouting:
+
+     .band-blue      a soft wash — light: a pale sky tint over the page;
+                     dark: a midnight blue one step off the near-black base.
+                     Content keeps the page's own palette. <Section tone="blue">
+     .band-contrast  the deep band for the two sections that ask for something
+                     (proof, the health-check offer). <Section tone="contrast">
+
+   Both are pulled toward the palette rather than Tailwind's stock blue-600:
+   hue ~260 like --primary, chroma held back so a full-width band rests the
+   eye instead of glaring, and the teal partner glow in the far corner. */
+.band-blue {
+  --accent: oklch(0.91 0.04 258);
+  --border: oklch(0.5 0.12 260 / 14%);
+
+  background-color: oklch(0.96 0.022 256);
+  background-image: radial-gradient(60% 80% at 0% 0%, rgba(37, 99, 235, 0.08), transparent 65%),
+    radial-gradient(50% 70% at 100% 100%, rgba(8, 145, 178, 0.06), transparent 65%),
+    linear-gradient(180deg, oklch(0.965 0.02 256) 0%, oklch(0.945 0.03 258) 100%);
+}
+
+.dark .band-blue {
+  --card: oklch(0.215 0.04 262);
+  --accent: oklch(0.27 0.06 262);
+  --border: oklch(0.75 0.08 260 / 12%);
+
+  background-color: oklch(0.185 0.04 262);
+  background-image: radial-gradient(60% 80% at 0% 0%, rgba(59, 130, 246, 0.1), transparent 65%),
+    radial-gradient(50% 70% at 100% 100%, rgba(34, 211, 238, 0.05), transparent 65%),
+    linear-gradient(180deg, oklch(0.175 0.035 262) 0%, oklch(0.195 0.045 263) 100%);
+}
+
+/* Contrast band — the deep blue. <Section tone="contrast"> also puts `dark`
+   on the band so everything inside renders its dark-mode styling (light text,
+   dark: variants); the tokens below retint that dark palette for a blue
+   ground instead of a near-black one, in both page themes.
+
+   Tailwind's blue-300/400 are remapped too: the hard-coded accent text
+   (eyebrows, links, star marks) uses them, and the stock shades sit too
+   close to the band's own blue to read at 11px. */
+.band-contrast {
+  --background: oklch(0.44 0.14 262);
+  --foreground: oklch(0.99 0.005 260);
+  --card: oklch(0.4 0.12 263);
+  --card-foreground: oklch(0.99 0.005 260);
+  --muted-foreground: oklch(0.9 0.035 258);
+  --accent: oklch(0.5 0.13 260);
+  --border: oklch(1 0 0 / 16%);
+  --fg-rgb: 255 255 255;
+  --teal: oklch(0.88 0.1 205);
+  --color-blue-300: oklch(0.93 0.04 250);
+  --color-blue-400: oklch(0.86 0.07 250);
+
+  background-color: var(--background);
+  background-image: radial-gradient(70% 90% at 0% 0%, rgba(147, 197, 253, 0.22), transparent 60%),
+    radial-gradient(60% 80% at 100% 100%, rgba(34, 211, 238, 0.14), transparent 60%),
+    linear-gradient(135deg, oklch(0.5 0.15 260) 0%, oklch(0.44 0.14 262) 55%, oklch(0.37 0.12 265) 100%);
+  color: var(--foreground);
+}
+
+/* On a dark page even the calmer light-mode blue would glow; a deep ink blue
+   still reads plainly as "the blue section" against the near-black base and
+   stays clearly stronger than .band-blue. */
+.dark .band-contrast {
+  --background: oklch(0.29 0.09 263);
+  --card: oklch(0.26 0.075 264);
+  --accent: oklch(0.34 0.1 262);
+  --border: oklch(1 0 0 / 12%);
+
+  background-image: radial-gradient(70% 90% at 0% 0%, rgba(96, 165, 250, 0.18), transparent 60%),
+    radial-gradient(60% 80% at 100% 100%, rgba(34, 211, 238, 0.08), transparent 60%),
+    linear-gradient(135deg, oklch(0.33 0.1 262) 0%, oklch(0.28 0.085 263) 55%, oklch(0.22 0.065 265) 100%);
+}
+
 @theme inline {
   --font-sans: var(--font-geist-sans), 'Geist Fallback', sans-serif;
   --font-mono: var(--font-geist-mono), 'Geist Mono Fallback', monospace;
@@ -191,6 +308,9 @@
   --color-glass-border: var(--glass-border);
   --color-teal: var(--teal);
   --color-teal-foreground: var(--teal-foreground);
+  --color-svc: var(--svc);
+  --color-svc-2: var(--svc-2);
+  --color-svc-ink: var(--svc-ink);
 }
 
 @layer base {

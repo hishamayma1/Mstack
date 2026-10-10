@@ -37,13 +37,18 @@ export function ServiceBandsSection({ pricing }: { pricing: ServicePricing }) {
               {pricing.bands.map((band) => (
                 <tr
                   key={`${band.minSeats}-${band.maxSeats ?? "plus"}`}
-                  className="border-b border-border"
+                  className="border-b border-border transition-colors hover:bg-svc/[0.04]"
                 >
-                  <td className="py-5 pr-6 text-sm text-foreground">{band.label}</td>
+                  <td className="py-5 pr-6 text-sm text-foreground">
+                    <span className="inline-flex items-center gap-2.5">
+                      <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-svc" />
+                      {band.label}
+                    </span>
+                  </td>
                   <td className="py-5 pr-6 text-sm text-muted-foreground tabular-nums whitespace-nowrap">
                     {bandRangeLabel(band)}
                   </td>
-                  <td className="py-5 text-right text-lg font-light tabular-nums whitespace-nowrap">
+                  <td className="py-5 text-right text-lg font-light tabular-nums whitespace-nowrap text-svc-ink">
                     {formatMoney(band.pricePerSeat, pricing.currency)}
                   </td>
                 </tr>

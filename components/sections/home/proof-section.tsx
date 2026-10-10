@@ -27,7 +27,7 @@ const FIGURES: { value: string; label: string; mark?: boolean; srValue?: string 
 // /case-studies, where a long scrolling wall of names is the point.
 export function ProofSection() {
   return (
-    <Section id="proof" tone="accent" size="lg">
+    <Section id="proof" tone="contrast" size="lg">
       <div className="grid gap-10 lg:grid-cols-12 lg:gap-16">
         <div className="lg:col-span-5">
           <Eyebrow>The record</Eyebrow>

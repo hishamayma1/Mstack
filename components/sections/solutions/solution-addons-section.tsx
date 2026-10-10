@@ -4,6 +4,8 @@ import { BentoCard } from "@/components/ui/bento-card"
 import { MouseGlowGrid } from "@/components/ui/mouse-glow-grid"
 import { formatMoney } from "@/lib/pricing"
 import type { ServiceCard } from "@/lib/cms/services"
+import { serviceTheme } from "@/lib/service-theme"
+import { ServiceAccent } from "@/components/ui/service-accent"
 
 // The standalone engagements that sit alongside the five-level ladder. Same
 // prop-driven shape as ServiceLevelsSection — the page fetches, this renders.
@@ -28,14 +30,24 @@ export function SolutionAddonsSection({ addons }: { addons: ServiceCard[] }) {
 
         <MouseGlowGrid className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {addons.map((addon, index) => (
-            <BentoCard key={addon.id} className="p-8 flex flex-col" delay={index * 70}>
+            <BentoCard
+              key={addon.id}
+              theme={serviceTheme(addon.slug)}
+              className="p-8 flex flex-col"
+              delay={index * 70}
+            >
+              <ServiceAccent />
+
+              <div className="mb-5 flex items-center gap-3">
+                <span
+                  aria-hidden="true"
+                  className="h-2.5 w-2.5 rounded-full bg-linear-to-br from-svc to-svc-2 shadow-[0_0_12px_var(--svc)]"
+                />
+                <span className="text-[11px] tracking-widest text-svc-ink">ADD-ON</span>
+              </div>
+
               <h3 className="text-lg font-light mb-2">
-                <Link
-                  href={`/solutions/${addon.slug}`}
-                  className={`transition-colors ${
-                    index % 2 === 0 ? "hover:text-blue-500 dark:hover:text-blue-300" : "hover:text-teal"
-                  }`}
-                >
+                <Link href={`/solutions/${addon.slug}`} className="transition-colors hover:text-svc-ink">
                   {addon.title}
                 </Link>
               </h3>
@@ -46,7 +58,7 @@ export function SolutionAddonsSection({ addons }: { addons: ServiceCard[] }) {
                   {addon.highlights.map((highlight) => (
                     <span
                       key={highlight}
-                      className="text-[10px] px-2.5 py-1 rounded-full bg-card border border-border text-muted-foreground tracking-wide"
+                      className="text-[10px] px-2.5 py-1 rounded-full bg-svc/[0.06] border border-svc/20 text-muted-foreground tracking-wide"
                     >
                       {highlight}
                     </span>
@@ -70,11 +82,7 @@ export function SolutionAddonsSection({ addons }: { addons: ServiceCard[] }) {
                 </span>
                 <Link
                   href={`/solutions/${addon.slug}`}
-                  className={`text-[11px] tracking-widest transition-colors whitespace-nowrap ${
-                    index % 2 === 0
-                      ? "text-blue-600 dark:text-blue-300/80 hover:text-blue-500 dark:hover:text-blue-300"
-                      : "text-teal/80 hover:text-teal"
-                  }`}
+                  className="text-[11px] tracking-widest text-svc-ink hover:opacity-80 transition-opacity whitespace-nowrap"
                 >
                   {addon.fromPricePerSeat !== null ? "BUILD PLAN →" : "GET A PRICE →"}
                 </Link>

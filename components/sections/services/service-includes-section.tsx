@@ -27,10 +27,10 @@ export function ServiceIncludesSection({
           {includes.map((item, index) => (
             <BentoCard key={item.title} className="p-8" delay={index * 70}>
               <span
-                className={`font-pixel text-[11px] tracking-widest ${
-                  index % 2 === 0 ? "text-blue-400/80 dark:text-blue-300/70" : "text-teal/80"
-                }`}
-              >
+                aria-hidden="true"
+                className="pointer-events-none absolute -z-10 inset-y-0 left-0 w-1 bg-linear-to-b from-svc to-svc-2 opacity-70 transition-opacity duration-300 group-hover:opacity-100"
+              />
+              <span className="inline-flex h-8 min-w-8 items-center justify-center rounded-lg bg-svc/10 px-2 font-pixel text-[11px] tracking-widest text-svc-ink">
                 {String(index + 1).padStart(2, "0")}
               </span>
               <h3 className="mt-4 text-lg font-light">{item.title}</h3>

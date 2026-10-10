@@ -35,7 +35,7 @@ const LIFT = ["", "md:mt-12", "", "md:mt-12", ""]
 // layout, standing still.
 export function ProcessSection() {
   return (
-    <Section id="process" tone="raised" size="lg">
+    <Section id="process" tone="blue" size="lg">
       <SectionIntro
         eyebrow="Our process"
         title={"How working with\nus actually goes."}

@@ -24,17 +24,21 @@ import { getServices } from "@/lib/cms/services"
 // and the *surface* alternates so consecutive ideas never blur together. Tone
 // is the separator; hairline borders are not asked to do that job any more.
 //
-//   Hero          base     what we do, and the primary ask
-//   Trust bar     base     the platform, as marks — one slim strip
-//   Challenges    base     the visitor recognises their own situation
-//   Services      raised   what we'd do about it, as an ordered progression
-//   Proof         accent   the numbers and the voices, together, held still
-//   Industries    base     proof we understand their context specifically
-//   Process       raised   what working with us looks like — removes risk
-//   Why us        base     differentiation, once they're considering
-//   Questions     raised   real requests + FAQ — objection handling, merged
-//   Health check  accent   the conversion offer every other link points to
-//   Final CTA     —        the close, on its own backdrop
+//   Hero          base      what we do, and the primary ask
+//   Trust bar     base      the platform, as marks — one slim strip
+//   Challenges    base      the visitor recognises their own situation
+//   Process       blue      what working with us looks like — removes risk
+//   Services      raised    what we'd do about it, as an ordered progression
+//   Why us        base      differentiation, once they're considering
+//   Proof         contrast  the numbers and the voices, together, held still
+//   Industries    blue      proof we understand their context specifically
+//   Questions     raised    real requests + FAQ — objection handling, merged
+//   Health check  contrast  the conversion offer every other link points to
+//   Final CTA     —         the close, on its own backdrop
+//
+// Blue comes in two strengths: `blue` is a soft wash, `contrast` the deep
+// band reserved for the two sections that ask for something. A blue band is
+// never placed next to another of the same strength.
 //
 // ── What changed, and why ───────────────────────────────────────────────────
 //
@@ -66,13 +70,13 @@ export default async function HomePage() {
       <HeroSection />
       <TrustBarSection />
       <ChallengesSection />
+      <ProofSection />
       <ProcessSection />
       <HomeServicesSection levels={levels} />
       <DifferentiatorsSection />
-      <ProofSection />
+      <LeadMagnetSection />
       <HomeIndustriesSection />
       <QuestionsSection faqs={faqs} />
-      <LeadMagnetSection />
       <FinalCTASection />
       <FloatingActions />
       <SiteFooter />

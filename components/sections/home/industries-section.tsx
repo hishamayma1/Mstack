@@ -8,7 +8,7 @@ import { IndustryTabs } from "@/components/sections/home/industry-tabs"
 // homepage's own, tidier take on the same content.
 export function HomeIndustriesSection() {
   return (
-    <Section id="industries" tone="base" size="lg">
+    <Section id="industries" tone="blue" size="lg">
       <SectionIntro
         eyebrow="Built for your sector"
         title={"The same platform,\nconfigured for your industry."}

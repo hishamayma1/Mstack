@@ -17,7 +17,7 @@ import { HEALTH_CHECK_DELIVERABLES } from "@/lib/content/site"
 // doing the opposite of its job.
 export function LeadMagnetSection() {
   return (
-    <Section id="health-check" tone="accent" size="lg">
+    <Section id="health-check" tone="contrast" size="lg">
       <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-20">
         <div>
           <Eyebrow>Free — no commitment</Eyebrow>
@@ -38,6 +38,7 @@ export function LeadMagnetSection() {
               primaryLabel="Book Your Health Check"
               secondaryLabel="Talk to Us First"
               secondaryHref="/contact"
+              inverse
             />
           </div>
 

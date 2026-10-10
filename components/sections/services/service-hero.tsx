@@ -1,6 +1,7 @@
 import Link from "next/link"
 import { RevealText } from "@/components/ui/reveal-text"
 import { Tag } from "@/components/ui/tag"
+import { ServicePill } from "@/components/ui/service-accent"
 import { formatMoney, type Currency } from "@/lib/pricing"
 import type { ServiceStat } from "@/lib/cms/services"
 import styles from "@/components/sections/shared/page-hero.module.css"
@@ -31,7 +32,11 @@ export function ServiceHero({
   return (
     <section className="relative pt-36 md:pt-44 pb-16 px-6 md:px-12 lg:px-20 overflow-hidden">
       <div className={styles.grid} aria-hidden="true" />
-      <div className={styles.glow} aria-hidden="true" />
+      {/* The page-hero glow, recoloured to this service's accent pair. */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 z-0 bg-[radial-gradient(640px_circle_at_50%_-10%,color-mix(in_oklch,var(--svc)_24%,transparent),transparent_60%),radial-gradient(520px_circle_at_88%_10%,color-mix(in_oklch,var(--svc-2)_18%,transparent),transparent_65%)]"
+      />
 
       <div className="relative z-10 max-w-6xl mx-auto">
         <nav aria-label="Breadcrumb" className="mb-8 text-[11px] tracking-widest text-muted-foreground">
@@ -41,13 +46,16 @@ export function ServiceHero({
           <span className="mx-2" aria-hidden="true">
             /
           </span>
-          <span className="text-muted-foreground">{title.toUpperCase()}</span>
+          <span className="text-svc-ink">{title.toUpperCase()}</span>
         </nav>
 
         <div className="grid grid-cols-1 lg:grid-cols-[1.3fr_1fr] gap-10 lg:gap-16 items-start">
           <div>
             <div className="flex flex-wrap items-center gap-2">
-              <Tag>{kind === "level" ? "SERVICE LEVEL" : "ADD-ON SERVICE"}</Tag>
+              <ServicePill>
+                <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-svc" />
+                {kind === "level" ? "SERVICE LEVEL" : "ADD-ON SERVICE"}
+              </ServicePill>
               {tagline ? <Tag>{tagline.toUpperCase()}</Tag> : null}
             </div>
 
@@ -58,18 +66,23 @@ export function ServiceHero({
               {headline}
             </RevealText>
 
+            <span
+              aria-hidden="true"
+              className="mt-7 block h-1 w-24 rounded-full bg-linear-to-r from-svc to-svc-2"
+            />
+
             <p className="mt-6 text-base text-muted-foreground leading-relaxed max-w-xl">{valueProp}</p>
 
             <div className="mt-9 flex flex-col sm:flex-row gap-3">
               <a
                 href="#configure"
-                className="px-8 py-3 bg-linear-to-br from-blue-600 to-cyan-600 text-white text-sm rounded-xl transition-[filter] duration-200 hover:brightness-110 active:brightness-95 tracking-widest font-medium text-center"
+                className="px-8 py-3 bg-linear-to-br from-svc to-svc-2 text-white text-sm rounded-xl shadow-[0_10px_30px_-10px_var(--svc)] transition-[filter] duration-200 hover:brightness-110 active:brightness-95 tracking-widest font-medium text-center"
               >
                 Build My Plan
               </a>
               <Link
                 href="/contact"
-                className="px-8 py-3 border border-border text-foreground/75 text-sm rounded-xl hover:border-blue-500/40 hover:text-foreground hover:bg-accent/60 transition-all tracking-widest font-medium text-center"
+                className="px-8 py-3 border border-border text-foreground/75 text-sm rounded-xl hover:border-svc/40 hover:text-foreground hover:bg-svc/[0.06] transition-all tracking-widest font-medium text-center"
               >
                 Talk to Someone
               </Link>
@@ -78,7 +91,11 @@ export function ServiceHero({
 
           {/* Price card. Only rendered when there's a real rate to show —
               a "from £0" on a price-on-application service would be a lie. */}
-          <div className="rounded-2xl border border-border bg-card p-8">
+          <div className="relative overflow-hidden rounded-2xl border border-svc/25 bg-card p-8 shadow-[0_24px_60px_-30px_var(--svc)]">
+            <span
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-x-0 top-0 h-1 bg-linear-to-r from-svc to-svc-2"
+            />
             {fromPricePerSeat !== null ? (
               <>
                 <span className="text-xs uppercase tracking-widest text-muted-foreground">Starting from</span>
@@ -106,10 +123,10 @@ export function ServiceHero({
 
             {stats.length > 0 ? (
               <div className="mt-7 pt-7 border-t border-border grid grid-cols-3 gap-4">
-                {stats.map((stat, i) => (
+                {stats.map((stat) => (
                   <div key={stat.label}>
                     <div
-                      className={`text-xl font-light ${i % 2 === 0 ? "text-blue-600 dark:text-blue-300/90" : "text-teal"}`}
+                      className="text-xl font-light text-svc-ink"
                     >
                       {stat.value}
                     </div>

@@ -9,6 +9,8 @@ import { AppLogoRow } from "@/components/ui/app-logo"
 import { LEVEL_LOGOS } from "@/lib/content/app-logos"
 import { formatMoney } from "@/lib/pricing"
 import type { ServiceCard } from "@/lib/cms/services"
+import { serviceTheme } from "@/lib/service-theme"
+import { ServiceAccent, ServiceIndex, ServicePill } from "@/components/ui/service-accent"
 
 // Server component — no "use client" here. BentoCard/PixelIcon/RevealText are
 // the only client leaves; this file's own markup is server-rendered.
@@ -42,23 +44,24 @@ export function ServiceLevelsSection({ levels }: { levels: ServiceCard[] }) {
           {levels.map((level, index) => (
             <BentoCard
               key={level.id}
+              theme={serviceTheme(level.slug)}
               className="col-span-12 md:col-span-6 lg:col-span-4 p-8 flex flex-col"
               delay={index * 80}
             >
-              <div className="flex items-center justify-between mb-5">
-                <span className="font-pixel text-[11px] text-muted-foreground tracking-widest">
-                  {String(index + 1).padStart(2, "0")}
-                </span>
-                {level.tagline ? <Tag>{level.tagline}</Tag> : null}
+              <ServiceAccent />
+
+              <div className="relative flex items-center justify-between mb-5">
+                <ServiceIndex value={String(index + 1).padStart(2, "0")} />
+                {level.tagline ? <ServicePill>{level.tagline}</ServicePill> : null}
               </div>
 
-              <h3 className="text-xl font-light mb-3">
+              <h3 className="relative text-xl font-light mb-3">
                 {/* The whole card is not a link — a nested-interactive card
                     breaks keyboard navigation and the logo row's own titles.
                     The heading carries the link instead. */}
                 <Link
                   href={`/solutions/${level.slug}`}
-                  className="hover:text-blue-500 dark:hover:text-blue-300 transition-colors"
+                  className="hover:text-svc-ink transition-colors"
                 >
                   {level.title}
                 </Link>
@@ -78,7 +81,7 @@ export function ServiceLevelsSection({ levels }: { levels: ServiceCard[] }) {
                 {level.highlights.map((highlight) => (
                   <span
                     key={highlight}
-                    className="text-[10px] px-2.5 py-1 rounded-full bg-card border border-border text-muted-foreground tracking-wide"
+                    className="text-[10px] px-2.5 py-1 rounded-full bg-svc/[0.06] border border-svc/20 text-muted-foreground tracking-wide"
                   >
                     {highlight}
                   </span>
@@ -88,17 +91,8 @@ export function ServiceLevelsSection({ levels }: { levels: ServiceCard[] }) {
               <div className="mt-auto pt-4 border-t border-border flex flex-col gap-3">
                 {level.bestFor ? (
                   <div className="flex items-center gap-2">
-                    <span
-                      aria-hidden="true"
-                      className={`h-1 w-1 rounded-full ${index % 2 === 0 ? "bg-blue-400/70" : "bg-teal/70"}`}
-                    />
-                    <span
-                      className={`text-[11px] tracking-wide ${
-                        index % 2 === 0 ? "text-blue-600 dark:text-blue-300/80" : "text-teal"
-                      }`}
-                    >
-                      Best for: {level.bestFor}
-                    </span>
+                    <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-svc" />
+                    <span className="text-[11px] tracking-wide text-svc-ink">Best for: {level.bestFor}</span>
                   </div>
                 ) : null}
 
@@ -118,7 +112,7 @@ export function ServiceLevelsSection({ levels }: { levels: ServiceCard[] }) {
                   </span>
                   <Link
                     href={`/solutions/${level.slug}`}
-                    className="text-[11px] tracking-widest text-blue-600 dark:text-blue-300/80 hover:text-blue-500 dark:hover:text-blue-300 transition-colors whitespace-nowrap"
+                    className="text-[11px] tracking-widest text-svc-ink hover:opacity-80 transition-opacity whitespace-nowrap"
                   >
                     BUILD PLAN →
                   </Link>

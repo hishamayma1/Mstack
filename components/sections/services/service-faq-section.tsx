@@ -18,18 +18,16 @@ export function ServiceFAQSection({ faqs }: { faqs: ServiceFAQ[] }) {
         />
 
         <div className="flex flex-col gap-2">
-          {faqs.map((faq, i) => (
+          {faqs.map((faq) => (
             <details
               key={faq.question}
-              className={`group rounded-xl border border-border bg-card transition-colors ${
-                i % 2 === 0 ? "open:border-blue-500/25" : "open:border-teal/30"
-              }`}
+              className="group rounded-xl border border-border bg-card transition-colors open:border-svc/35 open:bg-svc/[0.04]"
             >
               <summary className="flex items-start justify-between gap-6 p-6 cursor-pointer list-none [&::-webkit-details-marker]:hidden">
                 <span className="text-base font-light text-foreground">{faq.question}</span>
                 <span
                   aria-hidden="true"
-                  className="mt-1 shrink-0 text-muted-foreground transition-transform duration-300 group-open:rotate-45"
+                  className="mt-1 shrink-0 text-muted-foreground transition-transform duration-300 group-open:rotate-45 group-open:text-svc-ink"
                 >
                   +
                 </span>

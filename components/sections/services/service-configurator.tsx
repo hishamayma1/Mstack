@@ -105,11 +105,11 @@ export function ServiceConfigurator({
           // form they submitted has been replaced by a confirmation.
           role="status"
           aria-live="polite"
-          className="max-w-2xl mx-auto text-center rounded-2xl border border-blue-500/25 bg-blue-500/[0.06] p-10 md:p-14"
+          className="max-w-2xl mx-auto text-center rounded-2xl border border-svc/25 bg-svc/[0.06] p-10 md:p-14"
         >
           <div
             aria-hidden="true"
-            className="mx-auto mb-6 h-12 w-12 rounded-full border border-blue-400/40 bg-blue-500/15 flex items-center justify-center text-blue-300 text-xl"
+            className="mx-auto mb-6 h-12 w-12 rounded-full border border-svc/40 bg-svc/15 flex items-center justify-center text-svc-ink text-xl"
           >
             ✓
           </div>
@@ -209,10 +209,10 @@ export function ServiceConfigurator({
                   // Clamping on blur rather than on change lets someone clear
                   // the field and retype without it fighting them mid-edit.
                   onBlur={() => setSeats((current) => clampSeats(pricing, current))}
-                  className="w-24 px-3 py-2 rounded-lg bg-accent/40 border border-border text-sm text-foreground tabular-nums focus:border-blue-500/50 focus:outline-none transition-colors"
+                  className="w-24 px-3 py-2 rounded-lg bg-accent/40 border border-border text-sm text-foreground tabular-nums focus:border-svc/50 focus:outline-none transition-colors"
                 />
                 {priced && quote.band ? (
-                  <span className="ml-auto text-[11px] text-blue-600 dark:text-blue-300/80 tracking-wide">
+                  <span className="ml-auto text-[11px] text-svc-ink tracking-wide">
                     {quote.band.label} band
                   </span>
                 ) : null}
@@ -238,7 +238,7 @@ export function ServiceConfigurator({
                         key={option.id}
                         className={`flex gap-4 p-4 rounded-xl border cursor-pointer transition-colors ${
                           checked
-                            ? "border-blue-500/40 bg-blue-500/[0.07]"
+                            ? "border-svc/40 bg-svc/[0.07]"
                             : "border-border bg-card hover:border-foreground/20"
                         }`}
                       >
@@ -248,12 +248,12 @@ export function ServiceConfigurator({
                           value={option.id}
                           checked={checked}
                           onChange={() => toggleOption(option.id)}
-                          className="mt-1 h-4 w-4 shrink-0 accent-blue-600"
+                          className="mt-1 h-4 w-4 shrink-0 accent-(--svc)"
                         />
                         <span className="flex-1 min-w-0">
                           <span className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
                             <span className="text-sm text-foreground">{option.name}</span>
-                            <span className="text-[11px] text-blue-600 dark:text-blue-300/80 tracking-wide whitespace-nowrap">
+                            <span className="text-[11px] text-svc-ink tracking-wide whitespace-nowrap">
                               {optionSuffix(option, pricing)}
                             </span>
                           </span>
@@ -271,7 +271,11 @@ export function ServiceConfigurator({
 
           {/* ── Right: the quote and the details we need to send it ───────── */}
           <div className={styles.stickyPanel}>
-            <div className="rounded-2xl border border-border bg-card overflow-hidden">
+            <div className="relative rounded-2xl border border-svc/25 bg-card overflow-hidden shadow-[0_24px_60px_-30px_var(--svc)]">
+              <span
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-x-0 top-0 h-1 bg-linear-to-r from-svc to-svc-2"
+              />
               <div className="p-8 border-b border-border">
                 <span className="text-xs uppercase tracking-widest text-muted-foreground">
                   {priced ? "Your estimate" : "Your request"}
@@ -393,7 +397,7 @@ export function ServiceConfigurator({
                     id={`${fieldId}-preferredStart`}
                     name="preferredStart"
                     defaultValue="1-3-months"
-                    className="px-3.5 py-2.5 rounded-lg bg-accent/40 border border-border text-sm text-foreground focus:border-blue-500/50 focus:outline-none transition-colors"
+                    className="px-3.5 py-2.5 rounded-lg bg-accent/40 border border-border text-sm text-foreground focus:border-svc/50 focus:outline-none transition-colors"
                   >
                     {START_OPTIONS.map((option) => (
                       <option key={option.value} value={option.value} className="bg-card">
@@ -415,7 +419,7 @@ export function ServiceConfigurator({
                     name="message"
                     rows={3}
                     placeholder="Current setup, deadlines, anything unusual…"
-                    className="px-3.5 py-2.5 rounded-lg bg-accent/40 border border-border text-sm text-foreground placeholder:text-muted-foreground focus:border-blue-500/50 focus:outline-none transition-colors resize-y"
+                    className="px-3.5 py-2.5 rounded-lg bg-accent/40 border border-border text-sm text-foreground placeholder:text-muted-foreground focus:border-svc/50 focus:outline-none transition-colors resize-y"
                   />
                 </div>
 
@@ -439,7 +443,7 @@ export function ServiceConfigurator({
                 <button
                   type="submit"
                   disabled={pending}
-                  className="mt-1 w-full px-6 py-3.5 bg-linear-to-br from-blue-600 to-cyan-600 text-white text-sm rounded-xl transition-[filter] duration-200 hover:brightness-110 active:brightness-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:brightness-100 tracking-widest font-medium"
+                  className="mt-1 w-full px-6 py-3.5 bg-linear-to-br from-svc to-svc-2 text-white shadow-[0_10px_30px_-10px_var(--svc)] text-sm rounded-xl transition-[filter] duration-200 hover:brightness-110 active:brightness-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:brightness-100 tracking-widest font-medium"
                 >
                   {pending ? "Sending…" : priced ? "Send My Configuration" : "Request a Price"}
                 </button>
@@ -477,7 +481,7 @@ function Field({
     <div className="flex flex-col gap-1.5">
       <label htmlFor={id} className="text-[11px] uppercase tracking-widest text-muted-foreground">
         {label}
-        {required ? <span className="text-blue-400/70"> *</span> : null}
+        {required ? <span className="text-svc-ink/70"> *</span> : null}
       </label>
       <input
         id={id}
@@ -488,7 +492,7 @@ function Field({
         aria-invalid={error ? true : undefined}
         aria-describedby={error ? `${id}-error` : undefined}
         className={`px-3.5 py-2.5 rounded-lg bg-accent/40 border text-sm text-foreground placeholder:text-muted-foreground focus:outline-none transition-colors ${
-          error ? "border-red-500/50" : "border-border focus:border-blue-500/50"
+          error ? "border-red-500/50" : "border-border focus:border-svc/50"
         }`}
       />
       {error ? (

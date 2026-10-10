@@ -11,6 +11,7 @@ export function CTAButtons({
   secondaryHref,
   align = "left",
   size = "md",
+  inverse = false,
 }: {
   primaryLabel?: string
   primaryHref?: string
@@ -18,15 +19,20 @@ export function CTAButtons({
   secondaryHref?: string
   align?: "left" | "center"
   size?: "sm" | "md"
+  /** On a blue `contrast` band, where the blue gradient button would vanish. */
+  inverse?: boolean
 }) {
   const pad = size === "sm" ? "px-6 py-2.5" : "px-8 py-3"
+  const fill = inverse
+    ? "bg-white text-blue-700 shadow-lg shadow-blue-950/25"
+    : "bg-linear-to-br from-blue-600 to-cyan-600 text-white"
   return (
     <div
       className={`flex flex-col sm:flex-row gap-3 ${align === "center" ? "justify-center" : "justify-start"}`}
     >
       <Link
         href={primaryHref}
-        className={`${pad} bg-linear-to-br from-blue-600 to-cyan-600 text-white text-sm rounded-xl transition-[filter] duration-200 hover:brightness-110 active:brightness-95 tracking-widest font-medium text-center whitespace-nowrap`}
+        className={`${pad} ${fill} text-sm rounded-xl transition-[filter] duration-200 hover:brightness-110 active:brightness-95 tracking-widest font-medium text-center whitespace-nowrap`}
       >
         {primaryLabel}
       </Link>

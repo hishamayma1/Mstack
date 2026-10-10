@@ -17,7 +17,7 @@ export { Chevron } from "@/components/ui/chevron"
 // tones is what separates one idea from the next — the way the reference sites
 // do it — rather than a 1px line doing all the work.
 
-type Tone = "base" | "raised" | "accent"
+type Tone = "base" | "raised" | "accent" | "blue" | "contrast"
 type Size = "sm" | "md" | "lg"
 
 const TONE: Record<Tone, string> = {
@@ -28,8 +28,17 @@ const TONE: Record<Tone, string> = {
   base: "",
   // One step up, with hairlines top and bottom. Used for every other band.
   raised: "bg-card border-y border-border",
-  // The two bands that ask for something: proof, and the offer.
+  // A quiet tinted band, one step off the page.
   accent: "border-y border-border bg-accent/30",
+  // A soft brand-blue wash (pale sky in light mode, midnight blue in dark).
+  // Lets the page lean on the brand colour more often without shouting; see
+  // `.band-blue` in globals.css.
+  blue: "border-y border-border band-blue",
+  // The two bands that ask for something — proof, and the offer — on a
+  // saturated brand blue in both themes, so they catch the eye. `dark` makes
+  // the contents use their dark-mode styling (light text on a deep ground);
+  // `.band-contrast` in globals.css retints that palette for blue.
+  contrast: "dark band-contrast",
 }
 
 const SIZE: Record<Size, string> = {

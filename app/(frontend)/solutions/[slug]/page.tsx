@@ -10,6 +10,7 @@ import { ServiceFAQSection } from "@/components/sections/services/service-faq-se
 import { ServiceRelatedSection } from "@/components/sections/services/service-related-section"
 import { ServiceCTASection } from "@/components/sections/services/service-cta-section"
 import { getServiceBySlug, getServiceLinks, getServiceSlugs } from "@/lib/cms/services"
+import { serviceTheme } from "@/lib/service-theme"
 
 // Pre-renders one static route per published service at build time. New
 // services added in /admin need a rebuild to appear, the same tradeoff every
@@ -54,32 +55,36 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
 
   return (
     <PageShell>
-      <ServiceHero
-        title={service.title}
-        tagline={service.tagline}
-        headline={service.headline}
-        valueProp={service.valueProp}
-        stats={service.stats}
-        fromPricePerSeat={service.fromPricePerSeat}
-        currency={service.currency}
-        kind={service.kind}
-      />
+      {/* Every section below reads its accent from --svc-*, so this one
+          attribute is what gives each service page its own colour. */}
+      <div data-svc={serviceTheme(service.slug)}>
+        <ServiceHero
+          title={service.title}
+          tagline={service.tagline}
+          headline={service.headline}
+          valueProp={service.valueProp}
+          stats={service.stats}
+          fromPricePerSeat={service.fromPricePerSeat}
+          currency={service.currency}
+          kind={service.kind}
+        />
 
-      <ServiceIncludesSection serviceTitle={service.title} includes={service.includes} />
-      <ServiceOutcomesSection outcomes={service.outcomes} />
+        <ServiceIncludesSection serviceTitle={service.title} includes={service.includes} />
+        <ServiceOutcomesSection outcomes={service.outcomes} />
 
-      {/* The only client boundary on the page. Everything above and below is
-          static HTML, so the JS cost is scoped to the part that needs it. */}
-      <ServiceConfigurator
-        slug={service.slug}
-        serviceTitle={service.title}
-        pricing={service.pricing}
-      />
+        {/* The only client boundary on the page. Everything above and below is
+            static HTML, so the JS cost is scoped to the part that needs it. */}
+        <ServiceConfigurator
+          slug={service.slug}
+          serviceTitle={service.title}
+          pricing={service.pricing}
+        />
 
-      <ServiceBandsSection pricing={service.pricing} />
-      <ServiceFAQSection faqs={service.faqs} />
-      <ServiceRelatedSection services={otherServices} />
-      <ServiceCTASection headline={service.ctaHeadline} subtext={service.ctaSubtext} />
+        <ServiceBandsSection pricing={service.pricing} />
+        <ServiceFAQSection faqs={service.faqs} />
+        <ServiceRelatedSection services={otherServices} />
+        <ServiceCTASection headline={service.ctaHeadline} subtext={service.ctaSubtext} />
+      </div>
     </PageShell>
   )
 }
