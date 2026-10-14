@@ -1,6 +1,7 @@
 import type { CollectionConfig } from "payload"
 import { SITEMAP_INDUSTRY_TITLES } from "@/lib/content/site"
 import { createdByField, stampCreatedBy } from "./author"
+import { revalidateOnChange } from "./revalidate"
 
 // Case studies power the /case-studies index and one /case-studies/[slug]
 // page each. Only "Published" entries are ever fetched by the site (see
@@ -35,6 +36,7 @@ export const CaseStudies: CollectionConfig = {
   },
   hooks: {
     beforeChange: [stampCreatedBy],
+    ...revalidateOnChange("case-studies"),
   },
   fields: [
     {

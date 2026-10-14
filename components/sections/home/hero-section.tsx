@@ -13,7 +13,7 @@ import styles from "./hero-section.module.css"
 // heading from anything that doesn't run JS.
 //
 // The entrance is now a pure CSS stagger, and the only client code in the
-// hero is HeroBackdrop, which defers three.js to idle time.
+// hero is HeroBackdrop, which defers the WebGL backdrop until after load.
 //
 // Layout: the copy column is in normal flow (pushed down by `mt-auto`) rather
 // than absolutely pinned to the bottom. Pinned, it overflowed *upwards* on

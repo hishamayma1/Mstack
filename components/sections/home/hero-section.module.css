@@ -11,15 +11,16 @@
   animation-delay: calc(var(--i, 0) * 80ms);
 }
 
+/* No filter: blur() — filters can't run on the compositor, so a blur
+   animation repaints on the main thread every frame, right while the page
+   is loading. opacity + transform stay on the GPU. */
 @keyframes heroRise {
   from {
     opacity: 0;
-    filter: blur(14px);
     transform: translate3d(0, 22px, 0);
   }
   to {
     opacity: 1;
-    filter: blur(0);
     transform: none;
   }
 }

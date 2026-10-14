@@ -35,10 +35,10 @@ export async function SiteFooter() {
           <div className={`${styles.reveal} col-span-2 lg:col-span-4`}>
             <Link href="/" aria-label="MStack360 home" className="inline-flex items-center opacity-90 hover:opacity-100 transition-opacity">
               <Image
-                src="/Mstacklogo.webp"
+                src="/Mstacklogo-nav.webp"
                 alt="MStack360"
-                width={1024}
-                height={512}
+                width={216}
+                height={108}
                 className="h-11 w-auto"
               />
             </Link>

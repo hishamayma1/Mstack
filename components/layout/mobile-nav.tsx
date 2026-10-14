@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState, type CSSProperties } from "react"
+import { useEffect, useLayoutEffect, useState, type CSSProperties } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
@@ -27,10 +27,36 @@ function menuFor(label: string) {
 
 export function MobileNav() {
   const [open, setOpen] = useState(false)
+  // The menu sheet is ~200 elements of hidden markup that duplicates the
+  // desktop links. Rendering it on every page load was a fifth of the
+  // homepage's DOM — parsed, styled and hydrated before anyone tapped the
+  // burger. It now mounts on first open and then stays mounted, so its close
+  // animation and accordion state work exactly as before.
+  const [menuMounted, setMenuMounted] = useState(false)
+  // Same idea for the desktop mega panels: ~280 elements that are display:none
+  // below `lg`, yet were parsed and hydrated on every phone. They render on
+  // desktop-width screens once the browser is idle — or at once, if the
+  // pointer or keyboard reaches the links first. Every link in them is also
+  // in the footer, so crawlers lose nothing.
+  const [panelsReady, setPanelsReady] = useState(false)
+  const armPanels = () => setPanelsReady(true)
   const pathname = usePathname()
   const onHome = pathname === "/"
 
   const close = () => setOpen(false)
+
+  // First tap only mounts the sheet (closed); the layout effect below opens it.
+  const toggle = () => (menuMounted ? setOpen((v) => !v) : setMenuMounted(true))
+
+  // Right after the sheet first mounts: read its layout once, which makes the
+  // browser commit the closed state, so the CSS slide-in has a start point to
+  // animate from — then open. Synchronous on purpose: an rAF here is paused
+  // in background tabs and can race a quick second tap on a slow phone.
+  useLayoutEffect(() => {
+    if (!menuMounted) return
+    void document.getElementById(MOBILE_MENU_ID)?.offsetHeight
+    setOpen(true)
+  }, [menuMounted])
 
   // Next 16's router keeps restoring the scroll offset the previous route
   // had for a while after a client-side transition (part of its new
@@ -50,6 +76,17 @@ export function MobileNav() {
     }
     tick()
   }
+
+  useEffect(() => {
+    if (!window.matchMedia("(min-width: 1024px)").matches) return
+    const ric = window.requestIdleCallback
+    if (typeof ric === "function") {
+      const handle = ric(armPanels, { timeout: 3000 })
+      return () => window.cancelIdleCallback?.(handle)
+    }
+    const handle = window.setTimeout(armPanels, 1500)
+    return () => window.clearTimeout(handle)
+  }, [])
 
   // Whenever the route actually becomes "/", after the new page has mounted.
   useEffect(() => {
@@ -81,11 +118,17 @@ export function MobileNav() {
             onClick={scrollTopIfHome}
           >
             <Image
-              src="/Mstacklogo.webp"
+              // A 216×108 copy of the 1024×512 master: the logo never shows
+              // above 36px tall, and the master was 40 KB of a page's LCP
+              // element. Eager + high priority because it is the LCP element on
+              // most pages — next/image lazy-loads by default, and `priority`
+              // is deprecated in Next 16.
+              src="/Mstacklogo-nav.webp"
               alt="MStack360"
-              width={1024}
-              height={512}
-              priority
+              width={216}
+              height={108}
+              loading="eager"
+              fetchPriority="high"
               className="h-7 sm:h-8 lg:h-9 w-auto"
             />
           </Link>
@@ -93,7 +136,12 @@ export function MobileNav() {
           {/* Desktop links — needs real room for the mega-menu triggers, so
               this only switches on at `lg`; below that the burger takes over,
               same as it always did, just one breakpoint later than before. */}
-          <div className="hidden lg:flex items-center gap-6 xl:gap-8" style={{ fontFamily: "system-ui, -apple-system, sans-serif" }}>
+          <div
+            className="hidden lg:flex items-center gap-6 xl:gap-8"
+            style={{ fontFamily: "system-ui, -apple-system, sans-serif" }}
+            onPointerEnter={panelsReady ? undefined : armPanels}
+            onFocus={panelsReady ? undefined : armPanels}
+          >
             {NAV_LINKS.map(l => {
               const menu = menuFor(l.label)
 
@@ -124,87 +172,89 @@ export function MobileNav() {
                   {/* Mega panel — spans the full nav width (positioned against
                       the nav root, not this item) so the link groups and the
                       media card sit side by side horizontally. */}
-                  <div className={styles.dropdown}>
-                    <div className={styles.dropdownInner}>
-                      <div className={styles.panel}>
-                        <div className={styles.panelMain}>
-                          <div className={styles.panelHead}>
-                            <span className={styles.panelTitle}>{l.label}</span>
-                            <span className={styles.panelBlurb}>{menu.blurb}</span>
-                          </div>
+                  {panelsReady && (
+                    <div className={styles.dropdown}>
+                      <div className={styles.dropdownInner}>
+                        <div className={styles.panel}>
+                          <div className={styles.panelMain}>
+                            <div className={styles.panelHead}>
+                              <span className={styles.panelTitle}>{l.label}</span>
+                              <span className={styles.panelBlurb}>{menu.blurb}</span>
+                            </div>
 
-                          <div className={styles.groups}>
-                            {menu.groups.map((g, gi) => (
-                              <div key={g.heading} className={styles.group}>
-                                <span className={styles.groupHeading}>{g.heading}</span>
-                                {g.links.map((m, i) => (
-                                  <a
-                                    key={m.label}
-                                    href={m.href}
-                                    className={styles.itemLink}
-                                    style={{ "--i": gi * 2 + i } as CSSProperties}
-                                  >
-                                    <span className={styles.itemDot} />
-                                    <span className={styles.itemText}>
-                                      <span className={styles.itemLabel}>{m.label}</span>
-                                      <span className={styles.itemDesc}>{m.desc}</span>
-                                    </span>
-                                    <svg
-                                      className={styles.itemArrow}
-                                      width="12"
-                                      height="12"
-                                      viewBox="0 0 12 12"
-                                      fill="none"
-                                      aria-hidden="true"
+                            <div className={styles.groups}>
+                              {menu.groups.map((g, gi) => (
+                                <div key={g.heading} className={styles.group}>
+                                  <span className={styles.groupHeading}>{g.heading}</span>
+                                  {g.links.map((m, i) => (
+                                    <a
+                                      key={m.label}
+                                      href={m.href}
+                                      className={styles.itemLink}
+                                      style={{ "--i": gi * 2 + i } as CSSProperties}
                                     >
-                                      <path d="M3.5 6h5M6.5 3.5 9 6l-2.5 2.5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
-                                    </svg>
-                                  </a>
-                                ))}
-                              </div>
-                            ))}
-                          </div>
-
-                          <div className={styles.panelFoot}>
-                            <a href={l.href} className={styles.footLink}>
-                              View all {l.label}
-                              <span aria-hidden="true">→</span>
-                            </a>
-                          </div>
-                        </div>
-
-                        <a href={menu.media.href} className={styles.media}>
-                          <span className={styles.mediaVisual}>
-                            {menu.media.image ? (
-                              <Image
-                                src={menu.media.image}
-                                alt=""
-                                fill
-                                sizes="280px"
-                                className="object-cover"
-                              />
-                            ) : (
-                              <span className={styles.mediaGrid} aria-hidden="true" />
-                            )}
-                            <span className={styles.mediaLogos}>
-                              {menu.media.logos.map(slug => (
-                                <AppLogo key={slug} slug={slug} size={26} />
+                                      <span className={styles.itemDot} />
+                                      <span className={styles.itemText}>
+                                        <span className={styles.itemLabel}>{m.label}</span>
+                                        <span className={styles.itemDesc}>{m.desc}</span>
+                                      </span>
+                                      <svg
+                                        className={styles.itemArrow}
+                                        width="12"
+                                        height="12"
+                                        viewBox="0 0 12 12"
+                                        fill="none"
+                                        aria-hidden="true"
+                                      >
+                                        <path d="M3.5 6h5M6.5 3.5 9 6l-2.5 2.5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
+                                      </svg>
+                                    </a>
+                                  ))}
+                                </div>
                               ))}
+                            </div>
+
+                            <div className={styles.panelFoot}>
+                              <a href={l.href} className={styles.footLink}>
+                                View all {l.label}
+                                <span aria-hidden="true">→</span>
+                              </a>
+                            </div>
+                          </div>
+
+                          <a href={menu.media.href} className={styles.media}>
+                            <span className={styles.mediaVisual}>
+                              {menu.media.image ? (
+                                <Image
+                                  src={menu.media.image}
+                                  alt=""
+                                  fill
+                                  sizes="280px"
+                                  className="object-cover"
+                                />
+                              ) : (
+                                <span className={styles.mediaGrid} aria-hidden="true" />
+                              )}
+                              <span className={styles.mediaLogos}>
+                                {menu.media.logos.map(slug => (
+                                  <AppLogo key={slug} slug={slug} size={26} />
+                                ))}
+                              </span>
                             </span>
-                          </span>
-                          <span className={styles.mediaBody}>
-                            <span className={styles.mediaEyebrow}>{menu.media.eyebrow}</span>
-                            <span className={styles.mediaTitle}>{menu.media.title}</span>
-                            <span className={styles.mediaDesc}>{menu.media.desc}</span>
-                            <span className={styles.mediaCta}>
-                              {menu.media.cta}
-                              <span aria-hidden="true">→</span>
+                            <span className={styles.mediaBody}>
+                              <span className={styles.mediaEyebrow}>{menu.media.eyebrow}</span>
+                              <span className={styles.mediaTitle}>{menu.media.title}</span>
+                              <span className={styles.mediaDesc}>{menu.media.desc}</span>
+                              <span className={styles.mediaCta}>
+                                {menu.media.cta}
+                                <span aria-hidden="true">→</span>
+                              </span>
                             </span>
-                          </span>
-                        </a>
+                          </a>
+                        </div>
                       </div>
                     </div>
-                  </div>
+                  )}
                 </div>
               )
             })}
@@ -219,7 +269,7 @@ export function MobileNav() {
 
             {/* Burger — everything below `lg`, matching the desktop links' breakpoint */}
             <button
-              onClick={() => setOpen(v => !v)}
+              onClick={toggle}
               className="lg:hidden flex flex-col justify-center items-center w-9 h-9 gap-[5px] rounded-lg hover:bg-accent/60 transition-colors"
               aria-label={open ? "Close menu" : "Open menu"}
               aria-expanded={open}
@@ -258,7 +308,7 @@ export function MobileNav() {
         fixed full-viewport layer, and nesting it inside the bar's z-50 stacking
         context would paint it over the pill — burger included, which is the
         close affordance and must stay tappable. */}
-    <MobileMenu id={MOBILE_MENU_ID} open={open} onClose={close} />
+    {menuMounted && <MobileMenu id={MOBILE_MENU_ID} open={open} onClose={close} />}
     </>
   )
 }

@@ -1,4 +1,5 @@
 import type { CollectionConfig } from "payload"
+import { revalidateOnChange } from "./revalidate"
 
 // Powers the /solutions hub and each /solutions/[slug] detail page, including
 // the price configurator on it.
@@ -24,6 +25,7 @@ export const Services: CollectionConfig = {
   access: {
     read: () => true,
   },
+  hooks: revalidateOnChange("services"),
   fields: [
     // ── Sidebar: identity and publishing ────────────────────────────────────
     {

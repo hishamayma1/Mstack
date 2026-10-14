@@ -1,5 +1,4 @@
 import type { CollectionConfig } from "payload"
-import { revalidateTag } from "next/cache"
 import {
   BlocksFeature,
   CodeBlock,
@@ -9,22 +8,12 @@ import {
 } from "@payloadcms/richtext-lexical"
 import { BLOG_BLOCKS } from "./blog-blocks"
 import { createdByField, fillBylineFromAuthor, mentionsField, stampCreatedBy } from "./author"
+import { revalidateCacheTag } from "./revalidate"
 
 const TAG_OPTIONS = ["Security", "SharePoint", "Automation", "Power Platform", "Migration", "General"] as const
 
-// Cached reads in lib/cms/blog.ts are tagged "blog-posts". Marking the tag
-// stale on every save means a published edit shows up on the next visit
-// instead of after the cacheLife window. `profile: "max"` is
-// stale-while-revalidate, so the visitor who triggers the refresh still gets
-// an instant response. Wrapped because this also runs from the onInit seed,
-// outside any request, where there is no cache to revalidate.
-function revalidateBlog() {
-  try {
-    revalidateTag("blog-posts", "max")
-  } catch {
-    // Not in a request context (seed / CLI) — nothing cached to invalidate.
-  }
-}
+// Cached reads in lib/cms/blog.ts are tagged "blog-posts".
+const revalidateBlog = revalidateCacheTag("blog-posts")
 
 // Articles for /blog and /blog/[slug]. Only "Published" entries are fetched
 // by the site (lib/cms/blog.ts).

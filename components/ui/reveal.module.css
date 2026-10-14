@@ -36,8 +36,10 @@
   }
 }
 
-/* Word-level variant for headings: same mechanism, smaller travel, and a
-   blur that matches the intro animation's character. */
+/* Word-level variant for headings: same mechanism, smaller travel. There
+   are ~50 of these on the homepage alone, which is why it animates only
+   compositor properties — a blur here repainted every word on the main
+   thread for every frame of the scroll. */
 @supports (animation-timeline: view()) {
   @media (prefers-reduced-motion: no-preference) {
     .revealWord {
@@ -52,12 +54,10 @@
 @keyframes revealWord {
   from {
     opacity: 0;
-    filter: blur(8px);
     transform: translate3d(0, 12px, 0);
   }
   to {
     opacity: 1;
-    filter: blur(0);
     transform: none;
   }
 }

@@ -28,6 +28,7 @@ export function ContactSection() {
               title="Book a meeting with MStack"
               className={styles.bookingIframe}
               scrolling="yes"
+              loading="lazy"
             />
            
 

@@ -25,12 +25,16 @@ const courierPrime = Courier_Prime({
   subsets: ["latin"],
   variable: "--font-courier-prime",
   display: "swap",
+  // Not preloaded: font files are shared with the main layout, and a preload
+  // flag here put these on every page's critical path (see that layout).
+  preload: false,
 })
 const ibmPlexSans = IBM_Plex_Sans({
   weight: ["300", "400"],
   subsets: ["latin"],
   variable: "--font-ibm-plex-sans",
   display: "swap",
+  preload: false,
 })
 
 export const metadata: Metadata = {

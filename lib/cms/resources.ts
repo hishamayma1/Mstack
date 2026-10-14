@@ -23,6 +23,9 @@ export type FAQCard = {
   category: string
 }
 
+// None of these collections has a relationship field, so depth: 0 skips a
+// pointless populate walk; pagination: false skips the count query nobody
+// reads; select returns only the fields the cards render.
 async function payloadClient() {
   return getPayload({ config })
 }
@@ -38,6 +41,9 @@ export async function getGuides(): Promise<ResourceCard[]> {
     where: { status: { equals: "published" } },
     sort: "-publishedDate",
     limit: 100,
+    depth: 0,
+    pagination: false,
+    select: { title: true, description: true, tag: true, downloadUrl: true },
   })
   return docs.map((doc) => ({
     id: String(doc.id),
@@ -60,6 +66,9 @@ export async function getTools(): Promise<ResourceCard[]> {
     where: { status: { equals: "published" } },
     sort: "-publishedDate",
     limit: 100,
+    depth: 0,
+    pagination: false,
+    select: { title: true, description: true, tag: true, url: true },
   })
   return docs.map((doc) => ({
     id: String(doc.id),
@@ -82,6 +91,9 @@ export async function getFAQs(): Promise<FAQCard[]> {
     where: { status: { equals: "published" } },
     sort: "order",
     limit: 100,
+    depth: 0,
+    pagination: false,
+    select: { question: true, answer: true, points: true, category: true },
   })
   return docs.map((doc) => ({
     id: String(doc.id),

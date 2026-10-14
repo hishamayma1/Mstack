@@ -1,28 +1,28 @@
 "use client"
 
 import { useEffect, useRef } from 'react';
-import {
-  Clock,
-  Mesh,
-  OrthographicCamera,
-  PlaneGeometry,
-  Scene,
-  ShaderMaterial,
-  Vector2,
-  Vector3,
-  WebGLRenderer
-} from 'three';
 
-const vertexShader = `
-precision highp float;
+// Raw WebGL2 rather than three.js. All this draws is one full-screen quad with
+// a fragment shader — three.js was ~500 KB of JS (the heaviest bundle on the
+// site) to set up a scene, camera and mesh the shader never uses, and parsing
+// it was the largest main-thread task on the homepage. WebGL2 because the
+// line loops below take uniform bounds, which GLSL ES 1.00 forbids.
+
+// Two triangles covering clip space — the whole canvas.
+const QUAD = new Float32Array([-1, -1, 1, -1, -1, 1, -1, 1, 1, -1, 1, 1]);
+
+const vertexShader = `#version 300 es
+in vec2 position;
 
 void main() {
-  gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+  gl_Position = vec4(position, 0.0, 1.0);
 }
 `;
 
-const fragmentShader = `
+const fragmentShader = `#version 300 es
 precision highp float;
+
+out vec4 outColor;
 
 uniform float iTime;
 uniform vec3  iResolution;
@@ -199,7 +199,7 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord) {
 void main() {
   vec4 color = vec4(0.0);
   mainImage(color, gl_FragCoord.xy);
-  gl_FragColor = color;
+  outColor = color;
 }
 `;
 
@@ -229,7 +229,7 @@ type FloatingLinesProps = {
   mixBlendMode?: React.CSSProperties['mixBlendMode'];
 };
 
-function hexToVec3(hex: string): Vector3 {
+function hexToRgb(hex: string): [number, number, number] {
   let value = hex.trim();
 
   if (value.startsWith('#')) {
@@ -250,7 +250,18 @@ function hexToVec3(hex: string): Vector3 {
     b = parseInt(value.slice(4, 6), 16);
   }
 
-  return new Vector3(r / 255, g / 255, b / 255);
+  return [r / 255, g / 255, b / 255];
+}
+
+// Deliberately doesn't read COMPILE_STATUS: any status query makes the main
+// thread wait for the GPU process to finish compiling. Errors are reported
+// once linking is known to be done (see init).
+function compile(gl: WebGL2RenderingContext, type: number, source: string): WebGLShader | null {
+  const shader = gl.createShader(type);
+  if (!shader) return null;
+  gl.shaderSource(shader, source);
+  gl.compileShader(shader);
+  return shader;
 }
 
 export default function FloatingLines({
@@ -271,12 +282,6 @@ export default function FloatingLines({
   mixBlendMode = 'screen'
 }: FloatingLinesProps) {
   const containerRef = useRef<HTMLDivElement | null>(null);
-  const targetMouseRef = useRef<Vector2>(new Vector2(-1000, -1000));
-  const currentMouseRef = useRef<Vector2>(new Vector2(-1000, -1000));
-  const targetInfluenceRef = useRef<number>(0);
-  const currentInfluenceRef = useRef<number>(0);
-  const targetParallaxRef = useRef<Vector2>(new Vector2(0, 0));
-  const currentParallaxRef = useRef<Vector2>(new Vector2(0, 0));
 
   const getLineCount = (waveType: 'top' | 'middle' | 'bottom'): number => {
     if (typeof lineCount === 'number') return lineCount;
@@ -304,214 +309,262 @@ export default function FloatingLines({
     const container = containerRef.current;
     if (!container) return;
 
+    const canvas = document.createElement('canvas');
+    canvas.style.width = '100%';
+    canvas.style.height = '100%';
+    canvas.style.display = 'block';
+
+    // No antialias: a full-screen quad has no geometry edges to smooth, and
+    // the multisample buffer would only cost GPU memory.
+    const gl = canvas.getContext('webgl2', { antialias: false, alpha: false, powerPreference: 'low-power' });
+    // No WebGL2 (very old browsers, some locked-down GPUs): the backdrop is
+    // decoration, so render nothing rather than a broken canvas.
+    if (!gl) return;
+    container.appendChild(canvas);
+
     let active = true;
+    let program: WebGLProgram | null = null;
+    let buffer: WebGLBuffer | null = null;
+    let loc: Record<string, WebGLUniformLocation | null> = {};
 
-    const scene = new Scene();
+    const gradient = new Float32Array(MAX_GRADIENT_STOPS * 3).fill(1);
+    const stops = (linesGradient ?? []).slice(0, MAX_GRADIENT_STOPS);
+    stops.forEach((hex, i) => gradient.set(hexToRgb(hex), i * 3));
 
-    const camera = new OrthographicCamera(-1, 1, 1, -1, 0, 1);
-    camera.position.z = 1;
+    // KHR_parallel_shader_compile lets the shader compile on a background
+    // thread while we poll for completion. Without it, the first status query
+    // blocked the main thread for ~200ms on a mid-range phone — the single
+    // largest task on the homepage. Browsers without the extension fall back
+    // to the blocking path.
+    const parallel = gl.getExtension('KHR_parallel_shader_compile');
+    let pollTimer = 0;
 
-    const renderer = new WebGLRenderer({ antialias: true, alpha: false });
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
-    renderer.domElement.style.width = '100%';
-    renderer.domElement.style.height = '100%';
-    container.appendChild(renderer.domElement);
+    // Builds the program and, once the GPU has finished compiling it, sets
+    // every uniform that doesn't change per frame and starts the loop. Runs
+    // again after a context restore, since a lost context drops all GPU
+    // objects.
+    const init = () => {
+      const vs = compile(gl, gl.VERTEX_SHADER, vertexShader);
+      const fs = compile(gl, gl.FRAGMENT_SHADER, fragmentShader);
+      const p = gl.createProgram();
+      if (!vs || !fs || !p) return;
+      gl.attachShader(p, vs);
+      gl.attachShader(p, fs);
+      gl.linkProgram(p);
 
-    const uniforms = {
-      iTime: { value: 0 },
-      iResolution: { value: new Vector3(1, 1, 1) },
-      animationSpeed: { value: animationSpeed },
-
-      enableTop: { value: enabledWaves.includes('top') },
-      enableMiddle: { value: enabledWaves.includes('middle') },
-      enableBottom: { value: enabledWaves.includes('bottom') },
-
-      topLineCount: { value: topLineCount },
-      middleLineCount: { value: middleLineCount },
-      bottomLineCount: { value: bottomLineCount },
-
-      topLineDistance: { value: topLineDistance },
-      middleLineDistance: { value: middleLineDistance },
-      bottomLineDistance: { value: bottomLineDistance },
-
-      topWavePosition: {
-        value: new Vector3(topWavePosition?.x ?? 10.0, topWavePosition?.y ?? 0.5, topWavePosition?.rotate ?? -0.4)
-      },
-      middleWavePosition: {
-        value: new Vector3(
-          middleWavePosition?.x ?? 5.0,
-          middleWavePosition?.y ?? 0.0,
-          middleWavePosition?.rotate ?? 0.2
-        )
-      },
-      bottomWavePosition: {
-        value: new Vector3(
-          bottomWavePosition?.x ?? 2.0,
-          bottomWavePosition?.y ?? -0.7,
-          bottomWavePosition?.rotate ?? 0.4
-        )
-      },
-
-      iMouse: { value: new Vector2(-1000, -1000) },
-      interactive: { value: interactive },
-      bendRadius: { value: bendRadius },
-      bendStrength: { value: bendStrength },
-      bendInfluence: { value: 0 },
-
-      parallax: { value: parallax },
-      parallaxStrength: { value: parallaxStrength },
-      parallaxOffset: { value: new Vector2(0, 0) },
-
-      lineGradient: {
-        value: Array.from({ length: MAX_GRADIENT_STOPS }, () => new Vector3(1, 1, 1))
-      },
-      lineGradientCount: { value: 0 }
+      const whenLinked = () => {
+        pollTimer = 0;
+        if (!active || contextLost) return;
+        if (parallel && !gl.getProgramParameter(p, parallel.COMPLETION_STATUS_KHR)) {
+          pollTimer = window.setTimeout(whenLinked, 50);
+          return;
+        }
+        if (!gl.getProgramParameter(p, gl.LINK_STATUS)) {
+          if (!gl.isContextLost()) {
+            console.error(
+              'FloatingLines shader:',
+              gl.getShaderInfoLog(vs) || gl.getShaderInfoLog(fs) || gl.getProgramInfoLog(p)
+            );
+          }
+          return;
+        }
+        gl.deleteShader(vs);
+        gl.deleteShader(fs);
+        setUp(p);
+        setSize();
+        sync();
+      };
+      whenLinked();
     };
 
-    if (linesGradient && linesGradient.length > 0) {
-      const stops = linesGradient.slice(0, MAX_GRADIENT_STOPS);
-      uniforms.lineGradientCount.value = stops.length;
+    const setUp = (p: WebGLProgram) => {
+      program = p;
+      gl.useProgram(p);
 
-      stops.forEach((hex, i) => {
-        const color = hexToVec3(hex);
-        uniforms.lineGradient.value[i].set(color.x, color.y, color.z);
-      });
-    }
+      buffer = gl.createBuffer();
+      gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+      gl.bufferData(gl.ARRAY_BUFFER, QUAD, gl.STATIC_DRAW);
+      const position = gl.getAttribLocation(p, 'position');
+      gl.enableVertexAttribArray(position);
+      gl.vertexAttribPointer(position, 2, gl.FLOAT, false, 0, 0);
 
-    const material = new ShaderMaterial({
-      uniforms,
-      vertexShader,
-      fragmentShader
-    });
+      const u = (name: string) => gl.getUniformLocation(p, name);
+      loc = Object.fromEntries(
+        ['iTime', 'iResolution', 'iMouse', 'bendInfluence', 'parallaxOffset'].map((name) => [name, u(name)])
+      );
 
-    const geometry = new PlaneGeometry(2, 2);
-    const mesh = new Mesh(geometry, material);
-    scene.add(mesh);
+      gl.uniform1f(u('animationSpeed'), animationSpeed);
+      gl.uniform1i(u('enableTop'), enabledWaves.includes('top') ? 1 : 0);
+      gl.uniform1i(u('enableMiddle'), enabledWaves.includes('middle') ? 1 : 0);
+      gl.uniform1i(u('enableBottom'), enabledWaves.includes('bottom') ? 1 : 0);
+      gl.uniform1i(u('topLineCount'), topLineCount);
+      gl.uniform1i(u('middleLineCount'), middleLineCount);
+      gl.uniform1i(u('bottomLineCount'), bottomLineCount);
+      gl.uniform1f(u('topLineDistance'), topLineDistance);
+      gl.uniform1f(u('middleLineDistance'), middleLineDistance);
+      gl.uniform1f(u('bottomLineDistance'), bottomLineDistance);
+      gl.uniform3f(
+        u('topWavePosition'),
+        topWavePosition?.x ?? 10.0,
+        topWavePosition?.y ?? 0.5,
+        topWavePosition?.rotate ?? -0.4
+      );
+      gl.uniform3f(
+        u('middleWavePosition'),
+        middleWavePosition?.x ?? 5.0,
+        middleWavePosition?.y ?? 0.0,
+        middleWavePosition?.rotate ?? 0.2
+      );
+      gl.uniform3f(
+        u('bottomWavePosition'),
+        bottomWavePosition?.x ?? 2.0,
+        bottomWavePosition?.y ?? -0.7,
+        bottomWavePosition?.rotate ?? 0.4
+      );
+      gl.uniform1i(u('interactive'), interactive ? 1 : 0);
+      gl.uniform1f(u('bendRadius'), bendRadius);
+      gl.uniform1f(u('bendStrength'), bendStrength);
+      gl.uniform1i(u('parallax'), parallax ? 1 : 0);
+      gl.uniform1f(u('parallaxStrength'), parallaxStrength);
+      gl.uniform3fv(u('lineGradient'), gradient);
+      gl.uniform1i(u('lineGradientCount'), stops.length);
+    };
 
-    const clock = new Clock();
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
 
+    // Sized here and on resize only — never inside the render loop, where
+    // touching canvas.width reallocates the drawing buffer every frame.
     const setSize = () => {
       if (!active) return;
       const width = container.clientWidth || 1;
       const height = container.clientHeight || 1;
-
-      renderer.setSize(width, height, false);
-
-      const canvasWidth = renderer.domElement.width;
-      const canvasHeight = renderer.domElement.height;
-      uniforms.iResolution.value.set(canvasWidth, canvasHeight, 1);
+      canvas.width = Math.round(width * dpr);
+      canvas.height = Math.round(height * dpr);
+      gl.viewport(0, 0, canvas.width, canvas.height);
+      if (program) gl.uniform3f(loc.iResolution, canvas.width, canvas.height, 1);
     };
 
-    setSize();
-
-    const ro =
-      typeof ResizeObserver !== 'undefined'
-        ? new ResizeObserver(() => {
-            if (!active) return;
-            setSize();
-          })
-        : null;
-
-    if (ro) ro.observe(container);
+    // Mouse and parallax state, eased toward their targets each frame.
+    const targetMouse = [-1000, -1000];
+    const currentMouse = [-1000, -1000];
+    let targetInfluence = 0;
+    let currentInfluence = 0;
+    const targetParallax = [0, 0];
+    const currentParallax = [0, 0];
 
     const handlePointerMove = (event: PointerEvent) => {
-      const rect = renderer.domElement.getBoundingClientRect();
+      const rect = canvas.getBoundingClientRect();
       const x = event.clientX - rect.left;
       const y = event.clientY - rect.top;
-      const dpr = renderer.getPixelRatio();
 
-      targetMouseRef.current.set(x * dpr, (rect.height - y) * dpr);
-      targetInfluenceRef.current = 1.0;
+      targetMouse[0] = x * dpr;
+      targetMouse[1] = (rect.height - y) * dpr;
+      targetInfluence = 1.0;
 
       if (parallax) {
-        const centerX = rect.width / 2;
-        const centerY = rect.height / 2;
-        const offsetX = (x - centerX) / rect.width;
-        const offsetY = -(y - centerY) / rect.height;
-        targetParallaxRef.current.set(offsetX * parallaxStrength, offsetY * parallaxStrength);
+        targetParallax[0] = ((x - rect.width / 2) / rect.width) * parallaxStrength;
+        targetParallax[1] = (-(y - rect.height / 2) / rect.height) * parallaxStrength;
       }
     };
 
     const handlePointerLeave = () => {
-      targetInfluenceRef.current = 0.0;
+      targetInfluence = 0.0;
     };
 
-    if (interactive) {
-      renderer.domElement.addEventListener('pointermove', handlePointerMove);
-      renderer.domElement.addEventListener('pointerleave', handlePointerLeave);
-    }
-
-    // WebGL contexts can be lost at any time — GPU driver resets, laptop GPU
-    // switching, or a browser reclaiming memory after too many contexts pile
-    // up (e.g. across repeated dev-mode hot reloads). Without handling this,
-    // the canvas just goes permanently black/frozen. preventDefault() on the
-    // loss event is what tells the browser it's allowed to restore the
-    // context; we pause the render loop meanwhile and resume once restored.
     let raf = 0;
     let contextLost = false;
+    let onScreen = false;
+    const start = performance.now();
+
+    const renderLoop = () => {
+      raf = 0;
+      if (!active || contextLost || !program) return;
+
+      gl.uniform1f(loc.iTime, (performance.now() - start) / 1000);
+
+      if (interactive) {
+        currentMouse[0] += (targetMouse[0] - currentMouse[0]) * mouseDamping;
+        currentMouse[1] += (targetMouse[1] - currentMouse[1]) * mouseDamping;
+        gl.uniform2f(loc.iMouse, currentMouse[0], currentMouse[1]);
+
+        currentInfluence += (targetInfluence - currentInfluence) * mouseDamping;
+        gl.uniform1f(loc.bendInfluence, currentInfluence);
+      }
+
+      if (parallax) {
+        currentParallax[0] += (targetParallax[0] - currentParallax[0]) * mouseDamping;
+        currentParallax[1] += (targetParallax[1] - currentParallax[1]) * mouseDamping;
+        gl.uniform2f(loc.parallaxOffset, currentParallax[0], currentParallax[1]);
+      }
+
+      gl.drawArrays(gl.TRIANGLES, 0, 6);
+      raf = requestAnimationFrame(renderLoop);
+    };
+
+    // Only animate while the hero is on screen and the tab is visible — the
+    // shader is the most expensive thing on the page per frame, and nobody
+    // sees it once they've scrolled past.
+    const sync = () => {
+      const shouldRun = active && !contextLost && onScreen && !document.hidden;
+      if (shouldRun && !raf) raf = requestAnimationFrame(renderLoop);
+      if (!shouldRun && raf) {
+        cancelAnimationFrame(raf);
+        raf = 0;
+      }
+    };
 
     const handleContextLost = (event: Event) => {
+      // preventDefault() is what allows the browser to restore the context.
       event.preventDefault();
       contextLost = true;
-      cancelAnimationFrame(raf);
+      program = null;
+      sync();
     };
 
     const handleContextRestored = () => {
       contextLost = false;
-      if (active) {
-        setSize();
-        raf = requestAnimationFrame(renderLoop);
-      }
+      if (active) init();
     };
 
-    renderer.domElement.addEventListener('webglcontextlost', handleContextLost, false);
-    renderer.domElement.addEventListener('webglcontextrestored', handleContextRestored, false);
+    setSize();
+    init();
 
-    const renderLoop = () => {
-      if (!active || contextLost) return;
+    const ro = typeof ResizeObserver !== 'undefined' ? new ResizeObserver(setSize) : null;
+    ro?.observe(container);
 
-      uniforms.iTime.value = clock.getElapsedTime();
+    const io = new IntersectionObserver(([entry]) => {
+      onScreen = entry.isIntersecting;
+      sync();
+    });
+    io.observe(container);
 
-      if (interactive) {
-        currentMouseRef.current.lerp(targetMouseRef.current, mouseDamping);
-        uniforms.iMouse.value.copy(currentMouseRef.current);
-
-        currentInfluenceRef.current += (targetInfluenceRef.current - currentInfluenceRef.current) * mouseDamping;
-        uniforms.bendInfluence.value = currentInfluenceRef.current;
-      }
-
-      if (parallax) {
-        currentParallaxRef.current.lerp(targetParallaxRef.current, mouseDamping);
-        uniforms.parallaxOffset.value.copy(currentParallaxRef.current);
-      }
-
-      renderer.render(scene, camera);
-      raf = requestAnimationFrame(renderLoop);
-    };
-    renderLoop();
+    if (interactive) {
+      canvas.addEventListener('pointermove', handlePointerMove);
+      canvas.addEventListener('pointerleave', handlePointerLeave);
+    }
+    canvas.addEventListener('webglcontextlost', handleContextLost, false);
+    canvas.addEventListener('webglcontextrestored', handleContextRestored, false);
+    document.addEventListener('visibilitychange', sync);
 
     return () => {
       active = false;
+      if (raf) cancelAnimationFrame(raf);
+      window.clearTimeout(pollTimer);
 
-      cancelAnimationFrame(raf);
+      ro?.disconnect();
+      io.disconnect();
+      document.removeEventListener('visibilitychange', sync);
+      canvas.removeEventListener('pointermove', handlePointerMove);
+      canvas.removeEventListener('pointerleave', handlePointerLeave);
+      canvas.removeEventListener('webglcontextlost', handleContextLost);
+      canvas.removeEventListener('webglcontextrestored', handleContextRestored);
 
-      if (ro) ro.disconnect();
-
-      if (interactive) {
-        renderer.domElement.removeEventListener('pointermove', handlePointerMove);
-        renderer.domElement.removeEventListener('pointerleave', handlePointerLeave);
-      }
-
-      renderer.domElement.removeEventListener('webglcontextlost', handleContextLost);
-      renderer.domElement.removeEventListener('webglcontextrestored', handleContextRestored);
-
-      geometry.dispose();
-      material.dispose();
-      renderer.dispose();
-      renderer.forceContextLoss();
-      if (renderer.domElement.parentElement) {
-        renderer.domElement.parentElement.removeChild(renderer.domElement);
-      }
+      if (buffer) gl.deleteBuffer(buffer);
+      if (program) gl.deleteProgram(program);
+      // Free the context now instead of waiting for GC — browsers cap the
+      // number of live WebGL contexts, and theme switches remount this.
+      gl.getExtension('WEBGL_lose_context')?.loseContext();
+      canvas.remove();
     };
   }, [
     linesGradient,
@@ -527,7 +580,13 @@ export default function FloatingLines({
     bendStrength,
     mouseDamping,
     parallax,
-    parallaxStrength
+    parallaxStrength,
+    topLineCount,
+    middleLineCount,
+    bottomLineCount,
+    topLineDistance,
+    middleLineDistance,
+    bottomLineDistance
   ]);
 
   return (

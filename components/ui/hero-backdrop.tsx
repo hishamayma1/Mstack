@@ -4,10 +4,10 @@ import dynamic from "next/dynamic"
 import { useEffect, useState } from "react"
 import { useTheme } from "next-themes"
 
-// FloatingLines pulls in three.js — the single heaviest bundle on the site.
-// `ssr: false` keeps it out of the server render, and the mount is deferred
-// to browser idle time so the WebGL context and its JS never compete with
-// first paint or hydration of the hero copy above it.
+// FloatingLines is a WebGL shader. `ssr: false` keeps it out of the server
+// render, and the mount is deferred until the intro curtain lifts and the
+// browser is idle, so the WebGL context and its shader compile never compete
+// with first paint or hydration of the hero copy above it.
 //
 // It is also skipped entirely for users who prefer reduced motion, and on
 // devices reporting few cores, where a continuous WebGL loop costs more than
@@ -15,6 +15,9 @@ import { useTheme } from "next-themes"
 const FloatingLines = dynamic(() => import("@/components/ui/floating-lines"), {
   ssr: false,
 })
+
+// When IntroAnimation's curtain starts to fade (its `curtainOut` delay).
+const CURTAIN_LIFT_MS = 1700
 
 // Third stop lands on the palette's teal rather than another blue, so the
 // line sweep reads as brand-blue-to-teal instead of a flat monochrome fade.
@@ -44,15 +47,25 @@ export function HeroBackdrop() {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return
     if (typeof navigator !== "undefined" && (navigator.hardwareConcurrency ?? 8) <= 4) return
 
-    // requestIdleCallback isn't in Safari; fall back to a short timeout.
-    const ric = window.requestIdleCallback
-    if (typeof ric === "function") {
-      const handle = ric(() => setShow(true), { timeout: 2000 })
-      return () => window.cancelIdleCallback?.(handle)
-    }
+    // The intro curtain covers the hero until it starts lifting at 1.7s (see
+    // intro-animation.module.css), so starting WebGL any earlier only
+    // competes with loading and hydration for something nobody can see yet.
+    // Wait for the curtain, then take the next idle slot. When the intro has
+    // already played this session there is no curtain (IntroAnimation marks
+    // <html>), so only the idle wait applies.
+    const delay = document.documentElement.hasAttribute("data-intro-seen") ? 0 : CURTAIN_LIFT_MS
+    let idle = 0
+    const timer = window.setTimeout(() => {
+      // requestIdleCallback isn't in Safari; there the timer alone is enough.
+      const ric = window.requestIdleCallback
+      if (typeof ric === "function") idle = ric(() => setShow(true), { timeout: 1000 })
+      else setShow(true)
+    }, delay)
 
-    const handle = window.setTimeout(() => setShow(true), 600)
-    return () => window.clearTimeout(handle)
+    return () => {
+      window.clearTimeout(timer)
+      if (idle) window.cancelIdleCallback?.(idle)
+    }
   }, [])
 
   if (!show) return null

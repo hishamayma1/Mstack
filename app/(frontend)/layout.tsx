@@ -7,10 +7,15 @@ import { StoreHydrator } from '@/components/providers/store-hydrator'
 import { ThemeProvider } from '@/components/providers/theme-provider'
 import './globals.css'
 
+// Only Geist — the body and headline face — is preloaded. The other three
+// are used for code, labels and below-the-fold sections; preloading them put
+// ~75 KB of High-priority font downloads in front of every page's LCP image
+// on mobile. They still load the moment a page uses them, with `swap` and
+// next/font's metric-matched fallback so the swap doesn't shift layout.
 const geistSans = Geist({ subsets: ["latin"], variable: "--font-geist-sans", display: "swap" });
-const geistMono = Geist_Mono({ subsets: ["latin"], variable: "--font-geist-mono", display: "swap" });
-const courierPrime = Courier_Prime({ weight: ["400", "700"], subsets: ["latin"], variable: "--font-courier-prime", display: "swap" });
-const ibmPlexSans = IBM_Plex_Sans({ weight: ["300", "400", "500", "600"], subsets: ["latin"], variable: "--font-ibm-plex-sans", display: "swap" });
+const geistMono = Geist_Mono({ subsets: ["latin"], variable: "--font-geist-mono", display: "swap", preload: false });
+const courierPrime = Courier_Prime({ weight: ["400", "700"], subsets: ["latin"], variable: "--font-courier-prime", display: "swap", preload: false });
+const ibmPlexSans = IBM_Plex_Sans({ weight: ["300", "400", "500", "600"], subsets: ["latin"], variable: "--font-ibm-plex-sans", display: "swap", preload: false });
 
 export const metadata: Metadata = {
   title: 'MStack360 - Expert Microsoft 365 Solutions | Security, SharePoint, Power Platform',

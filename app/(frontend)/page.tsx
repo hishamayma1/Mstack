@@ -1,3 +1,4 @@
+import { Suspense } from "react"
 import { IntroAnimation } from "@/components/ui/intro-animation"
 import { MobileNav } from "@/components/layout/mobile-nav"
 import { FloatingActions } from "@/components/layout/floating-actions"
@@ -68,18 +69,25 @@ export default async function HomePage() {
       <IntroAnimation />
       <MobileNav />
       <HeroSection />
-      <TrustBarSection />
-      <ChallengesSection />
-      <ProofSection />
-      <ProcessSection />
-      <HomeServicesSection levels={levels} />
-      <DifferentiatorsSection />
-      <LeadMagnetSection />
-      <HomeIndustriesSection />
-      <QuestionsSection faqs={faqs} />
-      <FinalCTASection />
-      <FloatingActions />
-      <SiteFooter />
+      {/*
+        Each below-the-fold section is its own Suspense boundary. Nothing here
+        ever suspends — the page is fully prerendered, so no fallback shows —
+        but a boundary is also a hydration unit: React hydrates them one at a
+        time and yields to the browser in between, instead of walking all
+        ~1,700 elements in one long task that blocks input during load.
+      */}
+      <Suspense><TrustBarSection /></Suspense>
+      <Suspense><ChallengesSection /></Suspense>
+      <Suspense><ProofSection /></Suspense>
+      <Suspense><ProcessSection /></Suspense>
+      <Suspense><HomeServicesSection levels={levels} /></Suspense>
+      <Suspense><DifferentiatorsSection /></Suspense>
+      <Suspense><LeadMagnetSection /></Suspense>
+      <Suspense><HomeIndustriesSection /></Suspense>
+      <Suspense><QuestionsSection faqs={faqs} /></Suspense>
+      <Suspense><FinalCTASection /></Suspense>
+      <Suspense><FloatingActions /></Suspense>
+      <Suspense><SiteFooter /></Suspense>
     </div>
   )
 }

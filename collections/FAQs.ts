@@ -1,4 +1,5 @@
 import type { CollectionConfig } from "payload"
+import { revalidateOnChange } from "./revalidate"
 
 const CATEGORY_OPTIONS = ["General", "Security", "Industries", "Pricing", "Support"] as const
 
@@ -17,6 +18,7 @@ export const FAQs: CollectionConfig = {
   access: {
     read: () => true,
   },
+  hooks: revalidateOnChange("faqs"),
   fields: [
     { name: "question", type: "text", required: true },
     {
@@ -51,6 +53,8 @@ export const FAQs: CollectionConfig = {
       name: "status",
       type: "select",
       required: true,
+      // Every site query filters on status: "published".
+      index: true,
       defaultValue: "draft",
       options: [
         { label: "Draft", value: "draft" },

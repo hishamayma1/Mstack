@@ -1,4 +1,5 @@
 import type { CollectionConfig } from "payload"
+import { revalidateOnChange } from "./revalidate"
 
 // Powers the /industries hub grid and each /industries/[slug] detail page.
 // Only "Published" entries are fetched by the site (lib/payload-industries.ts).
@@ -29,6 +30,7 @@ export const Industries: CollectionConfig = {
   access: {
     read: () => true,
   },
+  hooks: revalidateOnChange("industries"),
   fields: [
     // ── Sidebar: identity and publishing ────────────────────────────────────
     {

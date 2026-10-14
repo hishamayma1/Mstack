@@ -1,4 +1,5 @@
 import type { CollectionConfig } from "payload"
+import { revalidateOnChange } from "./revalidate"
 
 const TAG_OPTIONS = ["Security", "Migration", "Power Platform", "Governance", "General"] as const
 
@@ -15,6 +16,7 @@ export const Guides: CollectionConfig = {
   access: {
     read: () => true,
   },
+  hooks: revalidateOnChange("guides"),
   fields: [
     { name: "title", type: "text", required: true },
     {
@@ -46,6 +48,8 @@ export const Guides: CollectionConfig = {
       name: "status",
       type: "select",
       required: true,
+      // Every site query filters on status: "published".
+      index: true,
       defaultValue: "draft",
       options: [
         { label: "Draft", value: "draft" },
